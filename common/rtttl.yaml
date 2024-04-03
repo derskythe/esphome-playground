@@ -1,0 +1,11 @@
+---
+rtttl:
+  id: internal_speaker
+  icon: material-symbols:volume-down-rounded
+  output: rtttl_out
+  on_finished_playback:
+    - logger.log: 'Song ended!'
+  on_failed_playback:
+    - logger.log: 'Song failed to play!'
+  on_playback_started:
+    - logger.log: 'Song started!'

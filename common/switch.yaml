@@ -1,0 +1,14 @@
+---
+switch:
+  - platform: restart
+    id: restart_switch
+    name: "Restart ${friendly_name}"
+
+  - platform: safe_mode
+    name: "Restart (Safe Mode) ${friendly_name}"
+
+  - platform: shutdown
+    name: "Shutdown ${friendly_name}"
+
+  - platform: factory_reset
+    name: "Factory Reset ${friendly_name}"

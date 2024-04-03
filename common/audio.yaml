@@ -1,0 +1,18 @@
+---
+# Microphone and Speaker
+i2s_audio:
+  i2s_lrclk_pin: GPIO13
+
+microphone:
+  - id: adc_mic
+    name: "${friendly_name} Microphone"
+    platform: i2s_audio
+    adc_pin: GPIO34
+    adc_type: internal
+
+media_player:
+  - platform: i2s_audio
+    name: "${friendly_name} Internal Media Player"
+    id: media_player_out
+    dac_type: internal
+    mode: right

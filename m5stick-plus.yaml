@@ -1,0 +1,354 @@
+---
+substitutions:
+  friendly_name: "M5 Stick+"
+  entity_id: m5stick-c
+  wifi_power_save_mode: none
+  enable_ota: "true"
+  enable_wifi_led_status: "true"
+  display_backlight: "display_backlight"
+
+esphome:
+  name: ${entity_id}
+  friendly_name: ${friendly_name}
+  on_boot:
+    priority: 800
+    then:
+      - logger.log:
+          format: "Booting ${friendly_name}"
+          level: INFO
+      - display.page.show: display_page1
+      - component.update: my_display
+
+esp32:
+  board: ${entity_id}
+  framework:
+    type: arduino
+
+#######################################
+## Global variables
+#######################################
+globals:
+  - id: enable_wifi_led_status
+    type: bool
+    restore_value: no
+    initial_value: "true"
+  - id: is_api_connected
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  - id: is_mqtt_connected
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  - id: is_wifi_connected
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+#######################################
+## Enable Home Assistant API
+#######################################
+
+packages:
+  pkg_api: !include common/api.yaml
+  pkg_ota: !include common/ota.yaml
+  pkg_common: !include common/standard_mesh.yaml
+  pkg_wifi: !include common/wifi.yaml
+  pkg_mqtt: !include common/mqtt.yaml
+  pkg_sensor: !include common/sensor.yaml
+  pkg_binary_sensor: !include common/binary_sensor.yaml
+  pkg_text_sensor: !include common/text_sensor.yaml
+  pkg_switch: !include common/switch.yaml
+  # Display
+  pkg_font: !include common/font.yaml
+  pkg_font_images: !include common/font_images.yaml
+  # ! pkg_display_off: !include common/display_off.yaml
+  # Additional packages
+  pkg_audio: !include common/audio_m5stickc.yaml
+  # pkg_rtttl: !include common/rtttl.yaml
+  pkg_temp: !include common/qmp6988.yaml # Temperature, Pressure
+  pkg_humidity: !include common/sht30.yaml # Humidity (Can give temperature as well)
+  pkg_irda: !include common/irda.yaml # Infra Red Transmitter
+  #pkg_led_strip: !include common/sk6812.yaml   # LED Strip
+
+# Buttons
+binary_sensor:
+  - platform: gpio
+    id: button_a
+    name: "${friendly_name} Button A"
+    icon: mdi:nintendo-switch
+    pin:
+      number: GPIO37
+      inverted: true
+    on_press:
+      then:
+        - logger.log:
+            format: "Button A was pressed"
+            level: INFO
+        - display.page.show_next: my_display
+        - component.update: my_display
+        - binary_sensor.template.publish:
+            id: dim_display_on
+            state: ON
+        - binary_sensor.template.publish:
+            id: dim_display_off
+            state: ON
+    on_release:
+      then:
+        - binary_sensor.template.publish:
+            id: dim_display_on
+            state: OFF
+        - binary_sensor.template.publish:
+            id: dim_display_off
+            state: OFF
+
+  - platform: gpio
+    id: button_b
+    name: "${friendly_name} Button B"
+    icon: mdi:nintendo-switch
+    pin:
+      number: GPIO39
+      inverted: true
+    on_press:
+      then:
+        - logger.log:
+            format: "Button B was pressed"
+            level: INFO
+        - display.page.show: display_page1
+        - component.update: my_display
+        - binary_sensor.template.publish:
+            id: dim_display_on
+            state: ON
+        - binary_sensor.template.publish:
+            id: dim_display_off
+            state: ON
+    on_release:
+      then:
+        - binary_sensor.template.publish:
+            id: dim_display_on
+            state: OFF
+        - binary_sensor.template.publish:
+            id: dim_display_off
+            state: OFF
+
+  - platform: template
+    id: dim_display_on
+    filters:
+      - delayed_off: 1min
+    on_press:
+      then:
+        lambda: |-
+          ESP_LOGD("template", "Display ON!");
+          id(display_backlight).set_brightness(0.7);
+
+    on_release:
+      then:
+        lambda: |-
+          ESP_LOGD("template", "Display Half!");
+          id(display_backlight).set_brightness(0.4);
+
+  - platform: template
+    id: dim_display_off
+    filters:
+      - delayed_off: 2min 
+    on_release:
+      then:
+        lambda: |-
+          ESP_LOGD("template", "Display OFF!");
+          id(display_backlight).set_brightness(0.0);          
+
+interval:
+  - interval: 60s
+    then:
+      lambda: |-
+        if( !id(is_wifi_connected) || !id(is_mqtt_connected) || !id(is_api_connected) ) {
+          ESP_LOGW("interval_timer", "Not all services are connected");
+          id(led_strip).turn_off();
+          id(led_strip).turn_on();
+          delay(100);
+          id(led_strip).turn_off();
+          delay(100);
+          id(led_strip).turn_on();
+          delay(100);
+          id(led_strip).turn_off();
+        }
+# script:
+#   - id: script_page_turn
+#     mode: single
+#     then:
+#       - if:
+#           condition:
+#             binary_sensor.is_on: button_a
+#           then:
+#             - logger.log:
+#                 format: "Script Button A was pressed"
+#                 level: INFO
+#             - display.page.show: display_page1
+#             - component.update: my_display
+
+#       - if:
+#           condition:
+#             binary_sensor.is_on: button_b
+#           then:
+#             - logger.log:
+#                 format: "Script Button B was pressed"
+#                 level: INFO
+#             - display.page.show: display_page2
+#             - component.update: my_display
+
+#       - if:
+#           condition:
+#             binary_sensor.is_on: button_c
+#           then:
+#             - logger.log:
+#                 format: "Script Button C was pressed"
+#                 level: INFO
+#             - display.page.show: display_page3
+#             - component.update: my_display
+
+# - id: script_turn_on_led_ambient
+#   mode: single
+#   then:
+#     - lambda: |-
+#         static bool first_run = true;
+#         if (!first_run) {
+#           first_run = true;
+#           id(led_strip).turn_off();
+#           return;
+#         }
+#         first_run = false;
+#         id(led_strip).turn_on();
+# // Set correct values
+# // auto call = id(led_light).turn_on();
+# // // set parameters (optional)
+# // call.set_transition_length(1000); // in ms
+# // call.set_brightness(0.5); // 1.0 is full brightness
+# // call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
+# // call.set_rgb(1.0, 0.0, 0.0); // color in RGB order, this example is purple
+# // call.set_cold_white(0.2);
+# // call.set_warm_white(0.75);
+# // //call.set_effect("addressable_fireworks");
+# // // perform action:
+# // call.perform();
+
+# Power Management
+external_components:
+  - source:
+      type: git
+      url: https://github.com//martydingo/esphome-axp192
+    components: [axp192]
+
+sensor:
+  - platform: axp192
+    id: display_backlight # display_backlight
+    i2c_id: bus_a
+    model: M5STICKC
+    address: 0x34
+    update_interval: 60s
+    brightness: 75%
+    battery_level:
+      name: "${friendly_name} Battery Percent"
+      id: battery_percent
+      icon: mdi:battery-high
+    # charger_connected: # ! not exist in the library
+    #   name: "${friendly_name} Charger Connected"
+    #   id: battery_connected
+    #   icon: mdi:battery-charging-medium
+    # charge_full:
+    #   name: "${friendly_name} Charge Full"
+    #   id: battery_full
+    #   icon: mdi:battery-charging-high
+
+# Internal LEDS
+output:
+  - platform: ledc # display backlight output
+    pin: GPIO10
+    id: builtin_led_pwm
+    inverted: true
+
+  # - platform: esp32_pwm
+  #   pin: GPIO25
+  #   icon: material-symbols:volume-down-rounded
+  #   id: rtttl_out
+
+light:
+  - platform: monochromatic # display backlight
+    output: builtin_led_pwm
+    name: "${friendly_name} LED"
+    icon: mdi:led-off
+    id: led_strip
+    restore_mode: ALWAYS_OFF
+
+spi:
+  clk_pin: GPIO13
+  mosi_pin: GPIO15
+
+# I2C configuration entry for ESP32
+i2c:
+  - id: bus_a
+    sda: GPIO21
+    scl: GPIO22
+    scan: true
+
+display:
+  - platform: ili9xxx
+    model: ST7789V
+    cs_pin: GPIO5
+    dc_pin: GPIO23
+    reset_pin: GPIO18
+    dimensions: 240x135
+    #rotation: 270 # ? Do I need this?
+    id: my_display
+    update_interval: 15s
+    pages:
+      - id: display_page1
+        lambda: |-
+          ESP_LOGD("screen", "Page 1");
+          it.fill( id(my_green).fade_to_black(200) );
+
+          if( id(is_wifi_connected) ) {
+            it.image(0, 0, id(icon_wifi));
+          } else {
+            it.image(0, 0, id(icon_wifi_off));
+          }
+
+          if( id(is_mqtt_connected) ) {
+            it.image(0, 30, id(icon_access_point_network));
+          } else {
+            it.image(0, 30, id(icon_access_point_network_off));
+          }
+
+          if( id(is_api_connected) ) {
+            it.image(0, 60, id(icon_shield_home));
+          } else {
+            it.image(0, 60, id(icon_home_off));
+          }
+      - id: display_page2
+        lambda: |-
+          ESP_LOGD("screen", "Displaying page 2");
+          it.fill( id(my_green).fade_to_black(200) );
+
+          // Turn on or off the LED ambient
+          //id(led_strip).toggle();
+
+          // Draw the graph at position [x=10,y=20]
+          //it.graph(10, 20, id(single_temperature_graph));
+
+      - id: display_page3
+        lambda: |-
+          ESP_LOGD("screen", "Displaying page 3");
+          int shift_x = (it.get_width() -  310) / 2;
+          int shift_y = (it.get_height() - 256) / 2;
+          for( auto i = 0; i < 256; i++ ) {
+              it.horizontal_line(shift_x +  0,  i + shift_y, 50, my_red.fade_to_white(i));
+              it.horizontal_line(shift_x + 50,  i + shift_y, 50, my_red.fade_to_black(i));
+
+              it.horizontal_line(shift_x + 105, i + shift_y, 50, my_green.fade_to_white(i));
+              it.horizontal_line(shift_x + 155, i + shift_y, 50, my_green.fade_to_black(i));
+
+              it.horizontal_line(shift_x + 210, i + shift_y, 50, my_blue.fade_to_white(i));
+              it.horizontal_line(shift_x + 260, i + shift_y, 50, my_blue.fade_to_black(i));
+
+              it.printf(shift_x +      2 + 260, 2 + shift_y, id(roboto_small), "Index: %.1f", i);
+          }
+          it.rectangle( shift_x + 0, 0 + shift_y, shift_x + 310, 256 + shift_y, my_yellow);

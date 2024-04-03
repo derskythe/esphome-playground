@@ -1,0 +1,126 @@
+---
+image:
+  # 󰔏
+  - file: mdi:thermometer
+    id: icon_temp
+    resize: 28x28
+
+  # 󱔉
+  - file: mdi:water-percent-alert
+    id: icon_hum
+    resize: 28x28
+
+  # 󰖩
+  - file: mdi:wifi
+    id: icon_wifi
+    resize: 28x28
+
+  # 󰖪
+  - file: mdi:wifi-off
+    id: icon_wifi_off
+    resize: 28x28
+
+  # 󰡍
+  - file: mdi:arrow-collapse-vertical
+    id: icon_pressure
+    resize: 28x28
+
+  # 󰢋
+  - file: mdi:play-network
+    id: icon_uptime
+    resize: 28x28
+
+  # 󱊣
+  - file: mdi:battery-high
+    id: icon_battery
+    resize: 28x28
+
+  # 󱊦
+  - file: mdi:battery-charging-high
+    id: icon_battery_charging
+    resize: 28x28
+
+  # 󱃍
+  - file: mdi:battery-alert-variant-outline
+    id: icon_battery_critical
+    resize: 28x28
+
+  # 󰯡
+  - file: mdi:access-point-network-off
+    id: icon_access_point_network_off
+    resize: 28x28
+
+  # 󰀂
+  - file: mdi:access-point-network
+    id: icon_access_point_network
+    resize: 28x28
+
+  # 󱊢
+  - file: mdi:battery-medium
+    id: icon_battery_half
+    resize: 28x28
+
+  # 󰚊
+  - file: mdi:shield-home
+    id: icon_shield_home
+    resize: 28x28
+
+  # 󱩆
+  - file: mdi:home-off
+    id: icon_home_off
+    resize: 28x28
+
+  # 󰔄
+  - file: mdi:temperature-celsius
+    id: icon_temp_c
+    resize: 28x28
+
+  # 󰖐
+  - file: mdi:weather-cloudy
+    id: icon_weather_cloudy
+    resize: 28x28
+
+  # 󱭚
+  - file: mdi:weather-dust
+    id: icon_weather_dust
+    resize: 28x28
+
+  # 󰖑
+  - file: mdi:weather-fog
+    id: icon_weather_fog
+    resize: 28x28
+
+  # 󰖒
+  - file: mdi:weather-hail
+    id: icon_weather_hail
+    resize: 28x28
+
+  # 󰖓
+  - file: mdi:weather-lightning
+    id: icon_weather_lightning
+    resize: 28x28
+
+  # 󰖖
+  - file: mdi:weather-pouring
+    id: icon_weather_pouring
+    resize: 28x28
+
+  # 󰖕
+  - file: mdi:weather-partly-cloudy
+    id: icon_weather_partly_cloudy
+    resize: 28x28
+
+  # 󰖘
+  - file: mdi:weather-snowy
+    id: icon_weather_snowy
+    resize: 28x28
+  
+  # 󰖙
+  - file: mdi:weather-sunny
+    id: icon_weather_sunny
+    resize: 28x28
+
+  # 󰖝
+  - file: mdi:weather-windy
+    id: icon_weather_windy
+    resize: 28x28

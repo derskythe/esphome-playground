@@ -1,0 +1,50 @@
+---
+substitutions:
+  friendly_name: "C3U_Stamp"
+
+esphome:
+  name: c3u_stamp
+  platformio_options:
+    board_build.flash_mode: dio
+    board_build.mcu: esp32c3
+
+esp32:
+  board: esp32-c3-devkitm-1
+  variant: esp32c3
+  framework:
+    type: esp-idf
+    version: recommended
+    sdkconfig_options:
+      MDNS_STRICT_MODE: y
+
+esp32_ble_tracker:
+  on_ble_advertise:
+    then:
+      - lambda: |-
+          ESP_LOGD("ble_adv", "New BLE device");
+          ESP_LOGD("ble_adv", "  address: %s", x.address_str().c_str());
+          ESP_LOGD("ble_adv", "  name: %s", x.get_name().c_str());
+          ESP_LOGD("ble_adv", "  Advertised service UUIDs:");
+          for (auto uuid : x.get_service_uuids()) {
+              ESP_LOGD("ble_adv", "    - %s", uuid.to_string().c_str());
+          }
+          ESP_LOGD("ble_adv", "  Advertised service data:");
+          for (auto data : x.get_service_datas()) {
+              ESP_LOGD("ble_adv", "    - %s: (length %i)", data.uuid.to_string().c_str(), data.data.size());
+          }
+          ESP_LOGD("ble_adv", "  Advertised manufacturer data:");
+          for (auto data : x.get_manufacturer_datas()) {
+              ESP_LOGD("ble_adv", "    - %s: (length %i)", data.uuid.to_string().c_str(), data.data.size());
+          }
+
+<<: !include include_standart_mesh.yaml
+
+#logger: !remove
+
+# Enable logging
+logger:
+  hardware_uart: USB_SERIAL_JTAG
+  level: VERY_VERBOSE
+
+<<: !include include_sensor.yaml
+<<: !include include_switch.yaml

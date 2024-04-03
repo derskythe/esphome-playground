@@ -1,0 +1,13 @@
+---
+sensor:
+  - platform: sht4x
+    i2c_id: bus_a
+    address: 0x44
+    update_interval: 60s
+    precision: High
+    temperature:
+      name: "${friendly_name} Temperature (from not correct sensor)"
+      id: notcorrect_temperature_sensor
+    humidity:
+      name: "${friendly_name} Humidity"
+      id: humidity_sensor

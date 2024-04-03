@@ -1,0 +1,14 @@
+---
+color:
+  - id: my_blue
+    blue: 100%
+  - id: my_red
+    red: 100%
+  - id: my_green
+    green: 100%
+  - id: my_white
+    red: 100%
+    blue: 100%
+    green: 100%
+  - id: my_yellow
+    hex: ffff00

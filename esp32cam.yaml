@@ -1,0 +1,144 @@
+---
+substitutions:
+  friendly_name: ESP32_CAM_MOD
+  entity_id: "esp32cam-mod"
+  wifi_power_save_mode: "none"
+  enable_ota: "true"
+  enable_wifi_led_status: "false"
+
+esphome:
+  name: ${entity_id}
+  on_boot:
+    priority: 800
+    then:
+      - logger.log:
+          format: "${friendly_name} started"
+          level: INFO
+
+esp32:
+  board: "esp32cam"
+  framework:
+    type: arduino
+
+#######################################
+## Global variables
+#######################################
+globals:
+  - id: enable_wifi_led_status
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  - id: is_api_connected
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  - id: is_mqtt_connected
+    type: bool
+    restore_value: no
+    initial_value: "false"
+  - id: is_wifi_connected
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+packages:
+  pkg_ota: !include common/ota.yaml
+  pkg_api: !include common/api.yaml
+  pkg_pkg_common: !include common/standard_mesh.yaml
+  pkg_wifi: !include common/wifi.yaml
+  pkg_mqtt: !include common/mqtt.yaml
+  pkg_sensor: !include common/sensor.yaml
+  pkg_binary_sensor: !include common/binary_sensor.yaml
+  pkg_text_sensor: !include common/text_sensor.yaml
+  pkg_switch: !include common/switch.yaml
+
+# Change log level
+logger:
+  level: DEBUG
+
+binary_sensor:
+  - platform: homeassistant
+    id: itsday
+    entity_id: input_boolean.itsday
+    internal: false
+
+interval:
+  - interval: 120s # Show each page for 120 seconds
+    then:
+      - if:
+          condition:
+            binary_sensor.is_on: itsday
+          then:
+            - light.turn_off: led_strip # Disable Camera LED during the day
+            - logger.log:
+                format: "LED must be OFF"
+                level: INFO
+          else:
+            - light.turn_on: led_strip # Enable Camera LED at night
+            - logger.log:
+                format: "LED must be ON"
+                level: INFO
+
+sensor:
+  - platform: adc
+    pin: GPIO33
+    name: "${friendly_name} Voltage"
+    update_interval: 10s
+    icon: mdi:lightning-bolt
+    # attenuation: 11db
+
+esp32_camera:
+  icon: mdi:video-vintage
+  external_clock:
+    pin: GPIO0
+    frequency: 20MHz
+  i2c_pins:
+    sda: GPIO26
+    scl: GPIO27
+  data_pins: [GPIO5, GPIO18, GPIO19, GPIO21, GPIO36, GPIO39, GPIO34, GPIO35]
+  vsync_pin: GPIO25
+  href_pin: GPIO23
+  pixel_clock_pin: GPIO22
+  power_down_pin: GPIO32
+  # resolution: 800x600
+  resolution: 640x480
+  vertical_flip: false # Rotate the image 180°
+  horizontal_mirror: false
+  agc_gain_ceiling: 2x
+  wb_mode: auto
+  brightness: 1
+  jpeg_quality: 20
+  # Image settings
+  name: ESP-32 Camera Box
+
+# HTTP server settings
+esp32_camera_web_server:
+  - port: 8080
+    mode: stream
+  - port: 8081
+    mode: snapshot
+
+output:
+  - platform: ledc # backlight output
+    pin: GPIO4
+    id: led_pwm
+
+  # ? Useless
+  # - platform: ledc # onboard led
+  #   pin: GPIO16    # fake value
+  #   id: onboard_led_pwm
+
+light:
+  # Camera LED
+  - platform: monochromatic
+    output: led_pwm
+    name: "${friendly_name} LED"
+    id: led_strip
+    restore_mode: ALWAYS_OFF
+
+  # Onboard LED
+  # ? Useless
+  # - platform: monochromatic
+  #   output: onboard_led_pwm
+  #   name: "${friendly_name} Onboard LED"
+  #   id: led_strip

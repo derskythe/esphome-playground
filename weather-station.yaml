@@ -1,0 +1,215 @@
+substitutions:
+  esp_name: lilygo
+  font_small: "48"
+  font_big: "100"
+
+esphome:
+  name: ${esp_name}
+  comment: "E-paper display"
+  friendly_name: lilygo
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+logger:
+  level: INFO
+
+# To connect *to* HA *from* lilygo
+api:
+  encryption:
+    key: !secret ha_key
+
+ota:
+  password: !secret lilygo_ota
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive_portal node) in case wifi connection fails
+  ap:
+    ssid: "Lilygo Fallback Hotspot"
+    password: !secret fallback
+
+captive_portal:
+
+external_components:
+  - source: github://tiaanv/esphome-components
+    components:
+      - "t547"
+
+time:
+  - platform: homeassistant
+    id: ntp
+    timezone: "America/Toronto" # Picking up the timezone from HA would be nice
+
+# Setting these buttons with names auto-exposes them to HA
+button:
+  - platform: restart
+    name: "${esp_name} Restart"
+
+  - platform: template
+    name: "${esp_name} Refresh"
+    icon: "mdi:update"
+    on_press:
+      then:
+      - component.update: t5_disp
+
+# Fonts are downloaded from Google at build time, which is pretty neat.
+# Get codepoint values from the Google Fonts website.
+font:
+  - file: "gfonts://Roboto"
+    id: roboto
+    size: $font_small
+  - file:
+      type: gfonts
+      family: Roboto
+      weight: 500
+    id: din_big
+    # Glyphs are prerastered, choose them early to save flash
+    glyphs: " C$+-0123456789.:"
+    size: $font_big
+  - file: 'gfonts://Material+Symbols+Outlined'
+    id: font_icons_small
+    size: $font_small
+    glyphs: # also as a list
+      - "\U0000E1C6" # Sunrise
+      - "\U0000EF44" # Sunset
+      - "\U0000F582" # Temperature High
+      - "\U0000F581" # Temperature Low
+  - file: 'gfonts://Material+Symbols+Outlined'
+    id: font_icons_big
+    size: $font_big
+    glyphs:
+      - "\ue1ff" # device_thermostat
+      - "\ueb70" # currency exchange
+
+binary_sensor:
+  - platform: status
+    name: "status"
+    # Setting up the buttons here to refresh the display
+    # (for experimenting with sleep mode) and to flip between
+    # pages on the display.  Only one is defined at the bottom
+    # right now
+  - platform: gpio
+    pin:
+      number: GPIO39
+      inverted: true
+    internal: true
+    on_press:
+      then:
+        - component.update: t5_disp
+    name: "Button 1"
+  - platform: gpio
+    pin:
+      number: GPIO34
+      inverted: true
+    name: "Button 2"
+    internal: true
+    on_press:
+      then:
+        - display.page.show_previous: t5_disp
+        - component.update: t5_disp
+  - platform: gpio
+    pin:
+      number: GPIO35
+      inverted: true
+    name: "Button 3"
+    internal: true
+    on_press:
+      then:
+        - display.page.show_next: t5_disp
+        - component.update: t5_disp
+
+# Import some strings from HA - annoyingly we can't import
+# times from HA *as times* and strftime them, so these need
+# a template/helper on HA
+text_sensor:
+  - platform: homeassistant
+    entity_id: sensor.next_rising_time
+    id: sunrise
+  - platform: homeassistant
+    entity_id: sensor.next_setting_time
+    id: sunset
+
+# This bit basically defines a textbox that HA can fill
+# called 'alert' that the micro won't update itself (because
+# nothing will) but will prompt a redraw of the screen
+text:
+  mode: text
+  name: alert
+  id: alert
+  platform: template
+  optimistic: True
+  # maybe add a startup set of this state so HA doesn't say Unknown
+  update_interval: never
+  on_value:
+    then:
+      - component.update: t5_disp
+
+sensor:
+  - platform: homeassistant
+    name: "Current temperature"
+    entity_id: sensor.gatineau_temperature
+    id: temp
+  - platform: homeassistant
+    name: "Daily high"
+    entity_id: sensor.gatineau_high_temperature
+    id: daily_high
+  - platform: homeassistant
+    name: "Daily low"
+    entity_id: sensor.gatineau_low_temperature
+    id: daily_low
+  - platform: homeassistant
+    name: "GBP CAD"
+    entity_id: sensor.gbp_cad
+    id: gbp_cad
+    on_value: # Actions to perform once data for the last sensor has been received
+      then:
+        - script.execute: all_data_received
+
+script:
+  - id: all_data_received
+    then:
+      - component.update: t5_disp
+
+graph:
+  # Show bare-minimum auto-ranged graph.  It is not saved so
+  # any power loss or restart loses it. It'll take a while to fill
+  - id: temp_graph
+    sensor: temp
+    duration: 6h
+    x_grid: 1h
+    y_grid: 5.0     # degC/div
+    width: 400
+    height: 400
+
+display:
+  - platform: t547
+    id: t5_disp
+    rotation: 90
+    update_interval: 5min
+    pages:
+      - id: weather
+        lambda: |-
+          it.print(  40,  60, id(font_icons_big), TextAlign::CENTER_LEFT, "\ue1ff");
+          it.printf(130,  60, id(din_big),        TextAlign::CENTER_LEFT, "%3.1fC", id(temp).state);
+          it.graph((it.get_width() / 2)-200, 140, id(temp_graph)); // no support for ImageAlign in graph()
+          it.print(  70, 600, id(font_icons_small), TextAlign::CENTER_LEFT, "\U0000F582");
+          it.printf(260, 600, id(roboto),  TextAlign::CENTER_RIGHT, "%.1fC", id(daily_high).state);
+          it.print(  70, 660, id(font_icons_small), TextAlign::CENTER_LEFT, "\U0000F581");
+          it.printf(260, 660, id(roboto),  TextAlign::CENTER_RIGHT, "%.1fC", id(daily_low).state);
+          it.print( 270, 600, id(font_icons_small), TextAlign::CENTER_LEFT, "\uE1C6");
+          it.print( 340, 600, id(roboto),  TextAlign::CENTER_LEFT, id(sunrise).state.c_str());
+          it.print( 270, 660, id(font_icons_small), TextAlign::CENTER_LEFT, "\uEF44");
+          it.print( 340, 660, id(roboto),  TextAlign::CENTER_LEFT, id(sunset).state.c_str());
+          it.printf(130, 800, id(din_big), TextAlign::CENTER_LEFT, "C$ %.2f", id(gbp_cad).state);
+          it.print(  20, 880, id(roboto),  TextAlign::TOP_LEFT, id(alert).state.c_str());          
+    # This prints a thermometer and the current temperature
+    # Then a temperature graph
+    # Then the daily high and low temperatures to the left
+    #   and sunrise/sunset to the right
+    # Next is the GBP/CAD exchange rate
+    # Finally that arbitrary string

@@ -1,0 +1,5 @@
+---
+binary_sensor:
+  - platform: status
+    name: "${friendly_name} Node Status"
+    id: system_status

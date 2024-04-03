@@ -1,0 +1,81 @@
+---
+substitutions:
+  friendly_name: TTGOT1
+  entity_id: ttgo-t1
+  tag: ttgo-t1
+  wifi_power_save_mode: none
+  screenlock_delay: 120sec
+  enable_ota: "true"
+  enable_mdns: "true"
+  enable_wifi_led_status: "true"
+
+esphome:
+  name: ${entity_id}
+
+esp32:
+  board: ${entity_id}
+  framework:
+    type: arduino
+
+#esp32_ble_tracker:
+
+# Enable Home Assistant API
+<<: !include include_api.yaml
+<<: !include include_ota.yaml
+
+<<: !include include_font.yaml
+<<: !include include_font_images.yaml
+<<: !include include_sensor.yaml
+<<: !include include_wifi.yaml
+<<: !include include_mqtt.yaml
+<<: !include include_sensor.yaml
+<<: !include include_switch.yaml
+
+<<: !include include_standart_mesh.yaml
+
+# Buttons
+binary_sensor:
+  - <<: !include { file: include_button.yaml, vars: { id: BtnA, gpio: GPIO35 } }
+  - <<: !include include_binary_sensor.yaml
+
+i2c:
+  sda: 21
+  scl: 22
+  scan: false # nothing to scan
+  id: bus_a
+
+# Internal LEDS
+output:
+  - platform: ledc # display backlight output
+    pin: GPIO4
+    id: display_backlight_pwm
+
+light:
+  - platform: monochromatic # display backlight
+    output: display_backlight_pwm
+    name: ${friendly_name} Backlight
+    id: display_backlight
+    restore_mode: ALWAYS_ON
+
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO19
+
+display:
+  - platform: ili9xxx
+    model: st7789v
+    #TTGO TDisplay 135x240
+    cs_pin: GPIO5
+    dc_pin: GPIO16
+    reset_pin: GPIO23
+    dimensions:
+      height: 240
+      width: 135
+      offset_height: 40
+      offset_width: 52
+    # Required or the colors are all inverted, and Black screen is White
+    invert_colors: true
+    rotation: 90°
+    lambda: |-
+      it.fill(my_green.fade_to_black(200));
+      it.printf(0, 10, id(roboto), "Wi-Fi: %.1f dB", id(wifi_sensor).state);

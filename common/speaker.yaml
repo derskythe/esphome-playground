@@ -1,0 +1,74 @@
+---
+# Sample sounds
+# ----------------
+# two_short:d=4,o=5,b=100:16e6,16e6
+# long:d=1,o=5,b=100:e6
+# siren:d=8,o=5,b=100:d,e,d,e,d,e,d,e
+# scale_up:d=32,o=5,b=100:c,c#,d#,e,f#,g#,a#,b
+# star_wars:d=16,o=5,b=100:4e,4e,4e,8c,p,g,4e,8c,p,g,4e,4p,4b,4b,4b,8c6,p,g,4d#,8c,p,g,4e,8p
+# mission_imp:d=16,o=6,b=95:32d,32d#,32d,32d#,32d,32d#,32d,32d#,32d,32d,32d#,32e,32f,32f#,32g,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,g,8p,g,8p,a#,p,c7,p,g,8p,g,8p,f,p,f#,p,a#,g,2d,32p,a#,g,2c#,32p,a#,g,2c,a#5,8c,2p,32p,a#5,g5,2f#,32p,a#5,g5,2f,32p,a#5,g5,2e,d#,8d
+# mario:d=4,o=5,b=100:16e6,16e6,32p,8e6,16c6,8e6,8g6,8p,8g,8p,8c6,16p,8g,16p,8e,16p,8a,8b,16a#,8a,16g.,16e6,16g6,8a6,16f6,8g6,8e6,16c6,16d6,8b,16p,8c6,16p,8g,16p,8e,16p,8a,8b,16a#,8a,16g.,16e6,16g6,8a6,16f6,8g6,8e6,16c6,16d6,8b,8p,16g6,16f#6,16f6,16d#6,16p,16e6,16p,16g#,16a,16c6,16p,16a,16c6,16d6,8p,16g6,16f#6,16f6,16d#6,16p,16e6,16p,16c7,16p,16c7,16c7,p,16g6,16f#6,16f6,16d#6,16p,16e6,16p,16g#,16a,16c6,16p,16a,16c6,16d6,8p,16d#6,8p,16d6,8p,16c6
+#
+speaker:
+  - name: ${friendly_name} Speaker
+    id: speaker_out
+    channels: 2
+    power_supply: power_supply
+    min_volume: 0.0
+    max_volume: 1.0
+    volume: 0.5
+    effects:
+    - name: "Buzzer"
+        lambda: |-
+            auto effect = id(speaker_out).new_effect();
+            effect->set_type(EffectType::BUZZER);
+            effect->set_length(1000);
+            effect->set_frequency(1000);
+            effect->set_volume(0.5);
+            effect->start();
+            return effect;
+    - name: "Beep"
+        lambda: |-
+            auto effect = id(speaker_out).new_effect();
+            effect->set_type(EffectType::BEEP);
+            effect->set_length(1000);
+            effect->set_frequency(1000);
+            effect->set_volume(0.5);
+            effect->start();
+            return effect;
+    - name: "Alarm"
+        lambda: |-
+            auto effect = id(speaker_out).new_effect();
+            effect->set_type(EffectType::ALARM);
+            effect->set_length(1000);
+            effect->set_frequency(1000);
+            effect->set_volume(0.5);
+            effect->start();
+            return effect;
+    - name: "Dial Tone"
+        lambda: |-
+            auto effect = id(speaker_out).new_effect();
+            effect->set_type(EffectType::DIAL_TONE);
+            effect->set_length(1000);
+            effect->set_frequency(1000);
+            effect->set_volume(0.5);
+            effect->start();
+            return effect;
+    - name: "Power Up"
+        lambda: |-
+            auto effect = id(speaker_out).new_effect();
+            effect->set_type(EffectType::POWER_UP);
+            effect->set_length(1000);
+            effect->set_frequency(1000);
+            effect->set_volume(0.5);
+            effect->start();
+            return effect;
+    - name: "Power Down"
+        lambda: |-
+            auto effect = id(speaker_out).new_effect();
+            effect->set_type(EffectType::POWER_DOWN);
+            effect->set_length(1000);
+            effect->set_frequency(1000);
+            effect->set_volume(0.5);
+            effect->start();
+            return effect;

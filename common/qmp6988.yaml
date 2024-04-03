@@ -1,0 +1,13 @@
+---
+# Temperature + Pressure Sensor
+sensor:
+  - platform: qmp6988
+    temperature:
+      name: "${friendly_name} Temperature"
+      oversampling: 16x
+    pressure:
+      name: "${friendly_name} Pressure"
+      oversampling: 16x
+    address: 0x70
+    update_interval: 60s
+    iir_filter: 2x

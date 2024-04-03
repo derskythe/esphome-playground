@@ -1,0 +1,14 @@
+---
+# Temperature + Humidity Sensor
+sensor:
+  - platform: sht3xd
+    i2c_id: bus_a
+    temperature:
+      name: "${friendly_name} Temperature (from not correct sensor)"
+      id: notcorrect_temperature_sensor
+    humidity:
+      name: "${friendly_name} Humidity"
+      id: humidity_sensor
+    address: 0x44
+    update_interval: 60s
+    heater_enabled: true # By default is off

@@ -1,0 +1,17 @@
+---
+sensor:
+  - platform: bmp280
+    i2c_id: bus_a
+    address: 0x76
+    update_interval: 20s
+    iir_filter: 4x
+    temperature:
+      name: "${friendly_name} Temperature"
+      id: temperature_sensor
+      oversampling: 16x
+      unit_of_measurement: "°C"
+    pressure:
+      name: "${friendly_name} Pressure"
+      id: pressure_sensor
+      oversampling: 16x
+      unit_of_measurement: "kPa"

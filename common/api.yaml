@@ -1,0 +1,32 @@
+---
+api:
+  reboot_timeout: 1d
+  password: !secret ota_password
+  encryption: 
+    key: !secret ota_encryption
+  on_client_connected:
+    then:
+      - globals.set:
+          id: is_api_connected
+          value: "true"
+      - logger.log: 
+          format: "Client %s connected to API with IP %s"
+          args: ["client_info.c_str()", "client_address.c_str()"]
+          level: INFO
+
+  on_client_disconnected:
+    then:
+      - globals.set:
+          id: is_api_connected
+          value: "false"
+      - logger.log: 
+          format: "API client disconnected"
+          level: WARN
+
+  # services:
+  #   - service: play_rtttl
+  #     variables:
+  #       song_str: string
+  #     then:
+  #       - rtttl.play:
+  #           rtttl: !lambda 'return song_str;'

@@ -1,0 +1,7 @@
+{
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "esphome.validator": "local",
+    "[esphome]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}

@@ -1,0 +1,8 @@
+---
+- platform: gpio
+  name: "${friendly_name} Button ${id}"
+  id: ${id}
+  icon: mdi:nintendo-switch
+  pin:
+    number: ${gpio}
+    inverted: true
