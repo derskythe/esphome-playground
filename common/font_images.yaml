@@ -114,7 +114,7 @@ image:
   - file: mdi:weather-snowy
     id: icon_weather_snowy
     resize: 28x28
-  
+
   # 󰖙
   - file: mdi:weather-sunny
     id: icon_weather_sunny

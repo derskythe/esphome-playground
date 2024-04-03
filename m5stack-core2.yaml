@@ -1,19 +1,19 @@
 ---
 substitutions:
-  friendly_name: M5Stack
-  entity_id: m5stack-core2
-  wifi_power_save_mode: none
+  friendly_name: "M5Stack"
+  entity_id: "m5stack-core2"
+  wifi_power_save_mode: "none"
   enable_ota: "true"
   enable_wifi_led_status: "true"
   display_backlight: "display_backlight"
 
 esphome:
-  name: ${entity_id}
-  friendly_name: ${friendly_name}
+  name: "${entity_id}"
+  friendly_name: "${friendly_name}"
   on_boot:
     priority: 800
     then:
-      - logger.log: 
+      - logger.log:
           format: "Booting ESP32"
           level: INFO
       - light.turn_on:
@@ -24,7 +24,7 @@ esphome:
       - component.update: my_display
 
 esp32:
-  board: ${entity_id}
+  board: "${entity_id}"
   framework:
     type: arduino
 
@@ -70,9 +70,9 @@ packages:
   # additional packages
   # pkg_audio: !include common/audio.yaml
   # pkg_rtttl: !include common/rtttl.yaml
-  pkg_temp: !include common/bmp280.yaml        # Temperature, Pressure
-  pkg_humidity: !include common/sht40.yaml     # Humidity (Can give temperature as well)
-  pkg_led_strip: !include common/sk6812.yaml   # LED Strip
+  pkg_temp: !include common/bmp280.yaml # Temperature, Pressure
+  pkg_humidity: !include common/sht40.yaml # Humidity (Can give temperature as well)
+  pkg_led_strip: !include common/sk6812.yaml # LED Strip
 
 # Buttons
 binary_sensor:
@@ -85,14 +85,14 @@ binary_sensor:
       inverted: true
     on_press:
       then:
-        - logger.log: 
+        - logger.log:
             format: "Button A was pressed"
             level: INFO
         - if:
             condition:
               script.is_running: script_page_turn
             then:
-              - logger.log: 
+              - logger.log:
                   format: "Script is already running"
                   level: INFO
             else:
@@ -121,14 +121,14 @@ binary_sensor:
       inverted: true
     on_press:
       then:
-        - logger.log: 
+        - logger.log:
             format: "Button B was pressed"
             level: INFO
         - if:
             condition:
               script.is_running: script_page_turn
             then:
-              - logger.log: 
+              - logger.log:
                   format: "Script is already running"
                   level: INFO
             else:
@@ -157,14 +157,14 @@ binary_sensor:
       inverted: true
     on_press:
       then:
-        - logger.log: 
+        - logger.log:
             format: "Button C was pressed"
             level: INFO
         - if:
             condition:
               script.is_running: script_page_turn
             then:
-              - logger.log: 
+              - logger.log:
                   format: "Script is already running"
                   level: INFO
             else:
@@ -215,7 +215,7 @@ script:
           condition:
             binary_sensor.is_on: button_a
           then:
-            - logger.log: 
+            - logger.log:
                 format: "Script Button A was pressed"
                 level: INFO
             # - light.turn_on: ${display_backlight}
@@ -226,7 +226,7 @@ script:
           condition:
             binary_sensor.is_on: button_b
           then:
-            - logger.log: 
+            - logger.log:
                 format: "Script Button B was pressed"
                 level: INFO
             # - light.turn_on: ${display_backlight}
@@ -237,7 +237,7 @@ script:
           condition:
             binary_sensor.is_on: button_c
           then:
-            - logger.log: 
+            - logger.log:
                 format: "Script Button C was pressed"
                 level: INFO
             # - light.turn_on: ${display_backlight}
@@ -256,18 +256,18 @@ script:
   #         }
   #         first_run = false;
   #         id(led_strip).turn_on();
-          # // Set correct values
-          # // auto call = id(led_light).turn_on();
-          # // // set parameters (optional)
-          # // call.set_transition_length(1000); // in ms
-          # // call.set_brightness(0.5); // 1.0 is full brightness
-          # // call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
-          # // call.set_rgb(1.0, 0.0, 0.0); // color in RGB order, this example is purple
-          # // call.set_cold_white(0.2);
-          # // call.set_warm_white(0.75);
-          # // //call.set_effect("addressable_fireworks");
-          # // // perform action:
-          # // call.perform();
+  # // Set correct values
+  # // auto call = id(led_light).turn_on();
+  # // // set parameters (optional)
+  # // call.set_transition_length(1000); // in ms
+  # // call.set_brightness(0.5); // 1.0 is full brightness
+  # // call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
+  # // call.set_rgb(1.0, 0.0, 0.0); // color in RGB order, this example is purple
+  # // call.set_cold_white(0.2);
+  # // call.set_warm_white(0.75);
+  # // //call.set_effect("addressable_fireworks");
+  # // // perform action:
+  # // call.perform();
 
 # Power Management
 external_components:

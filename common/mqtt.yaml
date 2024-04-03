@@ -6,7 +6,7 @@ mqtt:
   password: !secret mqtt_password
   #reboot_timeout: 15min
   #keepalive: 60s
-  
+
   #client_id: ${entity_id}
   #topic_prefix: ${entity_id}
   # This feature is only available with frameworks ['esp-idf']
@@ -31,9 +31,9 @@ mqtt:
 
   # Use null if you want to disable sending logs to MQTT
   # By default this option is enabled
-  # The log_topic has an additional configuration option: 
+  # The log_topic has an additional configuration option:
   # level (Optional, string): The log level to use for MQTT logging.
-  log_topic: 
+  log_topic:
 
   # ---------------------------------------------------------------
   # birth_message:
@@ -51,15 +51,14 @@ mqtt:
       - globals.set:
           id: is_mqtt_connected
           value: "true"
-      - logger.log: 
+      - logger.log:
           format: "Connected to MQTT broker"
           level: INFO
-  on_disconnect: 
+  on_disconnect:
     then:
       - globals.set:
           id: is_mqtt_connected
           value: "false"
-      - logger.log: 
+      - logger.log:
           format: "Disconnected from MQTT broker"
           level: WARN
-

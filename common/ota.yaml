@@ -9,7 +9,7 @@ ota:
 
   on_begin:
     then:
-      - logger.log: 
+      - logger.log:
           format: "${friendly_name} OTA start"
           level: INFO
   on_progress:
@@ -19,7 +19,7 @@ ota:
           args: ["x"]
   on_end:
     then:
-      - logger.log: 
+      - logger.log:
           format: "${friendly_name} OTA end"
           level: INFO
   on_error:
@@ -35,6 +35,6 @@ ota:
             lambda: |-
               return state == ota::OTA_STARTED;
           then:
-            - logger.log: 
+            - logger.log:
                 format: "${friendly_name} OTA start"
                 level: INFO

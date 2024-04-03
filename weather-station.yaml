@@ -55,7 +55,7 @@ button:
     icon: "mdi:update"
     on_press:
       then:
-      - component.update: t5_disp
+        - component.update: t5_disp
 
 # Fonts are downloaded from Google at build time, which is pretty neat.
 # Get codepoint values from the Google Fonts website.
@@ -71,7 +71,7 @@ font:
     # Glyphs are prerastered, choose them early to save flash
     glyphs: " C$+-0123456789.:"
     size: $font_big
-  - file: 'gfonts://Material+Symbols+Outlined'
+  - file: "gfonts://Material+Symbols+Outlined"
     id: font_icons_small
     size: $font_small
     glyphs: # also as a list
@@ -79,7 +79,7 @@ font:
       - "\U0000EF44" # Sunset
       - "\U0000F582" # Temperature High
       - "\U0000F581" # Temperature Low
-  - file: 'gfonts://Material+Symbols+Outlined'
+  - file: "gfonts://Material+Symbols+Outlined"
     id: font_icons_big
     size: $font_big
     glyphs:
@@ -182,7 +182,7 @@ graph:
     sensor: temp
     duration: 6h
     x_grid: 1h
-    y_grid: 5.0     # degC/div
+    y_grid: 5.0 # degC/div
     width: 400
     height: 400
 
@@ -206,7 +206,7 @@ display:
           it.print( 270, 660, id(font_icons_small), TextAlign::CENTER_LEFT, "\uEF44");
           it.print( 340, 660, id(roboto),  TextAlign::CENTER_LEFT, id(sunset).state.c_str());
           it.printf(130, 800, id(din_big), TextAlign::CENTER_LEFT, "C$ %.2f", id(gbp_cad).state);
-          it.print(  20, 880, id(roboto),  TextAlign::TOP_LEFT, id(alert).state.c_str());          
+          it.print(  20, 880, id(roboto),  TextAlign::TOP_LEFT, id(alert).state.c_str());
     # This prints a thermometer and the current temperature
     # Then a temperature graph
     # Then the daily high and low temperatures to the left

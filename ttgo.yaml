@@ -25,7 +25,6 @@ esp32:
 
 <<: !include include_font.yaml
 <<: !include include_font_images.yaml
-<<: !include include_sensor.yaml
 <<: !include include_wifi.yaml
 <<: !include include_mqtt.yaml
 <<: !include include_sensor.yaml

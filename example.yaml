@@ -2,16 +2,16 @@
 substitutions:
   devicename: "ulanzi-led-matrix"
   friendly_name: "Ulanzi LED Matrix"
-  # Pin definition from https://github.com/aptonline/PixelIt_Ulanzi 
-  battery_pin: GPIO34 
-  buzzer_pin: GPIO15 
-  ldr_pin: GPIO35 
-  matrix_pin: GPIO32 
-  left_button_pin: GPIO26 
-  mid_button_pin: GPIO27 
-  right_button_pin: GPIO14 
-  scl_pin: GPIO22 
-  sda_pin: GPIO21 
+  # Pin definition from https://github.com/aptonline/PixelIt_Ulanzi
+  battery_pin: GPIO34
+  buzzer_pin: GPIO15
+  ldr_pin: GPIO35
+  matrix_pin: GPIO32
+  left_button_pin: GPIO26
+  mid_button_pin: GPIO27
+  right_button_pin: GPIO14
+  scl_pin: GPIO22
+  sda_pin: GPIO21
 
 esphome:
   name: ${devicename}
@@ -24,7 +24,7 @@ esphome:
   on_boot:
     then:
       - ds1307.read_time:
-      
+
 logger:
   level: WARN
 
@@ -38,7 +38,7 @@ api:
         tune: string
       then:
         - rtttl.play:
-            rtttl: !lambda 'return tune;'
+            rtttl: !lambda "return tune;"
 
 ota:
   password: !secret ota_password
@@ -110,21 +110,21 @@ globals:
     initial_value: "true"
   - id: aab_add
     type: int
-    initial_value: '10'
+    initial_value: "10"
   - id: aab_max
     type: int
-    initial_value: '220'
+    initial_value: "220"
   - id: aab_min
     type: int
-    initial_value: '20'
+    initial_value: "20"
 
 external_components:
   - source:
       type: git
       url: https://github.com/lubeda/EspHoMaTriXv2
       ref: main
-    refresh: 60s 
-    components: [ ehmtxv2 ]  
+    refresh: 60s
+    components: [ehmtxv2]
 
 font:
   # Matrix Clock Fonts
@@ -133,11 +133,11 @@ font:
   # Store in a "fonts" subfolder of your ESPHome config folder or change paths below
   - file: ehmtxv2/MatrixClock-Light8.bdf
     id: default_font
-    glyphs:  |
+    glyphs: |
       ! "#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz°
   - file: ehmtxv2/MatrixClock-Chunky6.bdf
     id: special_font
-    glyphs:  |
+    glyphs: |
       ! "#$%&'()*+,-./0123456789:APMTapmt
 
 #animation:
@@ -147,7 +147,7 @@ font:
 #image:
 #  - id: image_black
 #    file: "ehmtxv2/1pixel.gif"
-  
+
 binary_sensor:
   - platform: status
     name: "$devicename Status"
@@ -157,13 +157,13 @@ binary_sensor:
       inverted: true
     name: "Left button"
   - platform: gpio
-    pin: 
+    pin:
       inverted: true
       number: $mid_button_pin
       mode: INPUT_PULLUP
     name: "Middle button"
   - platform: gpio
-    pin: 
+    pin:
       number: $right_button_pin
       inverted: true
     name: "Right button"
@@ -206,7 +206,7 @@ sensor:
           if (r > 0) return r;
           if (r <= 0) return 1;
           return 0;
-    unit_of_measurement: '%'
+    unit_of_measurement: "%"
   - platform: adc
     id: light_sensor
     name: "$devicename Illuminance"
@@ -227,7 +227,7 @@ sensor:
               if (n > id(aab_max)) n = id(aab_max);
               if (n < id(aab_min)) n = id(aab_min);
               int c = id(rgb8x32)->get_brightness(); // current value
-              c = c>0?c:1 ; 
+              c = c>0?c:1 ;
               int d = (n - c) * 100 / c; // diff in %
               if ( abs(d) > 2 ) id(rgb8x32)->set_brightness(n);
             }
@@ -268,7 +268,7 @@ display:
     lambda: |-
       id(rgb8x32)->tick();
       id(rgb8x32)->draw();
-      
+
 ehmtxv2:
   id: rgb8x32
   icons2html: true
@@ -288,7 +288,7 @@ ehmtxv2:
   special_font_yoffset: 6
   # until here
   boot_logo: "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,63519,63519,63519,63519,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,63519,0,0,0,0,2016,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,63488,0,63488,0,0,0,63519,0,0,0,0,2016,2016,0,0,0,65514,0,65514,0,0,0,31,0,0,0,64512,0,0,64512,0,63488,63488,0,63488,63488,0,0,63519,63519,63519,0,0,2016,0,2016,0,65514,0,65514,0,65514,0,31,31,31,0,0,0,64512,64512,0,0,63488,63488,63488,63488,63488,0,0,63519,0,0,0,0,2016,0,2016,0,65514,0,65514,0,65514,0,0,31,0,0,0,0,64512,64512,0,0,0,63488,63488,63488,0,0,0,63519,63519,63519,63519,0,2016,0,2016,0,65514,0,65514,0,65514,0,0,0,31,31,0,64512,0,0,64512,0,0,0,63488,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
-  icons: 
+  icons:
     - id: error
       lameid: 40530
     - id: home_assistant
@@ -312,7 +312,7 @@ ehmtxv2:
     - id: weather_sunny
       lameid: 52156
     - id: sleep8x32
-      url: https://user-images.githubusercontent.com/16407309/224850723-634c9b2d-55d9-44f2-9f93-765c0485b090.gif 
+      url: https://user-images.githubusercontent.com/16407309/224850723-634c9b2d-55d9-44f2-9f93-765c0485b090.gif
   on_next_screen:
     - homeassistant.event:
         event: esphome.new_screen

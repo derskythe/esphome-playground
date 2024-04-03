@@ -150,12 +150,12 @@ binary_sensor:
   - platform: template
     id: dim_display_off
     filters:
-      - delayed_off: 2min 
+      - delayed_off: 2min
     on_release:
       then:
         lambda: |-
           ESP_LOGD("template", "Display OFF!");
-          id(display_backlight).set_brightness(0.0);          
+          id(display_backlight).set_brightness(0.0);
 
 interval:
   - interval: 60s
