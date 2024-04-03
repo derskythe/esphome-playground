@@ -7,7 +7,7 @@ binary_sensor:
     on_press: # brightness is float (from 0 to 1). 1 = 100%
       then:
         if:
-          condition: 
+          condition:
             light.is_off: ${display_backlight}
           then:
             - logger.log: "Display on!"
@@ -27,7 +27,7 @@ binary_sensor:
   - platform: template
     id: dim_display_off
     filters:
-      - delayed_off: 2min # Turn off display 
+      - delayed_off: 2min # Turn off display
     on_release:
       then:
         - logger.log: "Display OFF!"

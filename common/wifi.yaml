@@ -14,7 +14,7 @@ wifi:
     ap_timeout: 0s # Disable!
   on_connect:
     then:
-      - logger.log: 
+      - logger.log:
           format: "WiFi Connected!"
           level: INFO
       - globals.set:
@@ -25,7 +25,8 @@ wifi:
             lambda: |-
               return id(enable_wifi_led_status) == true;
           then:
-            <<: !include {
+            <<:
+              !include {
                 file: blink_led.yaml,
                 vars:
                   {
@@ -43,7 +44,7 @@ wifi:
             #     rtttl: !lambda 'return "scale_up:d=32,o=5,b=100:c,c#,d#,e,f#,g#,a#,b'
   on_disconnect:
     then:
-      - logger.log: 
+      - logger.log:
           format: "WiFi disconnected"
           level: WARN
       - globals.set:
@@ -54,7 +55,8 @@ wifi:
             lambda: |-
               return id(enable_wifi_led_status) == true;
           then:
-              <<: !include {
+            <<:
+              !include {
                 file: blink_led.yaml,
                 vars:
                   {
