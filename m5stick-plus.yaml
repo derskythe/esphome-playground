@@ -282,29 +282,33 @@ light:
 spi:
   clk_pin: GPIO13
   mosi_pin: GPIO15
+  interface: hardware
 
 # I2C configuration entry for ESP32
 i2c:
   - id: bus_a
-    sda: GPIO21
-    scl: GPIO22
+    sda: GPIO32
+    scl: GPIO33
     scan: true
 
 display:
   - platform: ili9xxx
-    model: ST7789V
+    model: st7789v
     cs_pin: GPIO5
     dc_pin: GPIO23
     reset_pin: GPIO18
-    dimensions: 240x135
-    #rotation: 270 # ? Do I need this?
+    dimensions:
+      height: 240
+      width:  135
+    rotation: 270 # ? Do I need this?
     id: my_display
     update_interval: 15s
     pages:
       - id: display_page1
         lambda: |-
           ESP_LOGD("screen", "Page 1");
-          it.fill( id(my_green).fade_to_black(200) );
+          it.fill(COLOR_ON);
+          it.fill( id(my_blue) );
 
           if( id(is_wifi_connected) ) {
             it.image(0, 0, id(icon_wifi));
@@ -326,7 +330,8 @@ display:
       - id: display_page2
         lambda: |-
           ESP_LOGD("screen", "Displaying page 2");
-          it.fill( id(my_green).fade_to_black(200) );
+          it.fill(COLOR_ON);
+          it.fill( id(my_blue).fade_to_black(200) );
 
           // Turn on or off the LED ambient
           //id(led_strip).toggle();
@@ -337,6 +342,7 @@ display:
       - id: display_page3
         lambda: |-
           ESP_LOGD("screen", "Displaying page 3");
+          it.fill(COLOR_ON);
           int shift_x = (it.get_width() -  310) / 2;
           int shift_y = (it.get_height() - 256) / 2;
           for( auto i = 0; i < 256; i++ ) {
