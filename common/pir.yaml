@@ -1,0 +1,31 @@
+---
+# PIR Motion Sensor AS312
+binary_sensor:
+  - platform: gpio
+    device_class: motion
+    name: "${friendly_name} Motion Sensor"
+    id: motion_sensor
+    pin:
+      number: ${pin_pir}
+    # mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on: 100ms
+      - delayed_off: 100ms
+      - delayed_on_off:
+          time_on: 10s
+          time_off: 20s
+      - autorepeat:
+        - delay: 1s
+          time_off: 100ms
+          time_on: 900ms
+        - delay: 5s
+          time_off: 100ms
+          time_on: 400ms
+      - settle: 500ms
+    #   - lambda: |-
+    #       if (id(other_binary_sensor).state) {
+    #         return x;
+    #       } else {
+    #         return {};
+    #       }

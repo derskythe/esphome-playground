@@ -19,7 +19,7 @@ esp32:
 
 esp32_ble_tracker:
 
-<<: !include include__sensor.yaml
+<<: !include include_sensor.yaml
 
 # Enable Home Assistant API
 api:

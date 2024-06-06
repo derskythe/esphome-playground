@@ -5,6 +5,7 @@ sensor:
     address: 0x44
     update_interval: 60s
     precision: High
+    heater_max_duty: 0.05
     temperature:
       name: "${friendly_name} Temperature (from not correct sensor)"
       id: notcorrect_temperature_sensor

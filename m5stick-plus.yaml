@@ -6,6 +6,15 @@ substitutions:
   enable_ota: "true"
   enable_wifi_led_status: "true"
   display_backlight: "display_backlight"
+  pin_audio_lrclk: "GPIO34" # SPM1423
+  pin_audio_bclk: "GPIO0"
+  pin_audio_din: "GPIO34"
+  pin_irda: "GPIO9"
+  pin_led: "GPIO10"
+  pin_pir: "GPIO36"
+  pin_button_a: "GPIO37" # Home Button
+  pin_button_b: "GPIO39" # Power Button
+  pin_speaker: "GPIO02"
 
 esphome:
   name: ${entity_id}
@@ -64,11 +73,12 @@ packages:
   pkg_font_images: !include common/font_images.yaml
   # ! pkg_display_off: !include common/display_off.yaml
   # Additional packages
-  pkg_audio: !include common/audio_m5stickc.yaml
+  # pkg_audio: !include common/audio_m5stickc.yaml
   # pkg_rtttl: !include common/rtttl.yaml
   pkg_temp: !include common/qmp6988.yaml # Temperature, Pressure
   pkg_humidity: !include common/sht30.yaml # Humidity (Can give temperature as well)
   pkg_irda: !include common/irda.yaml # Infra Red Transmitter
+  pkg_pir: !include common/pir.yaml # PIR Sensor
   #pkg_led_strip: !include common/sk6812.yaml   # LED Strip
 
 # Buttons
@@ -157,21 +167,19 @@ binary_sensor:
           ESP_LOGD("template", "Display OFF!");
           id(display_backlight).set_brightness(0.0);
 
-interval:
-  - interval: 60s
-    then:
-      lambda: |-
-        if( !id(is_wifi_connected) || !id(is_mqtt_connected) || !id(is_api_connected) ) {
-          ESP_LOGW("interval_timer", "Not all services are connected");
-          id(led_strip).turn_off();
-          id(led_strip).turn_on();
-          delay(100);
-          id(led_strip).turn_off();
-          delay(100);
-          id(led_strip).turn_on();
-          delay(100);
-          id(led_strip).turn_off();
-        }
+# interval:
+#   - interval: 60s!include common/irda.yaml # Infra Red Transmitter
+#         if( !id(is_wifi_connected) || !id(is_mqtt_connected) || !id(is_api_connected) ) {
+#           ESP_LOGW("interval_timer", "Not all services are connected");
+#           id(led_strip).turn_off();
+#           id(led_strip).turn_on();
+#           delay(100);
+#           id(led_strip).turn_off();
+#           delay(100);
+#           id(led_strip).turn_on();
+#           delay(100);
+#           id(led_strip).turn_off();
+#         }
 # script:
 #   - id: script_page_turn
 #     mode: single
@@ -262,7 +270,7 @@ sensor:
 # Internal LEDS
 output:
   - platform: ledc # display backlight output
-    pin: GPIO10
+    pin: ${pin_led}
     id: builtin_led_pwm
     inverted: true
 
@@ -300,6 +308,8 @@ display:
     dimensions:
       height: 240
       width:  135
+      offset_width: 20
+      offset_height: 10
     rotation: 270 # ? Do I need this?
     id: my_display
     update_interval: 15s
