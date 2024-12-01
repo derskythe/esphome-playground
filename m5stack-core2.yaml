@@ -356,6 +356,7 @@ display:
   reset_pin: GPIO33
   id: my_display
   update_interval: 15s
+  invert_colors: false
   pages:
   - id: display_page1
     lambda: |-

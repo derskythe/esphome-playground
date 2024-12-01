@@ -1,40 +1,41 @@
 ---
 ota:
-  password: !secret ota_password
-  port: 3232
-  # ? In future versions, this will be replaced
-  # status_led:
-  #   pin: ${status_led_pin}
-  #   id: ota_status_led
+  - platform: esphome
+    password: !secret ota_password
+    port: 3232
+    # ? In future versions, this will be replaced
+    # status_led:
+    #   pin: ${status_led_pin}
+    #   id: ota_status_led
 
-  on_begin:
-    then:
-      - logger.log:
-          format: "${friendly_name} OTA start"
-          level: INFO
-  on_progress:
-    then:
-      - logger.log:
-          format: "${friendly_name} OTA progress %0.1f%%"
-          args: ["x"]
-  on_end:
-    then:
-      - logger.log:
-          format: "${friendly_name} OTA end"
-          level: INFO
-  on_error:
-    then:
-      - logger.log:
-          format: "${friendly_name} OTA update error %d"
-          level: ERROR
-          args: ["x"]
-  on_state_change:
-    then:
-      - if:
-          condition:
-            lambda: |-
-              return state == ota::OTA_STARTED;
-          then:
-            - logger.log:
-                format: "${friendly_name} OTA start"
-                level: INFO
+    on_begin:
+      then:
+        - logger.log:
+            format: "${friendly_name} OTA start"
+            level: INFO
+    on_progress:
+      then:
+        - logger.log:
+            format: "${friendly_name} OTA progress %0.1f%%"
+            args: ["x"]
+    on_end:
+      then:
+        - logger.log:
+            format: "${friendly_name} OTA end"
+            level: INFO
+    on_error:
+      then:
+        - logger.log:
+            format: "${friendly_name} OTA update error %d"
+            level: ERROR
+            args: ["x"]
+    on_state_change:
+      then:
+        - if:
+            condition:
+              lambda: |-
+                return state == ota::OTA_STARTED;
+            then:
+              - logger.log:
+                  format: "${friendly_name} OTA start"
+                  level: INFO

@@ -1,6 +1,6 @@
 ---
 sensor:
-  - platform: bmp280
+  - platform: bmp280_i2c
     i2c_id: bus_a
     address: 0x76
     update_interval: 20s
