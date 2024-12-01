@@ -1,0 +1,16 @@
+---
+text_sensor:
+  - platform: version
+    name: "${friendly_name} Version"
+    hide_timestamp: false
+
+  - platform: debug
+    device:
+      name: "${friendly_name} Device Info"
+    reset_reason:
+      name: "${friendly_name} Reset Reason"
+
+  - platform: template
+    name: "${friendly_name} Uptime"
+    id: uptime_human
+    icon: mdi:clock-start

@@ -12,3 +12,7 @@ color:
     green: 100%
   - id: my_yellow
     hex: ffff00
+  - id: my_gray
+    red: 50%
+    green: 50%
+    blue: 50%
