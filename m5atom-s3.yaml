@@ -58,12 +58,12 @@ i2c:
     scl: GPIO39
 
 # GPIO pin of the display backlight
-#switch:
-#  - platform: gpio
-#    pin: 16
-#    name: "Backlight"
-#    id: backlight
-#    restore_mode: ALWAYS_ON
+switch:
+  - platform: gpio
+    pin: GPIO16
+    name: "Backlight"
+    id: backlight
+    restore_mode: ALWAYS_ON
 
 sensor:
   - platform: mpu6886
@@ -88,19 +88,19 @@ spi:
   mosi_pin: GPIO21
 
 display:
-  - platform: st7789v # https://esphome.io/components/display/st7789v.html
+  - platform: ili9xxx
+    model: ST7789V
     id: disp
-    model: Custom
-    backlight_pin: GPIO16
     cs_pin: GPIO15
     dc_pin: GPIO33
     reset_pin: GPIO34
-    height: 128
-    width: 128
-    offset_height: 2
-    offset_width: 1
-    eightbitcolor: true
-    update_interval: 3s
+    invert_colors: true
+    update_interval: 1s
+    dimensions:
+      height: 128
+      width: 128
+      offset_height: 1
+      offset_width: 2
     lambda: |-
       it.rectangle(0,  0, it.get_width(), it.get_height(), id(my_blue));
       it.rectangle(0, 20, it.get_width(), it.get_height(), id(my_blue));   // header bar
@@ -114,8 +114,7 @@ display:
 
       if (id(system_status).state) {
         it.print(115, 5, id(roboto_small), id(my_green), TextAlign::TOP_RIGHT, "Online");
-      }
-      else {
+      } else {
         it.print(115, 5, id(roboto_small), id(my_red), TextAlign::TOP_RIGHT, "Offline");
       }
 
