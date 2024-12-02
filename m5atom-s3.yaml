@@ -1,13 +1,19 @@
 substitutions:
-  friendly_name: "M5Atom"
-  entity_id: "m5stack-atoms3"
+  friendly_name: "M5_Atom_S3"
+  entity_id: "m5atom-s3"
   wifi_power_save_mode: "none"
   enable_ota: "true"
   enable_wifi_led_status: "false"
   display_backlight: "display_backlight"
 
 esphome:
-  name: atoms3
+  name: ${entity_id}
+  on_boot:
+    priority: 800
+    then:
+      - logger.log:
+          format: "${friendly_name} started"
+          level: INFO
 
 esp32:
   board: esp32-s3-devkitc-1
