@@ -1,3 +1,4 @@
+---
 substitutions:
   friendly_name: "M5_Atom_S3"
   entity_id: "m5atom-s3"

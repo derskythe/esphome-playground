@@ -1,3 +1,4 @@
+---
 substitutions:
   friendly_name: "M5Stack"
   entity_id: "m5stack-core2"

@@ -1,8 +1,8 @@
 ---
 substitutions:
   friendly_name: "M5 Stick+"
-  entity_id: m5stick-c
-  wifi_power_save_mode: none
+  entity_id: "m5stick-c"
+  wifi_power_save_mode: "none"
   enable_ota: "true"
   enable_wifi_led_status: "true"
   display_backlight: "display_backlight"
