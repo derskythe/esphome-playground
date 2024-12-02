@@ -2,6 +2,6 @@
 # Infrared transmitter
 remote_transmitter:
   - pin:
-      number: ${pin_irda}
+      number: "${pin_irda}"
     carrier_duty_percent: 50%
     id: irda_transmitter

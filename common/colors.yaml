@@ -1,32 +1,41 @@
 ---
 color:
+  # WARNING: Don't use symbol #
   - id: my_blue
-    blue: 100%
+    hex: 387EF9
+
   - id: my_red
-    red: 100%
+    hex: CE5241
+
   - id: my_dark_red
     hex: D91656
+
   - id: my_pink
     hex: EFB6C8
+
   - id: my_orange
     hex: FFB200
+
   - id: my_teal
     hex: 219B9D
+
   - id: my_warm
     hex: FFD2A0
+
   - id: my_purple
     hex: A888B5
+
   - id: my_green
-    green: 100%
+    hex: 5CA361
+
   - id: my_white
-    red: 100%
-    blue: 100%
-    green: 100%
+    hex: FFFFFF
+
   - id: my_yellow
-    hex: ffff00
+    hex: FFFF00
+
   - id: my_gray
-    red: 50%
-    green: 50%
-    blue: 50%
+    hex: 7F7F7F
+
   - id: my_light_gray
     hex: EEEEEE

@@ -25,8 +25,8 @@ sensor:
   #   internal: true
 
   - platform: uptime
-    name: "${friendly_name} Uptime"
     id: uptime_sensor
+    name: "${friendly_name} Uptime"
     update_interval: 120s
     internal: true
     on_raw_value:

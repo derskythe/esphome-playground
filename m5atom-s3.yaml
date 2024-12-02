@@ -8,7 +8,7 @@ substitutions:
   display_backlight: "display_backlight"
 
 esphome:
-  name: ${entity_id}
+  name: "${entity_id}"
   on_boot:
     priority: 800
     then:
@@ -17,10 +17,10 @@ esphome:
           level: INFO
 
 esp32:
-  board: esp32-s3-devkitc-1
-  variant: esp32s3
+  board: "esp32-s3-devkitc-1"
+  variant: "esp32s3"
   framework:
-    type: arduino
+    type: "arduino"
 
 #######################################
 ## Global variables
@@ -70,8 +70,8 @@ i2c:
 switch:
   - platform: gpio
     pin: GPIO16
-    name: "Backlight"
     id: backlight
+    name: "Backlight"
     restore_mode: ALWAYS_ON
 
 sensor:
@@ -98,8 +98,8 @@ spi:
 
 display:
   - platform: ili9xxx
+    id: main_display
     model: ST7789V
-    id: disp
     cs_pin: GPIO15
     dc_pin: GPIO33
     reset_pin: GPIO34
@@ -131,7 +131,7 @@ display:
 #G41=Button
 binary_sensor:
   - platform: gpio
-    name: Button
+    name: "Button A"
     pin:
       number: GPIO41
       inverted: true
@@ -142,4 +142,4 @@ binary_sensor:
       - delayed_off: 10ms
     on_press:
       then:
-        - logger.log: Button Pressed
+        - logger.log: "Button A Pressed"

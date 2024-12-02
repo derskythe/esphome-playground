@@ -83,6 +83,8 @@ binary_sensor:
   pin:
     number: GPIO39
     inverted: true
+  filters:
+    - delayed_off: 10ms
   on_press:
     then:
     - logger.log:
@@ -119,6 +121,8 @@ binary_sensor:
   pin:
     number: GPIO38
     inverted: true
+  filters:
+    - delayed_off: 10ms
   on_press:
     then:
     - logger.log:
@@ -155,6 +159,8 @@ binary_sensor:
   pin:
     number: GPIO37
     inverted: true
+  filters:
+    - delayed_off: 10ms
   on_press:
     then:
     - logger.log:
@@ -273,29 +279,29 @@ script:
 external_components:
 - source:
     type: git
-    url: https://github.com/ssieb/custom_components
+    url: "https://github.com/ssieb/custom_components"
   components: [ip5306]
 
 ip5306:
   i2c_id: bus_a
   battery_level:
-    name: "${friendly_name} Battery Percent"
     id: battery_percent
+    name: "${friendly_name} Battery Percent"
     icon: mdi:battery-high
   charger_connected:
-    name: "${friendly_name} Charger Connected"
     id: battery_connected
+    name: "${friendly_name} Charger Connected"
     icon: mdi:battery-charging-medium
   charge_full:
-    name: "${friendly_name} Charge Full"
     id: battery_full
+    name: "${friendly_name} Charge Full"
     icon: mdi:battery-charging-high
 
-# Internal LEDS
+# Internal LEDs
 output:
 - platform: ledc # display backlight output
+  id: "${display_backlight}_pwm"
   pin: GPIO32
-  id: ${display_backlight}_pwm
 
 # - platform: esp32_pwm
 #   pin: GPIO25
@@ -304,10 +310,10 @@ output:
 
 light:
 - platform: monochromatic # display backlight
-  output: ${display_backlight}_pwm
+  id: "${display_backlight}"
+  output: "${display_backlight}_pwm"
   name: "${friendly_name} Backlight"
   icon: mdi:monitor
-  id: ${display_backlight}
   restore_mode: ALWAYS_OFF
 
 spi:
@@ -323,8 +329,8 @@ i2c:
   sda: 21
   scl: 22
   scan: true
-  # Default 50kHz. Min. setting at 100kHz needed. Otherwise lambda is so slow that warnings appear in log
-  # frequency: 50khz
+  # Default: 50KHz. min. setting at 100KHz needed. Otherwise, lambda is so slow that warnings appear in log
+  # frequency: 50Khz
 - id: bus_c
   sda: 17
   scl: 16
@@ -340,7 +346,7 @@ graph:
   width: 300
   height: 200
   traces:
-  - sensor: notcorrect_temperature_sensor
+  - sensor: not_correct_temperature_sensor
     line_type: DASHED
     line_thickness: 2
     color: my_red
@@ -351,11 +357,11 @@ graph:
 
 display:
 - platform: ili9xxx
+  id: my_display
   model: M5STACK
   cs_pin: GPIO14
   dc_pin: GPIO27
   reset_pin: GPIO33
-  id: my_display
   update_interval: 15s
   invert_colors: false
   pages:

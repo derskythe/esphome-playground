@@ -8,7 +8,7 @@ sensor:
     heater_max_duty: 0.05
     temperature:
       name: "${friendly_name} Temperature (from not correct sensor)"
-      id: notcorrect_temperature_sensor
+      id: not_correct_temperature_sensor
     humidity:
       name: "${friendly_name} Humidity"
       id: humidity_sensor

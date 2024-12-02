@@ -6,7 +6,7 @@ binary_sensor:
     name: "${friendly_name} Motion Sensor"
     id: motion_sensor
     pin:
-      number: ${pin_pir}
+      number: "${pin_pir}"
     # mode: INPUT_PULLUP
       inverted: true
     filters:
