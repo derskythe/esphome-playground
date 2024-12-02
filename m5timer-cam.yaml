@@ -1,5 +1,5 @@
 substitutions:
-  friendly_name: M5_Timer_CAM
+  friendly_name: "M5_Timer_CAM"
   entity_id: "m5-timer-cam"
   wifi_power_save_mode: "none"
   enable_ota: "true"
@@ -15,7 +15,7 @@ esphome:
           level: INFO
 
 esp32:
-  board: m5stack-timer-cam
+  board: "m5stack-timer-cam"
   framework:
     type: arduino
 
@@ -98,6 +98,18 @@ esp32_camera:
   href_pin: GPIO26
   pixel_clock_pin: GPIO21
   reset_pin: GPIO15
+  # resolution: 640x480
+  jpeg_quality: 10
+  max_framerate: "15 fps"
+  idle_framerate: "0.5 fps"
+  frame_buffer_count: 2
+  resolution: 1024x768
+  contrast: 1
+  brightness: 1
+  saturation: 0
+  special_effect: "none"
+  wb_mode: "auto"
+
 
   # Image settings
   name: My Camera
