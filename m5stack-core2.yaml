@@ -10,6 +10,9 @@ substitutions:
 esphome:
   name: "${entity_id}"
   friendly_name: "${friendly_name}"
+  includes:
+    - "sound/betty_online.h"
+    - "sound/betty_shutdown.h"
   on_boot:
     priority: 800
     then:
@@ -17,7 +20,7 @@ esphome:
         format: "Booting ESP32"
         level: INFO
     - light.turn_on:
-        id: ${display_backlight}
+        id: "${display_backlight}"
         brightness: 1
         transition_length: 1s
     - display.page.show: display_page1
@@ -73,6 +76,7 @@ packages:
   pkg_temp: !include common/bmp280.yaml # Temperature, Pressure
   pkg_humidity: !include common/sht40.yaml # Humidity (Can give temperature as well)
   pkg_led_strip: !include common/sk6812.yaml # LED Strip
+  pkg_audio: !include common/i2s.yaml
 
 # Buttons
 binary_sensor:
@@ -397,6 +401,7 @@ display:
       // Red: 100%, Green: 53%, Blue: 5%
       // Turn on or off the LED ambient
       // id(led_strip).toggle();
+      id(general_speaker).play();
 
       auto call = id(led_strip).turn_on();
       // set parameters (optional)

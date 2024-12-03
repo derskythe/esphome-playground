@@ -15,7 +15,7 @@ debug:
 
 web_server:
   port: 80
-  ota: ${enable_ota}
+  ota: "${enable_ota}"
   enable_private_network_access: false
   version: 3
   local: true

@@ -1,13 +1,13 @@
 ---
 - repeat:
-    count: ${repeat_count}
+    count: "${repeat_count}"
     then:
       - light.turn_on:
-          id: ${led_id}
-          brightness: ${brightness}
-          red: ${red}
-          green: ${green}
-          blue: ${blue}
-      - delay: ${delay}
+          id: "${led_id}"
+          brightness: "${brightness}"
+          red: "${red}"
+          green: "${green}"
+          blue: "${blue}"
+      - delay: "${delay}"
       - light.turn_off: led_strip
-      - delay: ${delay}
+      - delay: "${delay}"

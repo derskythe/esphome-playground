@@ -1,0 +1,17 @@
+---
+i2s_audio:
+  id: "i2s_audio_component"
+  i2s_lrclk_pin: GPIO0
+  i2s_bclk_pin: GPIO12
+
+speaker:
+  - platform: i2s_audio
+    i2s_audio_id: "i2s_audio_component"
+    dac_type: external
+    i2s_mode: primary
+    i2s_dout_pin: GPIO2
+    id: "general_speaker"
+    on:
+      - speaker.play:
+          id: speaker
+          data: !lambda return betty_online_raw;

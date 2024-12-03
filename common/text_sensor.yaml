@@ -25,8 +25,8 @@ text_sensor:
       name: "${friendly_name} Reset Reason"
 
   - platform: template
-    name: "${friendly_name} Uptime"
     id: uptime_human
+    name: "${friendly_name} Uptime"
     icon: mdi:clock-start
 
   # - platform: internal_temperature
