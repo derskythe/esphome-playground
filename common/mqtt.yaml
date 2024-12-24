@@ -1,34 +1,30 @@
 ---
 mqtt:
   broker: "192.168.0.204"
-  #broker: iotstack.skif.ws
+  # broker: iotstack.skif.ws
   username: "log_default"
   password: !secret mqtt_password
-  #reboot_timeout: 15min
-  #keepalive: 60s
-
-  #client_id: ${entity_id}
-  #topic_prefix: ${entity_id}
+  # reboot_timeout: 15min
+  # keepalive: 60s
+  # client_id: ${entity_id}
+  # topic_prefix: ${entity_id}
   # This feature is only available with frameworks ['esp-idf']
   # skip_cert_cn_check: true
-  #discovery: true
-  #discovery_retain: true
-
-  # The topic to send MQTT log messages to. Use null if you want to disable sending logs to MQTT
+  # discovery: true
+  # discovery_retain: true
+  # The topic to send MQTT log messages to.
+  # Use null if you want to disable sending logs to MQTT
   # log_topic: null
   # -? discovery_unique_id_generator
-
   # Can be one of legacy or mac. Defaults to legacy,
   # which generates unique_id in format ESP<component_type><default_object_id>.
   # mac generator uses format:
   # <mac_address>-<component_type>-<fnv1_hash(friendly_name)>
-  #discovery_unique_id_generator: "mac"
-
+  # discovery_unique_id_generator: "mac"
   # Can be one of none or device_name. Defaults to none which does not generate object_id.
   # device_name generator uses format:
   # <device_name>_<friendly_name>
-  #discovery_object_id_generator: "device_name"
-
+  # discovery_object_id_generator: "device_name"
   # Use null if you want to disable sending logs to MQTT
   # By default this option is enabled
   # The log_topic has an additional configuration option:

@@ -11,4 +11,5 @@ sensor:
       id: humidity_sensor
     address: 0x44
     update_interval: 60s
-    heater_enabled: true # By default is off
+    # By-default is OFF
+    heater_enabled: "true"

@@ -28,7 +28,6 @@ text_sensor:
     id: uptime_human
     name: "${friendly_name} Uptime"
     icon: mdi:clock-start
-
-  # - platform: internal_temperature
-  #   icon: mdi:cpu-64-bit
-  #   name: ${friendly_name} Internal Temperature
+    # - platform: internal_temperature
+    #   icon: mdi:cpu-64-bit
+    #   name: ${friendly_name} Internal Temperature
