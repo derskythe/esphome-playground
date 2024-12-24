@@ -63,18 +63,21 @@ binary_sensor:
     internal: false
 
 interval:
-  - interval: 120s # Show each page for 120 seconds
+  # Show each page for 120 seconds
+  - interval: 120s
     then:
       - if:
           condition:
             binary_sensor.is_on: itsday
           then:
-            - light.turn_off: led_strip # Disable Camera LED during the day
+            # Disable Camera LED during the day
+            - light.turn_off: led_strip
             - logger.log:
                 format: "LED must be OFF"
                 level: INFO
           else:
-            - light.turn_on: led_strip # Enable Camera LED at night
+            # Enable Camera LED at night
+            - light.turn_on: led_strip
             - logger.log:
                 format: "LED must be ON"
                 level: INFO
@@ -102,7 +105,8 @@ esp32_camera:
   power_down_pin: GPIO32
   # resolution: 800x600
   resolution: 640x480
-  vertical_flip: false # Rotate the image 180°
+  # Rotate the image 180°
+  vertical_flip: false
   horizontal_mirror: false
   agc_gain_ceiling: 2x
   wb_mode: auto
@@ -118,8 +122,9 @@ esp32_camera_web_server:
   - port: 8081
     mode: snapshot
 
+# Backlight output
 output:
-  - platform: ledc # backlight output
+  - platform: ledc
     pin: GPIO4
     id: led_pwm
 

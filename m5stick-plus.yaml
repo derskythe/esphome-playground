@@ -6,18 +6,21 @@ substitutions:
   enable_ota: "true"
   enable_wifi_led_status: "true"
   display_backlight: "display_backlight"
-  pin_audio_lrclk: "GPIO34" # SPM1423
+  # SPM1423
+  pin_audio_lrclk: "GPIO34"
   pin_audio_bclk: "GPIO0"
   pin_audio_din: "GPIO34"
   pin_irda: "GPIO9"
   pin_led: "GPIO10"
   pin_pir: "GPIO36"
-  pin_button_a: "GPIO37" # Home Button
-  pin_button_b: "GPIO39" # Power Button
+  # Home Button
+  pin_button_a: "GPIO37"
+  # Power Button
+  pin_button_b: "GPIO39"
   pin_speaker: "GPIO02"
 
 esphome:
-  name: ${entity_id}
+  name: "${entity_id}"
   friendly_name: ${friendly_name}
   on_boot:
     priority: 800
@@ -26,10 +29,10 @@ esphome:
           format: "Booting ${friendly_name}"
           level: INFO
       - display.page.show: display_page1
-      - component.update: my_display
+      - component.update: main_display
 
 esp32:
-  board: ${entity_id}
+  board: "${entity_id}"
   framework:
     type: arduino
 
@@ -75,11 +78,16 @@ packages:
   # Additional packages
   # pkg_audio: !include common/audio_m5stickc.yaml
   # pkg_rtttl: !include common/rtttl.yaml
-  pkg_temp: !include common/qmp6988.yaml # Temperature, Pressure
-  pkg_humidity: !include common/sht30.yaml # Humidity (Can give temperature as well)
-  pkg_irda: !include common/irda.yaml # Infra Red Transmitter
-  pkg_pir: !include common/pir.yaml # PIR Sensor
-  #pkg_led_strip: !include common/sk6812.yaml   # LED Strip
+  # Temperature, Pressure
+  pkg_temp: !include common/qmp6988.yaml
+  # Humidity (Can give temperature as well)
+  pkg_humidity: !include common/sht30.yaml
+  # Infra Red Transmitter
+  pkg_irda: !include common/irda.yaml
+  # PIR Sensor
+  pkg_pir: !include common/pir.yaml
+  # LED Strip
+  # pkg_led_strip: !include common/sk6812.yaml
 
 # Buttons
 binary_sensor:
@@ -95,8 +103,8 @@ binary_sensor:
         - logger.log:
             format: "Button A was pressed"
             level: INFO
-        - display.page.show_next: my_display
-        - component.update: my_display
+        - display.page.show_next: main_display
+        - component.update: main_display
         - binary_sensor.template.publish:
             id: dim_display_on
             state: ON
@@ -125,7 +133,7 @@ binary_sensor:
             format: "Button B was pressed"
             level: INFO
         - display.page.show: display_page1
-        - component.update: my_display
+        - component.update: main_display
         - binary_sensor.template.publish:
             id: dim_display_on
             state: ON
@@ -192,7 +200,7 @@ binary_sensor:
 #                 format: "Script Button A was pressed"
 #                 level: INFO
 #             - display.page.show: display_page1
-#             - component.update: my_display
+#             - component.update: main_display
 
 #       - if:
 #           condition:
@@ -202,7 +210,7 @@ binary_sensor:
 #                 format: "Script Button B was pressed"
 #                 level: INFO
 #             - display.page.show: display_page2
-#             - component.update: my_display
+#             - component.update: main_display
 
 #       - if:
 #           condition:
@@ -212,7 +220,7 @@ binary_sensor:
 #                 format: "Script Button C was pressed"
 #                 level: INFO
 #             - display.page.show: display_page3
-#             - component.update: my_display
+#             - component.update: main_display
 
 # - id: script_turn_on_led_ambient
 #   mode: single
@@ -311,60 +319,68 @@ display:
       offset_width: 20
       offset_height: 10
     rotation: 270 # ? Do I need this?
-    id: my_display
+    id: main_display
     update_interval: 15s
     pages:
       - id: display_page1
         lambda: |-
           ESP_LOGD("screen", "Page 1");
           it.fill(COLOR_ON);
-          it.fill( id(my_blue) );
+          it.fill(id(my_blue));
+          int start_pos = 0;
 
-          if( id(is_wifi_connected) ) {
-            it.image(0, 0, id(icon_wifi));
-          } else {
-            it.image(0, 0, id(icon_wifi_off));
-          }
+          it.image(start_pos, 0,
+              id(is_wifi_connected) 
+              ? id(icon_wifi) 
+              : id(icon_wifi_off));
 
-          if( id(is_mqtt_connected) ) {
-            it.image(0, 30, id(icon_access_point_network));
-          } else {
-            it.image(0, 30, id(icon_access_point_network_off));
-          }
+          it.image(start_pos, 30,
+              id(is_mqtt_connected)
+              ? id(icon_access_point_network)
+              : id(icon_access_point_network_off));
 
-          if( id(is_api_connected) ) {
-            it.image(0, 60, id(icon_shield_home));
-          } else {
-            it.image(0, 60, id(icon_home_off));
-          }
+          it.image(start_pos, 60,
+              id(is_api_connected) 
+              ? id(icon_shield_home) 
+              : id(icon_home_off));
+
       - id: display_page2
         lambda: |-
           ESP_LOGD("screen", "Displaying page 2");
           it.fill(COLOR_ON);
-          it.fill( id(my_blue).fade_to_black(200) );
+          it.fill(id(my_blue));
 
           // Turn on or off the LED ambient
-          //id(led_strip).toggle();
-
+          // id(led_strip).toggle();
           // Draw the graph at position [x=10,y=20]
-          //it.graph(10, 20, id(single_temperature_graph));
+          // it.graph(10, 20, id(single_temperature_graph));
 
       - id: display_page3
         lambda: |-
           ESP_LOGD("screen", "Displaying page 3");
           it.fill(COLOR_ON);
-          int shift_x = (it.get_width() -  310) / 2;
-          int shift_y = (it.get_height() - 256) / 2;
-          for( auto i = 0; i < 256; i++ ) {
-              it.horizontal_line(shift_x +  0,  i + shift_y, 50, my_red.fade_to_white(i));
-              it.horizontal_line(shift_x + 50,  i + shift_y, 50, my_red.fade_to_black(i));
+          
+          int spacing = 50;
+          int max_width = 310;
+          int max_height = 256;
+          int shift_x = (it.get_width() -  max_width) / 2;
+          int shift_y = (it.get_height() - max_height) / 2;
 
-              it.horizontal_line(shift_x + 105, i + shift_y, 50, my_green.fade_to_white(i));
-              it.horizontal_line(shift_x + 155, i + shift_y, 50, my_green.fade_to_black(i));
+          for( int i = 0; i < max_height; i++ ) {
+              it.horizontal_line(shift_x + 0, i + shift_y, spacing, id(my_red));
+              it.horizontal_line(shift_x + spacing, i + shift_y, spacing, id(my_red));
 
-              it.horizontal_line(shift_x + 210, i + shift_y, 50, my_blue.fade_to_white(i));
-              it.horizontal_line(shift_x + 260, i + shift_y, 50, my_blue.fade_to_black(i));
+              it.horizontal_line(shift_x + 105, i + shift_y, spacing, id(my_gree));
+              it.horizontal_line(shift_x + 155, i + shift_y, spacing, id(my_gree));
 
-              it.printf(shift_x +      2 + 260, 2 + shift_y, id(roboto_small), "Index: %.1f", i);
+              it.horizontal_line(shift_x + 210, i + shift_y, spacing, id(my_blue));
+              it.horizontal_line(shift_x + 260, i + shift_y, spacing, id(my_blue));
+
+              it.printf(shift_x + 2 + 260, 2 + shift_y, id(roboto_small), "Index: %.1f", i);
           }
-          it.rectangle( shift_x + 0, 0 + shift_y, shift_x + 310, 256 + shift_y, my_yellow);
+          it.rectangle(
+            shift_x,
+            shift_y, 
+            shift_x + max_width, 
+            max_height + shift_y, 
+            id(my_yellow));

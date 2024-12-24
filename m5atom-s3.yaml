@@ -114,19 +114,25 @@ display:
       it.rectangle(0,  0, it.get_width(), it.get_height(), id(my_blue));
       it.rectangle(0, 20, it.get_width(), it.get_height(), id(my_blue));   // header bar
 
-      it.strftime((128 / 2), (128 / 3) * 1 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%Y-%m-%d", id(esptime).now());
-      it.strftime((128 / 2), (128 / 3) * 2 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%H:%M:%S", id(esptime).now());
+      it.strftime((128 / 2), (128 / 3) * 1 + 5, 
+            id(roboto_big), 
+            id(my_gray), 
+            TextAlign::CENTER, 
+            "%Y-%m-%d", 
+            id(esptime).now());
+      it.strftime((128 / 2), (128 / 3) * 2 + 5, id(roboto_big), id(my_gray), 
+            TextAlign::CENTER, 
+            "%H:%M:%S", 
+            id(esptime).now());
       it.print(5, 5, id(roboto_small), id(my_yellow), TextAlign::TOP_LEFT, "ESPHome");
 
       // Comment out the above lines to see the image without text overlaid
       // it.image(0, 0, id(my_image));
-
-      if (id(system_status).state) {
-        it.print(115, 5, id(roboto_small), id(my_green), TextAlign::TOP_RIGHT, "Online");
-      } else {
-        it.print(115, 5, id(roboto_small), id(my_red), TextAlign::TOP_RIGHT, "Offline");
-      }
-
+      it.print(115, 5, id(roboto_small), id(my_green),      
+         TextAlign::TOP_RIGHT, 
+         id(system_status).state 
+         ? "Online" 
+         : "Offline");
 
 #G41=Button
 binary_sensor:

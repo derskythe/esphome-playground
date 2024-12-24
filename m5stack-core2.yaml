@@ -24,7 +24,7 @@ esphome:
         brightness: 1
         transition_length: 1s
       - display.page.show: display_page1
-      - component.update: my_display
+      - component.update: main_display
 
 esp32:
   board: "${entity_id}"
@@ -233,7 +233,7 @@ script:
                 level: INFO
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page1
-            - component.update: my_display
+            - component.update: main_display
 
       - if:
           condition:
@@ -244,7 +244,7 @@ script:
                 level: INFO
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page2
-            - component.update: my_display
+            - component.update: main_display
 
       - if:
           condition:
@@ -255,7 +255,7 @@ script:
                 level: INFO
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page3
-            - component.update: my_display
+            - component.update: main_display
 
 # - id: script_turn_on_led_ambient
 #   mode: single
@@ -287,7 +287,7 @@ external_components:
   - source:
       type: git
       url: "https://github.com/ssieb/custom_components"
-    components: [ ip5306 ]
+    components: [ip5306]
 
 ip5306:
   i2c_id: bus_a
@@ -336,8 +336,9 @@ i2c:
     sda: 21
     scl: 22
     scan: true
-    # Default: 50KHz. min. setting at 100KHz needed. Otherwise, lambda is so slow that warnings appear in log
-    # frequency: 50Khz
+    # Default: 50KHz. min. setting at 100KHz needed.
+    # Otherwise, lambda is so slow that
+    # warnings appear in log frequency: 50Khz
   - id: bus_c
     sda: 17
     scl: 16
@@ -364,7 +365,7 @@ graph:
 
 display:
   - platform: ili9xxx
-    id: my_display
+    id: main_display
     model: M5STACK
     cs_pin: GPIO14
     dc_pin: GPIO27
@@ -375,66 +376,149 @@ display:
       - id: display_page1
         lambda: |-
           ESP_LOGD("screen", "Displaying page 1");
-          it.fill( id(my_green).fade_to_black(200) );
           
-          // icon_temp
-          it.image(0, 0, id(icon_temp));
-          it.printf(40, 0, id(roboto_big), "Temp.: %.1f C", id(temperature_sensor).state);
-          
-          // icon_pressure
-          it.image(0, 40, id(icon_pressure));
-          it.printf(40, 40, id(roboto_big), "Pressure: %.1f kPa", id(pressure_sensor).state);
-          
-          // icon_wifi
-          it.image(0, 80, id(icon_wifi));
-          it.printf(40, 80, id(roboto_big), "Wi-Fi: %.1f dB", id(wifi_sensor).state);
-          
+          int first_element_pos = 0;
+          int second_element_pos = 40;
+          int element_line = 0;
+          it.fill(id(my_green));
+
+          // Picture: icon_temp
+          it.image(first_element_pos, element_line, id(icon_temp));
+          it.printf(
+              second_element_pos, 
+              element_line, 
+              id(roboto_big), 
+              "Temp.: %.1f C", 
+              id(temperature_sensor).state);
+          element_line += second_element_pos;
+
+          // Picture: icon_pressure
+          it.image(first_element_pos, element_line, id(icon_pressure));
+          it.printf(
+              second_element_pos, 
+              element_line, 
+              id(roboto_big), 
+              "Pressure: %.1f kPa", 
+              id(pressure_sensor).state);
+          element_line += second_element_pos;
+
+          // Picture: icon_wifi
+          it.image(first_element_pos, element_line, id(icon_wifi));
+          it.printf(
+              second_element_pos, 
+              element_line, 
+              id(roboto_big), 
+              "Wi-Fi: %.1f dB", 
+              id(wifi_sensor).state);
+          element_line += second_element_pos;
+
           // icon_battery
-          it.image(0, 120, id(icon_battery));
-          it.printf(40, 120, id(roboto_big), "Battery: %.1f%%", id(battery_percent).state);
-          
+          it.image(first_element_pos, element_line, id(icon_battery));
+          it.printf(
+              second_element_pos, 
+              element_line, 
+              id(roboto_big), 
+              "Battery: %.1f%%", 
+              id(battery_percent).state);
+          element_line += second_element_pos;
+
           // icon_uptime
-          it.image(0, 160, id(icon_uptime));
-          it.printf(40, 160, id(roboto_big), "Uptime: %.1f%", id(uptime_sensor).state);
+          it.image(first_element_pos, element_line, id(icon_uptime));
+          it.printf(
+              second_element_pos, 
+              element_line, 
+              id(roboto_big), 
+              "Uptime: %.1f%", 
+              id(uptime_sensor).state);
 
       - id: display_page2
         lambda: |-
           ESP_LOGD("screen", "Displaying page 2");
-          
+
           // Red: 100%, Green: 53%, Blue: 5%
           // Turn on or off the LED ambient
           // id(led_strip).toggle();
           id(general_speaker).play();
-          
+
           auto call = id(led_strip).turn_on();
-          // set parameters (optional)
+          // Set parameters (optional)
           call.set_transition_length(1000); // in ms
-          call.set_brightness(1.0); // 1.0 is full brightness
+          // 1.0 is full brightness
+          call.set_brightness(1.0); 
           call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
-          call.set_rgb(1.0, 0.5, 0.1); // color in RGB order, want orange
+          // color in RGB order, want orange
+          call.set_rgb(1.0, 0.5, 0.1); 
           call.set_cold_white(0.5);
           call.set_warm_white(0.75);
           // perform action:
           call.perform();
-          
+
           // Draw the graph at position [x=10,y=20]
-          it.graph(10, 20, id(single_temperature_graph));
+          it.graph(
+              10, 
+              20, 
+              id(single_temperature_graph));
 
       - id: display_page3
         lambda: |-
           ESP_LOGD("screen", "Displaying page 3");
-          int shift_x = (it.get_width() -  310) / 2;
-          int shift_y = (it.get_height() - 256) / 2;
-          for( auto i = 0; i < 256; i++ ) {
-              it.horizontal_line(shift_x +  0,  i + shift_y, 50, my_red.fade_to_white(i));
-              it.horizontal_line(shift_x + 50,  i + shift_y, 50, my_red.fade_to_black(i));
+
+          int spacing = 50;
+          int max_width = 310;
+          int max_height = 256;
+          int shift_x = (it.get_width() -  max_width) / 2;
+          int shift_y = (it.get_height() - max_height) / 2;
           
-              it.horizontal_line(shift_x + 105, i + shift_y, 50, my_green.fade_to_white(i));
-              it.horizontal_line(shift_x + 155, i + shift_y, 50, my_green.fade_to_black(i));
-          
-              it.horizontal_line(shift_x + 210, i + shift_y, 50, my_blue.fade_to_white(i));
-              it.horizontal_line(shift_x + 260, i + shift_y, 50, my_blue.fade_to_black(i));
-          
-              it.printf(shift_x +      2 + 260, 2 + shift_y, id(roboto_small), "Index: %.1f", i);
+          for( auto i = 0; i < max_height; i++ ) {
+              int j = 0;
+              it.horizontal_line(
+                  shift_x + (spacing * j),  
+                  i + shift_y, 
+                  spacing, 
+                  id(my_red));
+              j++;
+              it.horizontal_line(
+                  shift_x + (spacing * j),  
+                  i + shift_y, 
+                  spacing, 
+                  id(my_red));
+              j++;
+
+              it.horizontal_line(
+                  shift_x + (spacing * j) + 5, 
+                  i + shift_y, 
+                  spacing, 
+                  id(my_green));
+              j++;
+              it.horizontal_line(
+                  shift_x + (spacing * j) + 5, 
+                  i + shift_y, 
+                  spacing, 
+                  id(my_green));
+              j++;
+
+              it.horizontal_line(
+                  shift_x + (spacing * j) + 10, 
+                  i + shift_y, 
+                  spacing, 
+                  id(my_blue));
+              j++;
+              it.horizontal_line(
+                  shift_x + (spacing * j) + 10, 
+                  i + shift_y, 
+                  spacing, 
+                  id(my_blue));
+
+              it.printf(
+                  shift_x + (spacing * j) + 12, 
+                  2 + shift_y, 
+                  id(roboto_small), 
+                  "Index: %.1f", 
+                  i);
           }
-          it.rectangle( shift_x + 0, 0 + shift_y, shift_x + 310, 256 + shift_y, my_yellow);
+          it.rectangle( 
+            shift_x, 
+            shift_y, 
+            shift_x + max_width, 
+            max_height + shift_y, 
+            id(my_yellow));
