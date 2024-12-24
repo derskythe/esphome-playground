@@ -1,0 +1,43 @@
+---
+name: Clean-up
+run-name: "Clean-up [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
+
+on:
+  push:
+    branches:
+      - master
+      - cicd
+    paths:
+      - '*.yaml'
+      - '*.yml'
+      - '.github/workflows/build.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  clean-up:
+    name: "Clean-up"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        type:
+          - cancelled
+          - failure
+    steps:
+      - name: "Run for ${{ matrix.type }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO: ${{ github.repo }}
+        run: |
+          gh run list -R "${{ env.REPO }}" -s ${{ matrix.type }}
+          sleep 1
+          gh run list -R "${{ env.REPO }}" -s ${{ matrix.type }} --json databaseId --jq ".[] | .databaseId" \
+            | xargs -I {} gh run -R "${{ env.REPO }}" delete {}

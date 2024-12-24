@@ -3,14 +3,15 @@ name: Build
 run-name: "Build [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
 
 on:
-  pull_request:
+  push:
+    branches:
+      - master
+      - cicd
     paths:
       - '*.yaml'
       - '*.yml'
       - '.github/workflows/build.yaml'
   workflow_dispatch:
-  release:
-    types: [ published ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
