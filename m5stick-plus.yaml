@@ -329,20 +329,9 @@ display:
           it.fill(id(my_blue));
           int start_pos = 0;
 
-          it.image(start_pos, 0,
-              id(is_wifi_connected) 
-              ? id(icon_wifi) 
-              : id(icon_wifi_off));
-
-          it.image(start_pos, 30,
-              id(is_mqtt_connected)
-              ? id(icon_access_point_network)
-              : id(icon_access_point_network_off));
-
-          it.image(start_pos, 60,
-              id(is_api_connected) 
-              ? id(icon_shield_home) 
-              : id(icon_home_off));
+          it.image(start_pos, 0, id(is_wifi_connected) ? id(icon_wifi) : id(icon_wifi_off));
+          it.image(start_pos, 30, id(is_mqtt_connected) ? id(icon_access_point_network) : id(icon_access_point_network_off));
+          it.image(start_pos, 60, id(is_api_connected) ? id(icon_shield_home) : id(icon_home_off));
 
       - id: display_page2
         lambda: |-
@@ -378,9 +367,4 @@ display:
 
               it.printf(shift_x + 2 + 260, 2 + shift_y, id(roboto_small), "Index: %.1f", i);
           }
-          it.rectangle(
-            shift_x,
-            shift_y, 
-            shift_x + max_width, 
-            max_height + shift_y, 
-            id(my_yellow));
+          it.rectangle(shift_x, shift_y, shift_x + max_width, max_height + shift_y, id(my_yellow));
