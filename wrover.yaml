@@ -1,9 +1,9 @@
 ---
 substitutions:
-  friendly_name: WROVER_DevKit
+  friendly_name: 'WROVER_DevKit'
 
 esphome:
-  name: wrover_devkit
+  name: 'wrover_devkit'
   platformio_options:
     board_build.flash_mode: dio
 
@@ -52,7 +52,7 @@ light:
     num_leds: 1
     rmt_channel: 1
     chipset: SK6812
-    name: ${friendly_name} LED Light
+    name: '${friendly_name} LED Light'
     restore_mode: ALWAYS_OFF
     id: side_light
     default_transition_length: 0s

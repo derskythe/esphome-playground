@@ -1,19 +1,19 @@
 ---
 substitutions:
-  friendly_name: TTGOT1
-  entity_id: ttgo-t1
-  tag: ttgo-t1
-  wifi_power_save_mode: none
-  screenlock_delay: 120sec
-  enable_ota: true
-  enable_mdns: true
-  enable_wifi_led_status: true
+  friendly_name: 'TTGOT1'
+  entity_id: 'ttgo-t1'
+  tag: 'ttgo-t1'
+  wifi_power_save_mode: 'none'
+  screenlock_delay: '120sec'
+  enable_ota: 'true'
+  enable_mdns: 'true'
+  enable_wifi_led_status: 'true'
 
 esphome:
-  name: ${entity_id}
+  name: '${entity_id}'
 
 esp32:
-  board: ${entity_id}
+  board: '${entity_id}'
   framework:
     type: arduino
 

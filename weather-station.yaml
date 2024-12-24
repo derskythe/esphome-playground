@@ -1,6 +1,6 @@
 ---
 substitutions:
-  esp_name: lilygo
+  esp_name: 'lilygo'
   font_small: '48'
   font_big: '100'
 

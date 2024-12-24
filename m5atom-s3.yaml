@@ -1,26 +1,26 @@
 ---
 substitutions:
-  friendly_name: "M5_Atom_S3"
-  entity_id: "m5atom-s3"
-  wifi_power_save_mode: "none"
-  enable_ota: true
-  enable_wifi_led_status: false
-  display_backlight: "display_backlight"
+  friendly_name: 'M5_Atom_S3'
+  entity_id: 'm5atom-s3'
+  wifi_power_save_mode: 'none'
+  enable_ota: 'true'
+  enable_wifi_led_status: 'false'
+  display_backlight: 'display_backlight'
 
 esphome:
-  name: "${entity_id}"
+  name: '${entity_id}'
   on_boot:
     priority: 800
     then:
       - logger.log:
-          format: "${friendly_name} started"
+          format: '${friendly_name} started'
           level: INFO
 
 esp32:
-  board: "esp32-s3-devkitc-1"
-  variant: "esp32s3"
+  board: 'esp32-s3-devkitc-1'
+  variant: 'esp32s3'
   framework:
-    type: "arduino"
+    type: arduino
 
 #######################################
 ## Global variables
@@ -71,26 +71,26 @@ switch:
   - platform: gpio
     pin: GPIO16
     id: backlight
-    name: "Backlight"
+    name: 'Backlight'
     restore_mode: ALWAYS_ON
 
 sensor:
   - platform: mpu6886
     address: 0x68
     accel_x:
-      name: "${friendly_name} MPU6886 Accel X"
+      name: '${friendly_name} MPU6886 Accel X'
     accel_y:
-      name: "${friendly_name} MPU6886 Accel Y"
+      name: '${friendly_name} MPU6886 Accel Y'
     accel_z:
-      name: "${friendly_name} MPU6886 Accel z"
+      name: '${friendly_name} MPU6886 Accel z'
     gyro_x:
-      name: "${friendly_name} MPU6886 Gyro X"
+      name: '${friendly_name} MPU6886 Gyro X'
     gyro_y:
-      name: "${friendly_name} MPU6886 Gyro Y"
+      name: '${friendly_name} MPU6886 Gyro Y'
     gyro_z:
-      name: "${friendly_name} MPU6886 Gyro z"
+      name: '${friendly_name} MPU6886 Gyro z'
     temperature:
-      name: "${friendly_name} MPU6886 Temperature"
+      name: '${friendly_name} MPU6886 Temperature'
 
 spi:
   clk_pin: GPIO17
@@ -133,7 +133,7 @@ display:
 # G41=Button
 binary_sensor:
   - platform: gpio
-    name: "Button A"
+    name: 'Button A'
     pin:
       number: GPIO41
       inverted: true
@@ -144,4 +144,4 @@ binary_sensor:
       - delayed_off: 10ms
     on_press:
       then:
-        - logger.log: "Button A Pressed"
+        - logger.log: 'Button A was PRESSED'
