@@ -108,18 +108,18 @@ binary_sensor:
               - script.execute: script_page_turn
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: ON
+            state: "true"
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: ON
+            state: "true"
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: OFF
+            state: "false"
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: OFF
+            state: "false"
 
   - platform: gpio
     id: button_b
@@ -127,7 +127,7 @@ binary_sensor:
     icon: mdi:nintendo-switch
     pin:
       number: GPIO38
-      inverted: true
+      inverted: "true"
     filters:
       - delayed_off: 10ms
     on_press:
@@ -146,18 +146,18 @@ binary_sensor:
               - script.execute: script_page_turn
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: ON
+            state: "true"
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: ON
+            state: "true"
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: OFF
+            state: "false"
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: OFF
+            state: "false"
 
   - platform: gpio
     id: button_c
@@ -165,7 +165,7 @@ binary_sensor:
     icon: mdi:nintendo-switch
     pin:
       number: GPIO37
-      inverted: true
+      inverted: "true"
     filters:
       - delayed_off: 10ms
     on_press:
@@ -184,18 +184,18 @@ binary_sensor:
               - script.execute: script_page_turn
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: ON
+            state: "true"
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: ON
+            state: "true"
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: OFF
+            state: "false"
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: OFF
+            state: "false"
 
 # - platform: template
 #   name: "${friendly_name} Button Template"
@@ -335,14 +335,14 @@ i2c:
   - id: bus_a
     sda: 21
     scl: 22
-    scan: true
+    scan: "true"
     # Default: 50KHz. min. setting at 100KHz needed.
     # Otherwise, lambda is so slow that
     # warnings appear in log frequency: 50Khz
   - id: bus_c
     sda: 17
     scl: 16
-    scan: true
+    scan: "true"
 
 graph:
   # Show bare-minimum auto-ranged graph
@@ -371,7 +371,7 @@ display:
     dc_pin: GPIO27
     reset_pin: GPIO33
     update_interval: 15s
-    invert_colors: false
+    invert_colors: "false"
     pages:
       - id: display_page1
         lambda: |-
@@ -384,27 +384,32 @@ display:
 
           // Picture: icon_temp
           it.image(first_element_pos, element_line, id(icon_temp));
-          it.printf(second_element_pos, element_line, id(roboto_big), "Temp.: %.1f C", id(temperature_sensor).state);
+          it.printf(second_element_pos, element_line, id(roboto_big), 
+          "Temp.: %.1f C", id(temperature_sensor).state);
           element_line += second_element_pos;
 
           // Picture: icon_pressure
           it.image(first_element_pos, element_line, id(icon_pressure));
-          it.printf(second_element_pos, element_line, id(roboto_big), "Pressure: %.1f kPa", id(pressure_sensor).state);
+          it.printf(second_element_pos, element_line, id(roboto_big), 
+          "Pressure: %.1f kPa", id(pressure_sensor).state);
           element_line += second_element_pos;
 
           // Picture: icon_wifi
           it.image(first_element_pos, element_line, id(icon_wifi));
-          it.printf(second_element_pos, element_line, id(roboto_big), "Wi-Fi: %.1f dB", id(wifi_sensor).state);
+          it.printf(second_element_pos, element_line, id(roboto_big), 
+          "Wi-Fi: %.1f dB", id(wifi_sensor).state);
           element_line += second_element_pos;
 
           // icon_battery
           it.image(first_element_pos, element_line, id(icon_battery));
-          it.printf(second_element_pos, element_line, id(roboto_big), "Battery: %.1f%%", id(battery_percent).state);
+          it.printf(second_element_pos, element_line, id(roboto_big), 
+          "Battery: %.1f%%", id(battery_percent).state);
           element_line += second_element_pos;
 
           // icon_uptime
           it.image(first_element_pos, element_line, id(icon_uptime));
-          it.printf(second_element_pos, element_line, id(roboto_big), "Uptime: %.1f%", id(uptime_sensor).state);
+          it.printf(second_element_pos, element_line, id(roboto_big), 
+          "Uptime: %.1f%", id(uptime_sensor).state);
 
       - id: display_page2
         lambda: |-
@@ -419,10 +424,10 @@ display:
           // Set parameters (optional)
           call.set_transition_length(1000); // in ms
           // 1.0 is full brightness
-          call.set_brightness(1.0); 
+          call.set_brightness(1.0);
           call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
           // color in RGB order, want orange
-          call.set_rgb(1.0, 0.5, 0.1); 
+          call.set_rgb(1.0, 0.5, 0.1);
           call.set_cold_white(0.5);
           call.set_warm_white(0.75);
           // perform action:
