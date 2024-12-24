@@ -62,7 +62,7 @@ jobs:
       - name: "Upload ESPHome binary"
         uses: actions/upload-artifact@v4
         with:
-          name: build-output-files-${{ env.VERSION }}-${{ matrix.manifest }}
+          name: build-output-files-${{ steps.esphome-build.outputs.name }}-${{ env.VERSION }}
           path: ${{ steps.esphome-build.outputs.name }}
 
   verify:

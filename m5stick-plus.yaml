@@ -321,6 +321,7 @@ display:
     rotation: 270 # ? Do I need this?
     id: main_display
     update_interval: 15s
+    invert_colors: "true"
     pages:
       - id: display_page1
         lambda: |-

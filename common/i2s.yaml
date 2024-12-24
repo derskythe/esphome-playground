@@ -11,11 +11,6 @@ speaker:
     i2s_mode: primary
     i2s_dout_pin: GPIO2
     id: "general_speaker"
-    on_stop:
-      then:
-        - speaker.play:
-          id: speaker
-          data: !lambda return betty_online_raw;
-    on_state:
-      then:
-        - logger.log: "State updated!"
+    on:
+      id: speaker
+      data: !lambda return betty_online_raw;
