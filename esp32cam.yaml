@@ -95,7 +95,7 @@ esp32_camera:
   i2c_pins:
     sda: GPIO26
     scl: GPIO27
-  data_pins: [GPIO5, GPIO18, GPIO19, GPIO21, GPIO36, GPIO39, GPIO34, GPIO35]
+  data_pins: [ GPIO5, GPIO18, GPIO19, GPIO21, GPIO36, GPIO39, GPIO34, GPIO35 ]
   vsync_pin: GPIO25
   href_pin: GPIO23
   pixel_clock_pin: GPIO22
@@ -131,9 +131,9 @@ output:
 light:
   # Camera LED
   - platform: monochromatic
+    id: led_strip
     output: led_pwm
     name: "${friendly_name} LED"
-    id: led_strip
     restore_mode: ALWAYS_OFF
 
   # Onboard LED

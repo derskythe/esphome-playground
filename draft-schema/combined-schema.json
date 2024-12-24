@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Combined Schema for Language Configuration and YAML.tmLanguage",
+  "type": "object",
+  "properties": {
+    "languageConfiguration": {
+      "type": "object",
+      "properties": {
+        "comments": {
+          "type": "object",
+          "properties": {
+            "lineComment": {
+              "type": "string"
+            }
+          },
+          "required": ["lineComment"]
+        },
+        "brackets": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "autoClosingPairs": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "surroundingPairs": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "folding": {
+          "type": "object",
+          "properties": {
+            "offSide": {
+              "type": "boolean"
+            },
+            "markers": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "string"
+                },
+                "end": {
+                  "type": "string"
+                }
+              },
+              "required": ["start", "end"]
+            }
+          },
+          "required": ["offSide", "markers"]
+        },
+        "wordPattern": {
+          "type": "string"
+        }
+      },
+      "required": ["comments", "brackets", "autoClosingPairs", "surroundingPairs"]
+    },
+    "yamlTmLanguage": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["YAML"]
+        },
+        "scopeName": {
+          "type": "string",
+          "enum": ["source.yaml-esphome"]
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pattern" }
+        },
+        "repository": {
+          "type": "object",
+          "patternProperties": {
+            ".*": { "$ref": "#/definitions/repositoryItem" }
+          }
+        }
+      },
+      "required": ["name", "scopeName", "patterns", "repository"]
+    }
+  },
+  "required": ["languageConfiguration", "yamlTmLanguage"],
+  "definitions": {
+    "pattern": {
+      "type": "object",
+      "properties": {
+        "include": {
+          "type": "string"
+        },
+        "match": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pattern" }
+        },
+        "begin": {
+          "type": "string"
+        },
+        "beginCaptures": {
+          "type": "object",
+          "patternProperties": {
+            "\\d+": { "$ref": "#/definitions/capture" }
+          }
+        },
+        "end": {
+          "type": "string"
+        },
+        "endCaptures": {
+          "type": "object",
+          "patternProperties": {
+            "\\d+": { "$ref": "#/definitions/capture" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "repositoryItem": {
+      "type": "object",
+      "properties": {
+        "patterns": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pattern" }
+        }
+      }
+    },
+    "capture": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": ["name"]
+    }
+  }
+}

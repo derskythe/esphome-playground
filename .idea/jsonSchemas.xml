@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="EspHome">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="EspHome" />
+              <option name="relativePathToSchema" value="$USER_HOME$/Downloads/yaml.tmLanguage.json" />
+              <option name="schemaVersion" value="JSON Schema 202,012" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="$USER_HOME$/Downloads/language-configuration.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="$USER_HOME$/Downloads/yaml.tmLanguage.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="$USER_HOME$/Downloads/yaml.tmLanguage.yml" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="common/font.yaml" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="esp32cam.yaml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
