@@ -30,14 +30,13 @@ jobs:
           - esp32cam.yaml
     env:
       VERSION: ''
+      YAML: |
+        ${{ secrets.SECRETS_YAML }}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
       - name: "Create secrets.yaml"
-        env:
-          YAML: |
-            ${{ secrets.SECRETS_YAML }}
         run: |
           VERSION=dev-$(date +'%Y%m%d-%H%M')-${{ github.run_attempt - 1 }}
           echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
