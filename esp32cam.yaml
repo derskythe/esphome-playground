@@ -7,7 +7,7 @@ substitutions:
   enable_wifi_led_status: "false"
 
 esphome:
-  name: ${entity_id}
+  name: "${entity_id}"
   on_boot:
     priority: 800
     then:

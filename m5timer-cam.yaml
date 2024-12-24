@@ -109,10 +109,8 @@ esp32_camera:
   saturation: 0
   special_effect: "none"
   wb_mode: "auto"
-
-
   # Image settings
-  name: My Camera
+  name: "My Camera"
 
 # HTTP server settings
 esp32_camera_web_server:

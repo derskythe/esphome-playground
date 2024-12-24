@@ -1,3 +1,4 @@
+---
 name: YAML lint
 run-name: "YAML lint [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
 
