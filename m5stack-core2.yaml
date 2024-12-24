@@ -37,20 +37,20 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: false
-    initial_value: true
+    restore_value: 'false'
+    initial_value: 'true'
   - id: is_api_connected
     type: bool
-    restore_value: false
-    initial_value: false
+    restore_value: 'false'
+    initial_value: 'false'
   - id: is_mqtt_connected
     type: bool
-    restore_value: false
-    initial_value: false
+    restore_value: 'false'
+    initial_value: 'false'
   - id: is_wifi_connected
     type: bool
-    restore_value: false
-    initial_value: false
+    restore_value: 'false'
+    initial_value: 'false'
 
 #######################################
 ## Enable Home Assistant API

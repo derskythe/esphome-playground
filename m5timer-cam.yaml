@@ -26,20 +26,20 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: false
-    initial_value: false
+    restore_value: 'false'
+    initial_value: 'false'
   - id: is_api_connected
     type: bool
-    restore_value: false
-    initial_value: false
+    restore_value: 'false'
+    initial_value: 'false'
   - id: is_mqtt_connected
     type: bool
-    restore_value: false
-    initial_value: false
+    restore_value: 'false'
+    initial_value: 'false'
   - id: is_wifi_connected
     type: bool
-    restore_value: false
-    initial_value: false
+    restore_value: 'false'
+    initial_value: 'false'
 
 packages:
   pkg_ota: !include common/ota.yaml
