@@ -305,8 +305,9 @@ ip5306:
     icon: mdi:battery-charging-high
 
 # Internal LEDs
+# Display backlight output
 output:
-  - platform: ledc # display backlight output
+  - platform: ledc
     id: "${display_backlight}_pwm"
     pin: GPIO32
 
@@ -314,7 +315,6 @@ output:
 #   pin: GPIO25
 #   icon: material-symbols:volume-down-rounded
 #   id: rtttl_out
-
 light:
   - platform: monochromatic # display backlight
     id: "${display_backlight}"
@@ -446,7 +446,7 @@ display:
           int shift_x = (it.get_width() -  max_width) / 2;
           int shift_y = (it.get_height() - max_height) / 2;
 
-          for( int i = 0; i < max_height; i++ ) {
+          for(int i = 0; i < max_height; i++) {
               int j = 0;
 
               it.horizontal_line(shift_x + (spacing * j), i + shift_y, spacing, id(my_red));
