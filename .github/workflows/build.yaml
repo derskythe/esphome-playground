@@ -1,0 +1,96 @@
+name: Build
+run-name: "Build [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
+
+on:
+  pull_request:
+    paths:
+      - '*.yaml'
+      - '*.yml'
+  workflow_dispatch:
+  release:
+    types: [published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: "Build test configuration for esphome:${{ matrix.esphome-version }} with ${{ matrix.manifest }} manifest"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        esphome-version:
+          - stable
+          - beta
+          - dev
+        manifest:
+          - complete
+          - partial
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Create secrets.yaml"
+        run: |
+          echo "${{ secrets.SECRETS_YAML }}" > secrets.yaml
+
+      - name: "Run action"
+        uses: esphome/build-action@v4
+        id: esphome-build
+        with:
+          yaml-file: |
+            m5atom-s3.yaml
+            m5stack-core2.yaml
+            m5timer-cam.yaml
+            m5stick-plus.yaml
+            esp32cam.yaml
+          version: ${{ matrix.esphome-version }}
+          platform: linux/amd64
+          cache: true
+          release-summary: ${{ env.TEST_RELEASE_SUMMARY }}
+          release-url: "https://github.com/derskythe/esphome-playground"
+          complete-manifest: ${{ matrix.manifest == 'complete' }}
+
+      - name: "Write version to file"
+        run: echo ${{ steps.esphome-build.outputs.version }} > ${{ steps.esphome-build.outputs.name }}/version
+
+      - name: "Upload ESPHome binary"
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output-files-${{ matrix.esphome-version }}-${{ matrix.manifest }}
+          path: ${{ steps.esphome-build.outputs.name }}
+
+  verify:
+    name: "Verify output files for esphome:${{ matrix.esphome-version }} with ${{ matrix.manifest }} manifest"
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        esphome-version:
+          - stable
+          - beta
+          - dev
+        manifest:
+          - complete
+          - partial
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Download files"
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output-files-${{ matrix.esphome-version }}-${{ matrix.manifest }}
+
+      - name: "List files"
+        run: |-
+          ls -al
+          tree
+
+      - name: Validate json file matches ${{ matrix.manifest }} manifest-template.json
+        run: |
+          jq -n --arg md5 "$(md5sum test-esp32.ota.bin | head -c 32)" -f tests/${{ matrix.manifest }}-manifest-template.json > /tmp/manifest.json
+          diff <(jq --sort-keys . /tmp/manifest.json) <(jq --sort-keys . manifest.json)

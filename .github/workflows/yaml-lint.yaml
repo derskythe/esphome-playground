@@ -1,0 +1,25 @@
+name: YAML lint
+run-name: "YAML lint [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - "**.yaml"
+      - "**.yml"
+  pull_request:
+    paths:
+      - "**.yaml"
+      - "**.yml"
+  workflow_dispatch:
+
+jobs:
+  yamllint:
+    name: 🧹 yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out configuration from GitHub
+        uses: actions/checkout@v4.2.2
+
+      - name: 🚀 Run yamllint
+        run: yamllint --strict .
