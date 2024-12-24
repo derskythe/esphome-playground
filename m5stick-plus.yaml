@@ -352,7 +352,7 @@ display:
         lambda: |-
           ESP_LOGD("screen", "Displaying page 3");
           it.fill(COLOR_ON);
-          
+
           int spacing = 50;
           int max_width = 310;
           int max_height = 256;

@@ -20,11 +20,6 @@ image:
     id: icon_wifi_off
     resize: 28x28
 
-  # 󰡍
-  - file: mdi:arrow-collapse-vertical
-    id: icon_pressure
-    resize: 28x28
-
   # 󰢋
   - file: mdi:play-network
     id: icon_uptime
@@ -45,24 +40,9 @@ image:
     id: icon_battery_critical
     resize: 28x28
 
-  # 󰯡
-  - file: mdi:access-point-network-off
-    id: icon_access_point_network_off
-    resize: 28x28
-
-  # 󰀂
-  - file: mdi:access-point-network
-    id: icon_access_point_network
-    resize: 28x28
-
   # 󱊢
   - file: mdi:battery-medium
     id: icon_battery_half
-    resize: 28x28
-
-  # 󰚊
-  - file: mdi:shield-home
-    id: icon_shield_home
     resize: 28x28
 
   # 󱩆
@@ -75,69 +55,9 @@ image:
     id: icon_temp_c
     resize: 28x28
 
-  # 󰖐
-  - file: mdi:weather-cloudy
-    id: icon_weather_cloudy
-    resize: 28x28
-
-  # 󱭚
-  - file: mdi:weather-dust
-    id: icon_weather_dust
-    resize: 28x28
-
-  # 󰖑
-  - file: mdi:weather-fog
-    id: icon_weather_fog
-    resize: 28x28
-
-  # 󰖒
-  - file: mdi:weather-hail
-    id: icon_weather_hail
-    resize: 28x28
-
-  # 󰖓
-  - file: mdi:weather-lightning
-    id: icon_weather_lightning
-    resize: 28x28
-
-  # 󰖖
-  - file: mdi:weather-pouring
-    id: icon_weather_pouring
-    resize: 28x28
-
-  # 󰖕
-  - file: mdi:weather-partly-cloudy
-    id: icon_weather_partly_cloudy
-    resize: 28x28
-
-  # 󰖘
-  - file: mdi:weather-snowy
-    id: icon_weather_snowy
-    resize: 28x28
-
-  # 󰖙
-  - file: mdi:weather-sunny
-    id: icon_weather_sunny
-    resize: 28x28
-
-  # 󰖝
-  - file: mdi:weather-windy
-    id: icon_weather_windy
-    resize: 28x28
-
   # 󰖎
   - file: mdi:water-percent
     id: icon_water_percent
-    resize: 28x28
-
-  # 󰄛
-  - file: mdi:cat
-    id: icon_cat
-    resize: 28x28
-
-  # 󰇷
-  - file: mdi:emoticon-poop
-    id: icon_poop
     resize: 28x28
 
   # 󰀠
@@ -145,48 +65,9 @@ image:
     id: icon_alarm
     resize: 28x28
 
-  # 󰠱
-  - file: mdi:shape
-    id: icon_shape
-    resize: 28x28
-
-  # 󰆣
-  - file: mdi:crosshairs
-    id: icon_crosshairs
-    resize: 28x28
-
-  # 󰆤
-  - file: mdi:crosshairs-gps
-    id: icon_crosshairs_gps
-    resize: 28x28
-
-  # 󰋋
-  - file: mdi:headphones
-    id: icon_headphones
-    resize: 28x28
-
-  # 󰙪
-  - file: mdi:tune-vertical
-    id: icon_tune_vertical
-    resize: 28x28
   # 󱇏
   - file: mdi:alert-rhombus-outline
     id: icon_alert_rhombus_outline
-    resize: 28x28
-
-  # 󰊤
-  - file: mdi:github
-    id: icon_github
-    resize: 28x28
-
-  # 󰕧
-  - file: mdi:video
-    id: icon_video
-    resize: 28x28
-
-  # 󰒡
-  - file: mdi:sign-caution
-    id: icon_sign_caution
     resize: 28x28
 
   # 󱓞
@@ -194,39 +75,9 @@ image:
     id: icon_rocket_launch
     resize: 28x28
 
-  # 󰓫
-  - file: mdi:table
-    id: icon_table
-    resize: 28x28
-
-  # 󰆐
-  - file: mdi:content-cut
-    id: icon_content_cut
-    resize: 28x28
-
-  # 󰃉
-  - file: mdi:border-color
-    id: icon_border_color
-    resize: 28x28
-
-  # 󰻵
-  - file: mdi:fit-to-page
-    id: icon_fit_to_page
-    resize: 28x28
-
-  # 󱡓
-  - file: mdi:circle-opacity
-    id: icon_circle_opacity
-    resize: 28x28
-
   # 󰣖
   - file: mdi:cogs
     id: icon_cogs
-    resize: 28x28
-
-  # 󰝨
-  - file: mdi:atom
-    id: icon_atom
     resize: 28x28
 
   # 󰟤
@@ -234,24 +85,9 @@ image:
     id: icon_molecule_co2
     resize: 28x28
 
-  # 󰙨
-  - file: mdi:test-tube
-    id: icon_test_tube
-    resize: 28x28
-
   # 󰅩
   - file: mdi:code-braces
     id: icon_code_braces
-    resize: 28x28
-
-  # 󰆌
-  - file: mdi:compass-outline
-    id: icon_compass_outline
-    resize: 28x28
-
-  # 󰍎
-  - file: mdi:map-marker
-    id: icon_map_marker
     resize: 28x28
 
   # 󰦅
@@ -264,11 +100,6 @@ image:
     id: icon_camera
     resize: 28x28
 
-  # 󰨰
-  - file: mdi:bug-outline
-    id: icon_bug_outline
-    resize: 28x28
-
   # 󰏩
   - file: mdi:paw
     id: icon_paw
@@ -279,39 +110,9 @@ image:
     id: icon_heart
     resize: 28x28
 
-  # 󰾧
-  - file: mdi:chart-bell-curve-cumulative
-    id: icon_chart_bell_curve_cumulative
-    resize: 28x28
-
   # 󰛤
   - file: mdi:infinity
     id: icon_infinity
-    resize: 28x28
-
-  # 󰌾
-  - file: mdi:lock
-    id: icon_lock
-    resize: 28x28
-
-  # 󰀛
-  - file: mdi:air-conditioner
-    id: icon_air_conditioner
-    resize: 28x28
-
-  # 󰝩
-  - file: mdi:ceiling-light
-    id: icon_ceiling_light
-    resize: 28x28
-
-  # 󱘖
-  - file: mdi:connection
-    id: icon_connection
-    resize: 28x28
-
-  # 󰥟
-  - file: mdi:desk-lamp
-    id: icon_desk_lamp
     resize: 28x28
 
   # 󰈸
@@ -334,24 +135,9 @@ image:
     id: icon_led_outline
     resize: 28x28
 
-  # 󰌵
-  - file: mdi:lightbulb
-    id: icon_lightbulb
-    resize: 28x28
-
-  # 󰛨
-  - file: mdi:lightbulb-on
-    id: icon_lightbulb_on
-    resize: 28x28
-
   # 󱐋
   - file: mdi:lightning-bolt
     id: icon_lightning_bolt
-    resize: 28x28
-
-  # 󰚥
-  - file: mdi:power-plug
-    id: icon_power_plug
     resize: 28x28
 
   # 󰐥
@@ -367,26 +153,6 @@ image:
   # 󰖌
   - file: mdi:water
     id: icon_water
-    resize: 28x28
-
-  # 󱨤
-  - file: mdi:light-switch-off
-    id: icon_light_switch_off
-    resize: 28x28
-
-  # 󰥾
-  - file: mdi:light-switch
-    id: icon_light_switch
-    resize: 28x28
-
-  # 󱡆
-  - file: mdi:curtains
-    id: icon_curtains
-    resize: 28x28
-
-  # 󱡇
-  - file: mdi:curtains-closed
-    id: icon_curtains_closed
     resize: 28x28
 
   # 󰂚
@@ -409,16 +175,6 @@ image:
     id: icon_arrow_right_bold
     resize: 28x28
 
-  # 󰄌
-  - file: mdi:car-battery
-    id: icon_car_battery
-    resize: 28x28
-
-  # 󱕵
-  - file: mdi:key-chain-variant
-    id: icon_key_chain_variant
-    resize: 28x28
-
   # 󰑓
   - file: mdi:reload
     id: icon_reload
@@ -429,44 +185,9 @@ image:
     id: icon_database
     resize: 28x28
 
-  # 󰚑
-  - file: mdi:bomb
-    id: icon_bomb
-    resize: 28x28
-
-  # 󱍢
-  - file: mdi:google-downasaur
-    id: icon_google_downasaur
-    resize: 28x28
-
-  # 󰘧
-  - file: mdi:lambda
-    id: icon_lambda
-    resize: 28x28
-
-  # 󱢼
-  - file: mdi:shield-crown
-    id: icon_shield_crown
-    resize: 28x28
-
-  # 󰞇
-  - file: mdi:sword-cross
-    id: icon_sword_cross
-    resize: 28x28
-
   # 󰗠
   - file: mdi:check-circle
     id: icon_check_circle
-    resize: 28x28
-
-  # 󰄬
-  - file: mdi:check
-    id: icon_check
-    resize: 28x28
-
-  # 󰅖
-  - file: mdi:close
-    id: icon_close
     resize: 28x28
 
   # 󰅙
@@ -474,39 +195,9 @@ image:
     id: icon_close_circle
     resize: 28x28
 
-  # 󰈤
-  - file: mdi:file-outline
-    id: icon_file_outline
-    resize: 28x28
-
-  # 󰉋
-  - file: mdi:folder
-    id: icon_folder
-    resize: 28x28
-
-  # 󱴓
-  - file: mdi:upload-circle-outline
-    id: icon_upload_circle_outline
-    resize: 28x28
-
-  # 󰩌
-  - file: mdi:file-alert-outline
-    id: icon_file_alert_outline
-    resize: 28x28
-
-  # 󰥥
-  - file: mdi:file-download
-    id: icon_file_download
-    resize: 28x28
-
   # 󰌢
   - file: mdi:laptop
     id: icon_laptop
-    resize: 28x28
-
-  # 󰍹
-  - file: mdi:monitor
-    id: icon_monitor
     resize: 28x28
 
   # 󰃭
@@ -522,11 +213,6 @@ image:
   # 󰔛
   - file: mdi:timer-outline
     id: icon_timer_outline
-    resize: 28x28
-
-  # 󰸌
-  - file: mdi:palette-outline
-    id: icon_palette_outline
     resize: 28x28
 
   # 󰣼
@@ -579,16 +265,6 @@ image:
     id: icon_signal_cellular_outline
     resize: 28x28
 
-  # 󰄔
-  - file: mdi:cash
-    id: icon_cash
-    resize: 28x28
-
-  # 󰁄
-  - file: mdi:arrow-collapse-all
-    id: icon_arrow_collapse_all
-    resize: 28x28
-
   # 󰜮
   - file: mdi:arrow-down-bold
     id: icon_arrow_down_bold
@@ -604,42 +280,12 @@ image:
     id: icon_swap_vertical_bold
     resize: 28x28
 
-  # 󰶣
-  - file: mdi:transfer-up
-    id: icon_transfer_up
+  # 󰡍
+  - file: mdi:arrow-collapse-vertical
+    id: icon_pressure
     resize: 28x28
 
-  # 󰄠
-  - file: mdi:tray-arrow-down
-    id: icon_tray_arrow_down
-    resize: 28x28
-
-  # 󰄝
-  - file: mdi:tray-arrow-up
-    id: icon_tray_arrow_up
-    resize: 28x28
-
-  # 󱀍
-  - file: mdi:alphabetical-variant
-    id: icon_alphabetical_variant
-    resize: 28x28
-
-  # 󰎠
-  - file: mdi:numeric
-    id: icon_numeric
-    resize: 28x28
-
-  # 󰼰
-  - file: mdi:weather-hazy
-    id: icon_weather_hazy
-    resize: 28x28
-
-  # 󰖏
-  - file: mdi:water-pump
-    id: icon_water_pump
-    resize: 28x28
-
-  # 󰕥
-  - file: mdi:shield-check
-    id: icon_shield_check
+  # 󰚊
+  - file: mdi:shield-home
+    id: icon_shield_home
     resize: 28x28

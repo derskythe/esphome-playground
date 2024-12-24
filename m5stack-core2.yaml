@@ -419,7 +419,20 @@ display:
           // Red: 100%, Green: 53%, Blue: 5%
           // Turn on or off the LED ambient
           // id(led_strip).toggle();
-          id(media_player_out).play();
+          // id(media_player_out).play();
+          if(id(media_player_out).is_ready()) {
+              static bool is_reported = false;
+              if(id(media_player_out).is_muted()) {
+                  if(!is_reported) {
+                      ESP_LOGW("media_player", "Is Muted!");
+                  }
+              } else {
+                  ESP_LOGD("media_player", "Trying to start!");
+                  id(media_player_out).start();
+              }
+          } else {
+              ESP_LOGW("media_player", "Not Ready!");
+          }
 
           auto call = id(led_strip).turn_on();
           // Set parameters (optional)
