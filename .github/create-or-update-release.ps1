@@ -14,6 +14,7 @@ $ErrorActionPreference = "Stop"        #
 [string]$Branch = $args[4]
 [string]$Sha = $args[5]
 [string]$CurrentLocation = (Get-Location)
+[string]$Tag = "$ReleaseVersion"
 
 function Format-Bytes
 {
@@ -76,10 +77,10 @@ Write-Host "Start upload"
 [string]$Mime = "Accept: application/vnd.github+json"
 [string]$Api = "X-GitHub-Api-Version: 2022-11-28"
 $Json = ((gh api -H $Mime -H $Api /repos/$Repo/releases) | ConvertFrom-Json)
-$TagExists = ($null -ne ($Json.GetEnumerator() | Where-Object { $_.tag_name -eq "v$ReleaseVersion" }))
+$TagExists = ($null -ne ($Json.GetEnumerator() | Where-Object { $_.tag_name -eq "$Tag" }))
 if ($false -eq $TagExists)
 {
-    gh api --method POST -H $Mime -H $Api /repos/$Repo/releases -f tag_name="v$ReleaseVersion" -f target_commitish="$Sha" -f name="v$ReleaseVersion" -F draft=false -F prerelease=false -F generate_release_notes=true
+    gh api --method POST -H $Mime -H $Api /repos/$Repo/releases -f tag_name="$Tag" -f target_commitish="$Sha" -f name="$Tag" -F draft=false -F prerelease=false -F generate_release_notes=true
 
     if ($LASTEXITCODE -gt 1)
     {
@@ -87,7 +88,7 @@ if ($false -eq $TagExists)
         exit 255
     }
 }
-gh release upload "v$ReleaseVersion" "$ZipName#$ZipName $ZipSize" --clobber -R $Repo
+gh release upload "$Tag" "$ZipName#$ZipName $ZipSize" --clobber -R $Repo
 
 if ($LASTEXITCODE -gt 1)
 {
@@ -95,7 +96,7 @@ if ($LASTEXITCODE -gt 1)
     exit 255
 }
 
-gh release edit "v$ReleaseVersion" --draft=false -R $Repo
+gh release edit "$Tag" --draft=false -R $Repo
 
 if ($LASTEXITCODE -gt 1)
 {
