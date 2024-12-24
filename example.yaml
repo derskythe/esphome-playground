@@ -108,7 +108,7 @@ globals:
   - id: aab_enable
     type: 'bool'
     restore_value: true
-    initial_value: 'true'
+    initial_value: true
   - id: aab_add
     type: 'int'
     initial_value: 10
