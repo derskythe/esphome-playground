@@ -36,9 +36,9 @@ jobs:
       - name: "Create secrets.yaml"
         run: |
           mkdir -p .esphome
-          cp ${{ matrix.yaml-file }} .esphome/${{ matrix.yaml-file }}
+          cp ./${{ matrix.yaml-file }} ./.esphome/${{ matrix.yaml-file }}
           cp -rf ./common ./.esphome/common
-          echo "${{ secrets.SECRETS_YAML }}" > .esphome/secrets.yaml
+          echo "${{ secrets.SECRETS_YAML }}" > ./.esphome/secrets.yaml
 
       - name: "Run action"
         uses: esphome/build-action@v4
