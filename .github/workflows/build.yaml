@@ -116,6 +116,6 @@ jobs:
       - name: "[ALL] Create or update RELEASE ${{ env.VERSION }} with assets 🌟"
         shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           ./.github/create-or-update-release.ps1 ./ "${{ env.FIRMWARE_NAME }}" "${{ env.VERSION }}" ${{ github.repository }} ${{ github.ref_name }} ${{ env.SHA }}
