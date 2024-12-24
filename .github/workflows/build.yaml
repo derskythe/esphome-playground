@@ -43,7 +43,7 @@ jobs:
           echo ${{ env.YAML }}  > ./secrets.yaml
 
       - name: "Run action"
-        uses: esphome/build-action@v4
+        uses: esphome/build-action@v5.0.0
         id: esphome-build
         with:
           yaml-file: ${{ matrix.yaml-file }}
