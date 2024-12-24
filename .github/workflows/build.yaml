@@ -28,27 +28,30 @@ jobs:
           - m5timer-cam.yaml
           - m5stick-plus.yaml
           - esp32cam.yaml
-
+    env:
+      VERSION: ''
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
       - name: "Create secrets.yaml"
+        env:
+          YAML: |
+            ${{ secrets.SECRETS_YAML }}
         run: |
-          mkdir -p .esphome
-          cp ./${{ matrix.yaml-file }} ./.esphome/${{ matrix.yaml-file }}
-          cp -rf ./common ./.esphome/common
-          echo "${{ secrets.SECRETS_YAML }}" > ./.esphome/secrets.yaml
+          VERSION=dev-$(date +'%Y%m%d-%H%M')-${{ github.run_attempt - 1 }}
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          echo ${{ env.YAML }}  > ./secrets.yaml
 
       - name: "Run action"
-        uses: esphome/build-action@v4
+        uses: esphome/build-action@v5
         id: esphome-build
         with:
           yaml-file: ${{ matrix.yaml-file }}
           version: dev
           platform: linux/amd64
           cache: true
-          release-summary: ${{ env.TEST_RELEASE_SUMMARY }}
+          release-summary: ''
           release-url: "https://github.com/derskythe/esphome-playground"
           complete-manifest: true
 
@@ -58,7 +61,7 @@ jobs:
       - name: "Upload ESPHome binary"
         uses: actions/upload-artifact@v4
         with:
-          name: build-output-files-${{ matrix.esphome-version }}-${{ matrix.manifest }}
+          name: build-output-files-${{ env.VERSION }}-${{ matrix.manifest }}
           path: ${{ steps.esphome-build.outputs.name }}
 
   verify:
