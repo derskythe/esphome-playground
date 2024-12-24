@@ -1,9 +1,7 @@
 <#
     Create or update release with given tag. Also upload files.
-
     GH_TOKEN is mandatory!
 #>
-
 ########################################
 Set-StrictMode -Version 3.0            #
 $ErrorActionPreference = "Stop"        #
@@ -13,6 +11,7 @@ $ErrorActionPreference = "Stop"        #
 [string]$ReleaseVersion = $args[1]
 [string]$Repo = $args[2]
 [string]$Branch = $args[3]
+[string]$CurrentLocation = (Get-Location)
 
 $Files = @(Get-ChildItem -Path "$InputDir/*" -File -Include "*.tgz", "*.zip" -ErrorAction SilentlyContinue)
 if ($Files.Count -eq 0)
@@ -30,7 +29,7 @@ if ($LASTEXITCODE -gt 1)
 }
 
 Write-Host "Start upload"
-cd $InputDir
+Set-Location $InputDir
 $Files | ForEach-Object {
     Write-Host ('Uploading {0}' -f $_.Name)
     gh release upload $ReleaseVersion $_.Name -R $Repo --clobber
@@ -39,4 +38,4 @@ $Files | ForEach-Object {
 Write-Host "Release edit"
 gh release edit $ReleaseVersion -R $Repo --latest --target $Branch
 
-cd -
+Set-Location $CurrentLocation
