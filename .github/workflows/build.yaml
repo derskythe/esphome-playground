@@ -3,14 +3,15 @@ name: Build
 run-name: "Build [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
 
 on:
-  pull_request:
+  push:
+    branches:
+      - master
+      - cicd
     paths:
       - '*.yaml'
       - '*.yml'
       - '.github/workflows/build.yaml'
   workflow_dispatch:
-  release:
-    types: [ published ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -25,6 +26,7 @@ jobs:
   build:
     name: "Build ${{ matrix.yaml-file }}"
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -41,14 +43,15 @@ jobs:
         ${{ secrets.SECRETS_YAML }}
     outputs:
       VERSION: ${{ steps.step-output.outputs.version }}
-      FILE_NAME: ${{ steps.step-output.outputs.file_name }}
+      FIRMWARE_NAME: ${{ steps.step-output.outputs.firmware_name }}
+      SHA: ${{ steps.step-output.outputs.sha }}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
 
       - name: "Create secrets.yaml"
         run: |
-          VERSION=dev-$(date +'%Y%m%d-%H%M')-${{ github.run_attempt }}
+          VERSION=dev-$(date +'%Y%m%d-%H%M')
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "${{ env.YAML }}"  > ./secrets.yaml
 
@@ -76,48 +79,23 @@ jobs:
       - name: "Output Values"
         id: step-output
         run: |
-          echo "VERSION=${{ env.VERSION }}" >> "$GITHUB_OUTPUT"
-          echo "FILE_NAME=${{ steps.esphome-build.outputs.name }}-${{ env.VERSION }}" >> "$GITHUB_OUTPUT"
-
-  verify:
-    name: "Verify ${{ matrix.yaml-file }}"
-    runs-on: ubuntu-latest
-    needs: [build]
-    strategy:
-      fail-fast: false
-      matrix:
-        yaml-file:
-          - m5atom-s3.yaml
-          - m5stack-core2.yaml
-          - m5timer-cam.yaml
-          - m5stick-plus.yaml
-          - esp32cam.yaml
-    env:
-      VERSION: ${{ needs.build.outputs.version }}
-      FILE_NAME: ${{ needs.build.outputs.FILE_NAME }}
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
+          echo "VERSION=${{ env.VERSION }}" >> "$GITHUB_ENV"
+          echo "FIRMWARE_NAME=${{ steps.esphome-build.outputs.name }}" >> "$GITHUB_ENV"
+          echo "SHA=$(git rev-parse --verify HEAD)" >> "$GITHUB_ENV"
 
       - name: "Download files"
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.FILE_NAME }}
+          name: ${{ env.FIRMWARE_NAME }}-${{ env.VERSION }}
 
       - name: "List files"
         run: |-
           ls -al
           tree
 
-      - name: Validate json file matches ${{ matrix.yaml-file }} manifest-template.json
-        run: |
-          jq -n --arg md5 "$(md5sum test-esp32.ota.bin | \
-            head -c 32)" -f tests/${{ matrix.yaml-file }}-manifest-template.json > /tmp/manifest.json
-          diff <(jq --sort-keys . /tmp/manifest.json) <(jq --sort-keys . manifest.json)
-
       - name: "[ALL] Create or update RELEASE ${{ env.VERSION }} with assets 🌟"
         shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          ./.github/create-or-update-release.ps1 ./ ${{ env.VERSION }} ${{ github.repository }} ${{ github.ref_name }}
+          ./.github/create-or-update-release.ps1 ./ "${{ env.FIRMWARE_NAME }}" "${{ env.VERSION }}" ${{ github.repository }} ${{ github.ref_name }} ${{ env.SHA }}
