@@ -4,7 +4,6 @@ run-name: "YAML lint [${{ github.ref_name }}](${{ github.event_name }}) by ${{ g
 
 on:
   push:
-    branches: [ master ]
     paths:
       - '**.yaml'
       - '**.yml'
