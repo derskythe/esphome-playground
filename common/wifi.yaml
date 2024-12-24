@@ -19,7 +19,7 @@ wifi:
           level: INFO
       - globals.set:
           id: is_wifi_connected
-          value: true
+          value: 'true'
       - if:
           condition:
             lambda: |-

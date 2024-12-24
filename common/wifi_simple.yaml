@@ -9,7 +9,7 @@ wifi:
   reboot_timeout: 15min
   # Enable fallback hotspot (captive portal) in case of Wi-Fi connection fails
   ap:
-    ssid: ${friendly_name} Fallback Hotspot
+    ssid: '${friendly_name} Fallback Hotspot'
     password: !secret wifi_standalone_ap
     # Disable!
     ap_timeout: 0s
@@ -17,15 +17,15 @@ wifi:
     then:
       - logger.log:
           format: 'WiFi Connected!'
-          level: INFO
+          level: 'INFO'
       - globals.set:
           id: is_wifi_connected
-          value: true
+          value: 'true'
   on_disconnect:
     then:
       - logger.log:
           format: 'WiFi disconnected'
-          level: WARN
+          level: 'WARN'
       - globals.set:
           id: is_wifi_connected
-          value: false
+          value: 'false'
