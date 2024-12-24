@@ -89,7 +89,7 @@ binary_sensor:
     icon: mdi:nintendo-switch
     pin:
       number: GPIO39
-      inverted: true
+      inverted: "true"
     filters:
       - delayed_off: 10ms
     on_press:
@@ -207,18 +207,18 @@ binary_sensor:
 #       - script.execute: script_page_turn
 #       - binary_sensor.template.publish:
 #           id: dim_display_on
-#           state: ON
+#           state: "true"
 #       - binary_sensor.template.publish:
 #           id: dim_display_off
-#           state: ON
+#           state: "true"
 #   on_release:
 #     then:
 #       - binary_sensor.template.publish:
 #           id: dim_display_on
-#           state: OFF
+#           state: "false"
 #       - binary_sensor.template.publish:
 #           id: dim_display_off
-#           state: OFF
+#           state: "false"
 
 script:
   - id: script_page_turn
@@ -315,8 +315,9 @@ output:
 #   pin: GPIO25
 #   icon: material-symbols:volume-down-rounded
 #   id: rtttl_out
+# Display backlight
 light:
-  - platform: monochromatic # display backlight
+  - platform: monochromatic
     id: "${display_backlight}"
     output: "${display_backlight}_pwm"
     name: "${friendly_name} Backlight"
@@ -384,31 +385,31 @@ display:
 
           // Picture: icon_temp
           it.image(first_element_pos, element_line, id(icon_temp));
-          it.printf(second_element_pos, element_line, id(roboto_big), 
+          it.printf(second_element_pos, element_line, id(roboto_big),
           "Temp.: %.1f C", id(temperature_sensor).state);
           element_line += second_element_pos;
 
           // Picture: icon_pressure
           it.image(first_element_pos, element_line, id(icon_pressure));
-          it.printf(second_element_pos, element_line, id(roboto_big), 
+          it.printf(second_element_pos, element_line, id(roboto_big),
           "Pressure: %.1f kPa", id(pressure_sensor).state);
           element_line += second_element_pos;
 
           // Picture: icon_wifi
           it.image(first_element_pos, element_line, id(icon_wifi));
-          it.printf(second_element_pos, element_line, id(roboto_big), 
+          it.printf(second_element_pos, element_line, id(roboto_big),
           "Wi-Fi: %.1f dB", id(wifi_sensor).state);
           element_line += second_element_pos;
 
           // icon_battery
           it.image(first_element_pos, element_line, id(icon_battery));
-          it.printf(second_element_pos, element_line, id(roboto_big), 
+          it.printf(second_element_pos, element_line, id(roboto_big),
           "Battery: %.1f%%", id(battery_percent).state);
           element_line += second_element_pos;
 
           // icon_uptime
           it.image(first_element_pos, element_line, id(icon_uptime));
-          it.printf(second_element_pos, element_line, id(roboto_big), 
+          it.printf(second_element_pos, element_line, id(roboto_big),
           "Uptime: %.1f%", id(uptime_sensor).state);
 
       - id: display_page2
@@ -422,15 +423,16 @@ display:
 
           auto call = id(led_strip).turn_on();
           // Set parameters (optional)
-          call.set_transition_length(1000); // in ms
+          // in ms
+          call.set_transition_length(1000);
           // 1.0 is full brightness
           call.set_brightness(1.0);
           call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
-          // color in RGB order, want orange
+          // Color in RGB order, want orange
           call.set_rgb(1.0, 0.5, 0.1);
           call.set_cold_white(0.5);
           call.set_warm_white(0.75);
-          // perform action:
+          // Perform action
           call.perform();
 
           // Draw the graph at position [x=10,y=20]
