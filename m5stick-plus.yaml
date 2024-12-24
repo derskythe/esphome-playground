@@ -3,8 +3,8 @@ substitutions:
   friendly_name: "M5 Stick+"
   entity_id: "m5stick-c"
   wifi_power_save_mode: "none"
-  enable_ota: "true"
-  enable_wifi_led_status: "true"
+  enable_ota: true
+  enable_wifi_led_status: true
   display_backlight: "display_backlight"
   # SPM1423
   pin_audio_lrclk: "GPIO34"
@@ -42,20 +42,20 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: "false"
-    initial_value: "true"
+    restore_value: false
+    initial_value: true
   - id: is_api_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_mqtt_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_wifi_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
 
 #######################################
 ## Enable Home Assistant API
@@ -107,18 +107,18 @@ binary_sensor:
         - component.update: main_display
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "true"
+            state: true
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "true"
+            state: true
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "false"
+            state: false
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "false"
+            state: false
 
   - platform: gpio
     id: button_b
@@ -136,18 +136,18 @@ binary_sensor:
         - component.update: main_display
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "true"
+            state: true
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "true"
+            state: true
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "false"
+            state: false
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "false"
+            state: false
 
   - platform: template
     id: dim_display_on
@@ -252,7 +252,7 @@ external_components:
   - source:
       type: git
       url: https://github.com//martydingo/esphome-axp192
-    components: [axp192]
+    components: [ axp192 ]
 
 sensor:
   - platform: axp192
@@ -321,7 +321,7 @@ display:
     rotation: 270 # ? Do I need this?
     id: main_display
     update_interval: 15s
-    invert_colors: "true"
+    invert_colors: true
     pages:
       - id: display_page1
         lambda: |-

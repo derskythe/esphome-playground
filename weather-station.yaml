@@ -29,7 +29,7 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
-  # Enable fallback hotspot (captive_portal node) in case wifi connection fails
+  # Enable fallback hotspot (captive_portal node) in case Wi-Fi connection fails
   ap:
     ssid: "Lilygo Fallback Hotspot"
     password: !secret fallback
@@ -69,7 +69,7 @@ font:
       family: Roboto
       weight: 500
     id: din_big
-    # Glyphs are prerastered, choose them early to save flash
+    # Glyphs are pre-mastered, choose them early to save flash
     glyphs: " C$+-0123456789.:"
     size: $font_big
   - file: "gfonts://Material+Symbols+Outlined"
@@ -143,7 +143,7 @@ text:
   name: alert
   id: alert
   platform: template
-  optimistic: True
+  optimistic: true
   # maybe add a startup set of this state so HA doesn't say Unknown
   update_interval: never
   on_value:
@@ -197,7 +197,8 @@ display:
         lambda: |-
           it.print(  40,  60, id(font_icons_big), TextAlign::CENTER_LEFT, "\ue1ff");
           it.printf(130,  60, id(din_big),        TextAlign::CENTER_LEFT, "%3.1fC", id(temp).state);
-          it.graph((it.get_width() / 2)-200, 140, id(temp_graph)); // no support for ImageAlign in graph()
+          // no support for ImageAlign in graph()
+          it.graph((it.get_width() / 2)-200, 140, id(temp_graph));
           it.print(  70, 600, id(font_icons_small), TextAlign::CENTER_LEFT, "\U0000F582");
           it.printf(260, 600, id(roboto),  TextAlign::CENTER_RIGHT, "%.1fC", id(daily_high).state);
           it.print(  70, 660, id(font_icons_small), TextAlign::CENTER_LEFT, "\U0000F581");

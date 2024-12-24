@@ -30,4 +30,4 @@ api:
 <<: !include include_switch.yaml
 # binary_sensor: !include include_binary_sensor.yaml
 
-<<: !include include_standart_mesh.yaml
+<<: !include include_standard_mesh.yaml

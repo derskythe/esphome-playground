@@ -3,8 +3,8 @@ substitutions:
   friendly_name: "M5_Timer_CAM"
   entity_id: "m5-timer-cam"
   wifi_power_save_mode: "none"
-  enable_ota: "true"
-  enable_wifi_led_status: "false"
+  enable_ota: true
+  enable_wifi_led_status: false
 
 esphome:
   name: "${entity_id}"
@@ -26,20 +26,20 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_api_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_mqtt_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_wifi_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
 
 packages:
   pkg_ota: !include common/ota.yaml
@@ -94,7 +94,7 @@ esp32_camera:
   i2c_pins:
     sda: GPIO25
     scl: GPIO23
-  data_pins: [GPIO32, GPIO35, GPIO34, GPIO5, GPIO39, GPIO18, GPIO36, GPIO19]
+  data_pins: [ GPIO32, GPIO35, GPIO34, GPIO5, GPIO39, GPIO18, GPIO36, GPIO19 ]
   vsync_pin: GPIO22
   href_pin: GPIO26
   pixel_clock_pin: GPIO21

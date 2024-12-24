@@ -12,4 +12,4 @@ sensor:
     address: 0x44
     update_interval: 60s
     # By-default is OFF
-    heater_enabled: "true"
+    heater_enabled: true

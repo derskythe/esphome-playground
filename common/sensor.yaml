@@ -33,7 +33,7 @@ sensor:
       then:
         - logger.log:
             format: "Raw Value of Uptime sensor: %f, %f"
-            args: ["id(uptime_sensor).raw_state", "id(uptime_sensor).state"]
+            args: [ "id(uptime_sensor).raw_state", "id(uptime_sensor).state" ]
             level: INFO
         - text_sensor.template.publish:
             id: uptime_human

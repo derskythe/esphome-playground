@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="YamllintSettings">
+    <enabled>true</enabled>
+    <binPath>C:/Python/Python312/Scripts/yamllint.exe</binPath>
+    <configPath>$PROJECT_DIR$/.yamllint</configPath>
+    <disabledRules>
+      <set>
+        <option value="new-lines" />
+        <option value="empty-values" />
+        <option value="quoted-strings" />
+      </set>
+    </disabledRules>
+  </component>
+</project>

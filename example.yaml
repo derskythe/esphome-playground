@@ -106,18 +106,18 @@ switch:
 globals:
   # aab = auto-adjustable brightness
   - id: aab_enable
-    type: "bool"
+    type: 'bool'
     restore_value: true
-    initial_value: "true"
+    initial_value: 'true'
   - id: aab_add
-    type: int
-    initial_value: "10"
+    type: 'int'
+    initial_value: 10
   - id: aab_max
-    type: int
-    initial_value: "220"
+    type: 'int'
+    initial_value: 220
   - id: aab_min
-    type: int
-    initial_value: "20"
+    type: 'int'
+    initial_value: 20
 
 external_components:
   - source:
@@ -141,11 +141,11 @@ font:
     glyphs: |
       ! "#$%&'()*+,-./0123456789:APMTapmt
 
-#animation:
+# animation:
 #  - id: animation_black
 #    file: "ehmtxv2/1pixel.gif"
 
-#image:
+# image:
 #  - id: image_black
 #    file: "ehmtxv2/1pixel.gif"
 
