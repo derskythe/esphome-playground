@@ -42,7 +42,7 @@ jobs:
         ${{ secrets.SECRETS_YAML }}
     outputs:
       VERSION: ${{ steps.step-output.outputs.version }}
-      FILE_NAME: ${{ steps.step-output.outputs.file_name }}
+      FIRMWARE_NAME: ${{ steps.step-output.outputs.firmware_name }}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -78,7 +78,7 @@ jobs:
         id: step-output
         run: |
           echo "VERSION=${{ env.VERSION }}" >> "$GITHUB_OUTPUT"
-          echo "FILE_NAME=${{ steps.esphome-build.outputs.name }}-${{ env.VERSION }}" >> "$GITHUB_OUTPUT"
+          echo "FIRMWARE_NAME=${{ steps.esphome-build.outputs.name }}" >> "$GITHUB_OUTPUT"
 
   verify:
     name: "Verify ${{ matrix.yaml-file }}"
@@ -95,7 +95,7 @@ jobs:
           - esp32cam.yaml
     env:
       VERSION: ${{ needs.build.outputs.version }}
-      FILE_NAME: ${{ needs.build.outputs.FILE_NAME }}
+      FIRMWARE_NAME: ${{ needs.build.outputs.firmware_name }}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -103,7 +103,7 @@ jobs:
       - name: "Download files"
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.FILE_NAME }}
+          name: ${{ env.FIRMWARE_NAME }}-${{ env.VERSION }}
 
       - name: "List files"
         run: |-
@@ -112,7 +112,7 @@ jobs:
 
       - name: Validate json file matches ${{ matrix.yaml-file }} manifest-template.json
         run: |
-          jq -n --arg md5 "$(md5sum test-esp32.ota.bin | \
+          jq -n --arg md5 "$(md5sum ${{ env.FIRMWARE_NAME }}.ota.bin | \
             head -c 32)" -f tests/${{ matrix.yaml-file }}-manifest-template.json > /tmp/manifest.json
           diff <(jq --sort-keys . /tmp/manifest.json) <(jq --sort-keys . manifest.json)
 
@@ -121,4 +121,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          ./.github/create-or-update-release.ps1 ./ ${{ env.VERSION }} ${{ github.repository }} ${{ github.ref_name }}
+          ./.github/create-or-update-release.ps1 ./ "${{ env.FIRMWARE_NAME }}-${{ env.VERSION }}" ${{ github.repository }} ${{ github.ref_name }}
