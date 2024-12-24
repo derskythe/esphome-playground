@@ -1,23 +1,23 @@
 ---
 substitutions:
-  friendly_name: "M5 Stick+"
-  entity_id: "m5stick-c"
-  wifi_power_save_mode: "none"
+  friendly_name: 'M5 Stick+'
+  entity_id: 'm5stick-c'
+  wifi_power_save_mode: 'none'
   enable_ota: true
   enable_wifi_led_status: true
-  display_backlight: "display_backlight"
+  display_backlight: 'display_backlight'
   # SPM1423
-  pin_audio_lrclk: "GPIO34"
-  pin_audio_bclk: "GPIO0"
-  pin_audio_din: "GPIO34"
-  pin_irda: "GPIO9"
-  pin_led: "GPIO10"
-  pin_pir: "GPIO36"
+  pin_audio_lrclk: 'GPIO34'
+  pin_audio_bclk: 'GPIO0'
+  pin_audio_din: 'GPIO34'
+  pin_irda: 'GPIO9'
+  pin_led: 'GPIO10'
+  pin_pir: 'GPIO36'
   # Home Button
-  pin_button_a: "GPIO37"
+  pin_button_a: 'GPIO37'
   # Power Button
-  pin_button_b: "GPIO39"
-  pin_speaker: "GPIO02"
+  pin_button_b: 'GPIO39'
+  pin_speaker: 'GPIO02'
 
 esphome:
   name: "${entity_id}"
@@ -26,13 +26,13 @@ esphome:
     priority: 800
     then:
       - logger.log:
-          format: "Booting ${friendly_name}"
+          format: 'Booting ${friendly_name}'
           level: INFO
       - display.page.show: display_page1
       - component.update: main_display
 
 esp32:
-  board: "${entity_id}"
+  board: '${entity_id}'
   framework:
     type: arduino
 
@@ -251,7 +251,7 @@ binary_sensor:
 external_components:
   - source:
       type: git
-      url: https://github.com//martydingo/esphome-axp192
+      url: 'https://github.com//martydingo/esphome-axp192'
     components: [ axp192 ]
 
 sensor:

@@ -1,6 +1,6 @@
 ---
 name: Build
-run-name: "Build [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
+run-name: 'Build [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}'
 
 on:
   push:
@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   build:
-    name: "Build ${{ matrix.yaml-file }}"
+    name: 'Build ${{ matrix.yaml-file }}'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
@@ -46,16 +46,16 @@ jobs:
       FIRMWARE_NAME: ${{ steps.step-output.outputs.firmware_name }}
       SHA: ${{ steps.step-output.outputs.sha }}
     steps:
-      - name: "Checkout"
+      - name: 'Checkout'
         uses: actions/checkout@v4
 
-      - name: "Create secrets.yaml"
+      - name: 'Create secrets.yaml'
         run: |
           VERSION=dev-$(date +'%Y%m%d-%H%M')
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "${{ env.YAML }}"  > ./secrets.yaml
 
-      - name: "Run action"
+      - name: 'Run action'
         uses: esphome/build-action@v5.0.0
         id: esphome-build
         with:
@@ -67,12 +67,12 @@ jobs:
           release-url: 'https://github.com/derskythe/esphome-playground'
           complete-manifest: true
 
-      - name: "Write version to file"
+      - name: 'Write version to file'
         run: |
           echo ${{ steps.esphome-build.outputs.version }}\
             > ${{ steps.esphome-build.outputs.name }}/version
 
-      - name: "Upload ESPHome binary"
+      - name: 'Upload ESPHome binary'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.esphome-build.outputs.name }}-${{ env.VERSION }}
@@ -85,17 +85,17 @@ jobs:
           echo "FIRMWARE_NAME=${{ steps.esphome-build.outputs.name }}" >> "$GITHUB_ENV"
           echo "SHA=$(git rev-parse --verify HEAD)" >> "$GITHUB_ENV"
 
-      - name: "Download files"
+      - name: 'Download files'
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.FIRMWARE_NAME }}-${{ env.VERSION }}
 
-      - name: "List files"
+      - name: 'List files'
         run: |-
           ls -al
           tree
 
-      - name: "[ALL] Create or update RELEASE ${{ env.VERSION }} with assets 🌟"
+      - name: '[ALL] Create or update RELEASE ${{ env.VERSION }} with assets 🌟'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
