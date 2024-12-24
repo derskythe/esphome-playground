@@ -419,7 +419,7 @@ display:
           // Red: 100%, Green: 53%, Blue: 5%
           // Turn on or off the LED ambient
           // id(led_strip).toggle();
-          id(general_speaker).play();
+          id(media_player_out).play();
 
           auto call = id(led_strip).turn_on();
           // Set parameters (optional)
