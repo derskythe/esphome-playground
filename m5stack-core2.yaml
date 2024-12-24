@@ -16,15 +16,15 @@ esphome:
   on_boot:
     priority: 800
     then:
-    - logger.log:
+      - logger.log:
         format: "Booting ESP32"
         level: INFO
-    - light.turn_on:
+      - light.turn_on:
         id: "${display_backlight}"
         brightness: 1
         transition_length: 1s
-    - display.page.show: display_page1
-    - component.update: my_display
+      - display.page.show: display_page1
+      - component.update: my_display
 
 esp32:
   board: "${entity_id}"
@@ -35,22 +35,22 @@ esp32:
 ## Global variables
 #######################################
 globals:
-- id: enable_wifi_led_status
-  type: bool
-  restore_value: no
-  initial_value: "true"
-- id: is_api_connected
-  type: bool
-  restore_value: no
-  initial_value: "false"
-- id: is_mqtt_connected
-  type: bool
-  restore_value: no
-  initial_value: "false"
-- id: is_wifi_connected
-  type: bool
-  restore_value: no
-  initial_value: "false"
+  - id: enable_wifi_led_status
+    type: bool
+    restore_value: "false"
+    initial_value: "true"
+  - id: is_api_connected
+    type: bool
+    restore_value: "false"
+    initial_value: "false"
+  - id: is_mqtt_connected
+    type: bool
+    restore_value: "false"
+    initial_value: "false"
+  - id: is_wifi_connected
+    type: bool
+    restore_value: "false"
+    initial_value: "false"
 
 #######################################
 ## Enable Home Assistant API
@@ -73,9 +73,12 @@ packages:
   # additional packages
   # pkg_audio: !include common/audio.yaml
   # pkg_rtttl: !include common/rtttl.yaml
-  pkg_temp: !include common/bmp280.yaml # Temperature, Pressure
-  pkg_humidity: !include common/sht40.yaml # Humidity (Can give temperature as well)
-  pkg_led_strip: !include common/sk6812.yaml # LED Strip
+  # Temperature, Pressure
+  pkg_temp: !include common/bmp280.yaml
+  # Humidity (Can give temperature as well)
+  pkg_humidity: !include common/sht40.yaml
+  # LED Strip
+  pkg_led_strip: !include common/sk6812.yaml
   pkg_audio: !include common/i2s.yaml
 
 # Buttons

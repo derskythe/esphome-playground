@@ -6,7 +6,7 @@ substitutions:
   enable_wifi_led_status: "false"
 
 esphome:
-  name: ${entity_id}
+  name: "${entity_id}"
   on_boot:
     priority: 800
     then:
@@ -25,19 +25,19 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: no
+    restore_value: "false"
     initial_value: "false"
   - id: is_api_connected
     type: bool
-    restore_value: no
+    restore_value: "false"
     initial_value: "false"
   - id: is_mqtt_connected
     type: bool
-    restore_value: no
+    restore_value: "false"
     initial_value: "false"
   - id: is_wifi_connected
     type: bool
-    restore_value: no
+    restore_value: "false"
     initial_value: "false"
 
 packages:
@@ -93,7 +93,7 @@ esp32_camera:
   i2c_pins:
     sda: GPIO25
     scl: GPIO23
-  data_pins: [GPIO32, GPIO35, GPIO34, GPIO5, GPIO39, GPIO18, GPIO36, GPIO19]
+  data_pins: [ GPIO32, GPIO35, GPIO34, GPIO5, GPIO39, GPIO18, GPIO36, GPIO19 ]
   vsync_pin: GPIO22
   href_pin: GPIO26
   pixel_clock_pin: GPIO21
