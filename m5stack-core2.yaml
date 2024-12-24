@@ -17,12 +17,12 @@ esphome:
     priority: 800
     then:
       - logger.log:
-        format: "Booting ESP32"
-        level: INFO
+          format: "Booting ESP32"
+          level: INFO
       - light.turn_on:
-        id: "${display_backlight}"
-        brightness: 1
-        transition_length: 1s
+          id: "${display_backlight}"
+          brightness: 1
+          transition_length: 1s
       - display.page.show: display_page1
       - component.update: main_display
 

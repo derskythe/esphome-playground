@@ -16,6 +16,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+
 jobs:
   build:
     name: "Build ${{ matrix.yaml-file }}"
@@ -34,6 +39,8 @@ jobs:
       TZ: 'Asia/Baku'
       YAML: |
         ${{ secrets.SECRETS_YAML }}
+    outputs:
+      VERSION: ${{ steps.step-output.outputs.version }}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -65,6 +72,11 @@ jobs:
           name: build-output-files-${{ steps.esphome-build.outputs.name }}-${{ env.VERSION }}
           path: ${{ steps.esphome-build.outputs.name }}
 
+      - name: "Output Values"
+        id: step-output
+        run: |
+          echo "VERSION=${{ env.VERSION }}" >> "$GITHUB_OUTPUT"
+
   verify:
     name: "Verify ${{ matrix.yaml-file }}"
     runs-on: ubuntu-latest
@@ -78,6 +90,8 @@ jobs:
           - m5timer-cam.yaml
           - m5stick-plus.yaml
           - esp32cam.yaml
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -96,3 +110,10 @@ jobs:
         run: |
           jq -n --arg md5 "$(md5sum test-esp32.ota.bin | head -c 32)" -f tests/${{ matrix.yaml-file }}-manifest-template.json > /tmp/manifest.json
           diff <(jq --sort-keys . /tmp/manifest.json) <(jq --sort-keys . manifest.json)
+
+      - name: "[ALL] Create or update RELEASE ${{ env.VERSION }} with assets 🌟"
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          ./.github/create-or-update-release.ps1 ${{ env.VERSION }} ${{ env.VERSION }} ${{ github.repository }} ${{ github.ref_name }}
