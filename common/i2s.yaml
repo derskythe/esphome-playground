@@ -8,13 +8,14 @@ speaker:
   - platform: i2s_audio
     i2s_audio_id: "i2s_audio_component"
     dac_type: external
-    mode: mono
     i2s_mode: primary
     i2s_dout_pin: GPIO2
     id: "general_speaker"
     on_stop:
-      - speaker.play:
-        id: speaker
-        data: !lambda return betty_online_raw;
+      then:
+        - speaker.play:
+          id: speaker
+          data: !lambda return betty_online_raw;
     on_state:
-      - logger.log: "State updated!"
+      then:
+        - logger.log: "State updated!"
