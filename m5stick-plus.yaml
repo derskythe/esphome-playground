@@ -333,8 +333,8 @@ display:
           it.image(start_pos, 0, id(is_wifi_connected) ? id(icon_wifi) : id(icon_wifi_off));
           it.image(start_pos, 30,
           id(is_mqtt_connected)
-          ? id(icon_access_point_network)
-          : id(icon_access_point_network_off));
+          ? id(icon_swap_vertical_bold)
+          : id(icon_network_strength_off));
           it.image(start_pos, 60, id(is_api_connected) ? id(icon_shield_home) : id(icon_home_off));
 
       - id: display_page2

@@ -62,9 +62,9 @@ packages:
   pkg_common: !include common/standard_mesh.yaml
   pkg_wifi: !include common/wifi.yaml
   pkg_mqtt: !include common/mqtt.yaml
-  pkg_sensor: !include common/sensor.yaml
+  pkg_sensor: !include common/sensor_simple.yaml
   pkg_binary_sensor: !include common/binary_sensor.yaml
-  pkg_text_sensor: !include common/text_sensor.yaml
+  pkg_text_sensor: !include common/text_sensor_simple.yaml
   pkg_switch: !include common/switch.yaml
   # Display
   pkg_font: !include common/font.yaml

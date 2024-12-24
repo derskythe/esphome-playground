@@ -11,7 +11,7 @@ switch:
   - platform: shutdown
     id: switch_shutdown
     name: "Shutdown ${friendly_name}"
-
-  - platform: factory_reset
-    id: switch_factory_reset
-    name: "Factory Reset ${friendly_name}"
+#
+#  - platform: factory_reset
+#    id: switch_factory_reset
+#    name: "Factory Reset ${friendly_name}"

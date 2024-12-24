@@ -25,7 +25,7 @@ network:
   enable_ipv6: false
 
 mdns:
-  disabled: false
+  disabled: true
 
 time:
   - platform: homeassistant
