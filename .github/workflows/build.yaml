@@ -7,6 +7,7 @@ on:
     paths:
       - '*.yaml'
       - '*.yml'
+      - '.github/workflows/build.yaml'
   workflow_dispatch:
   release:
     types: [published]
@@ -30,6 +31,7 @@ jobs:
           - esp32cam.yaml
     env:
       VERSION: ''
+      TZ: 'Asia/Baku'
       YAML: |
         ${{ secrets.SECRETS_YAML }}
     steps:
