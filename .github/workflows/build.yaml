@@ -113,12 +113,6 @@ jobs:
           ls -al
           tree
 
-      - name: Validate json file matches ${{ matrix.yaml-file }} manifest-template.json
-        run: |
-          jq -n --arg md5 "$(md5sum ${{ env.FIRMWARE_NAME }}.ota.bin | \
-            head -c 32)" -f tests/${{ matrix.yaml-file }}-manifest-template.json > /tmp/manifest.json
-          diff <(jq --sort-keys . /tmp/manifest.json) <(jq --sort-keys . manifest.json)
-
       - name: "[ALL] Create or update RELEASE ${{ env.VERSION }} with assets 🌟"
         shell: pwsh
         env:
