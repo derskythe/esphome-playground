@@ -21,6 +21,10 @@ function Format-Bytes
     param(
         [int]$number
     )
+    if(0 -eq $number) {
+        Write-Error ('::error title=File has zero lenght!::Error')
+        exit 2
+    }
     $sizes = 'KB', 'MB', 'GB', 'TB', 'PB'
     for ($x = 0; $x -lt $sizes.count; $x++) {
         if ($number -lt [int64]"1$( $sizes[$x] )")
@@ -41,11 +45,6 @@ function Format-Bytes
 
 Set-Location $InputDir
 [string]$ZipName = ('{0}.zip' -f $AppName)
-
-New-Item -Name $AppName -ItemType Directory
-Copy-Item -Force -Verbose -Path "./$AppName.*" -Destination "./$AppName"
-Copy-Item -Force -Verbose -Path "./version" -Destination "./$AppName"
-Copy-Item -Force -Verbose -Path "./manifest.json" -Destination "./$AppName"
 
 zip -r -qq $ZipName "./$AppName"
 
