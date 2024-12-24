@@ -10,9 +10,9 @@ substitutions:
 esphome:
   name: "${entity_id}"
   friendly_name: "${friendly_name}"
-  includes:
-    - "sound/betty_online.h"
-    - "sound/betty_shutdown.h"
+  #  includes:
+  #    - "sound/betty_online.h"
+  #    - "sound/betty_shutdown.h"
   on_boot:
     priority: 800
     then:
@@ -77,9 +77,9 @@ packages:
   pkg_temp: !include common/bmp280.yaml
   # Humidity (Can give temperature as well)
   pkg_humidity: !include common/sht40.yaml
+  # pkg_audio: !include common/i2s.yaml
   # LED Strip
   pkg_led_strip: !include common/sk6812.yaml
-  pkg_audio: !include common/i2s.yaml
 
 # Buttons
 binary_sensor:
@@ -420,20 +420,19 @@ display:
           // Turn on or off the LED ambient
           // id(led_strip).toggle();
           // id(media_player_out).play();
-          if(id(media_player_out).is_ready()) {
-              static bool is_reported = false;
-              if(id(media_player_out).is_muted()) {
-                  if(!is_reported) {
-                      ESP_LOGW("media_player", "Is Muted!");
-                  }
-              } else {
-                  ESP_LOGD("media_player", "Trying to start!");
-                  id(media_player_out).start();
-              }
-          } else {
-              ESP_LOGW("media_player", "Not Ready!");
-          }
-
+          // if(id(media_player_out).is_ready()) {
+          //     static bool is_reported = false;
+          //     if(id(media_player_out).is_muted()) {
+          //         if(!is_reported) {
+          //             ESP_LOGW("media_player", "Is Muted!");
+          //         }
+          //     } else {
+          //         ESP_LOGD("media_player", "Trying to start!");
+          //         id(media_player_out).start();
+          //     }
+          // } else {
+          //     ESP_LOGW("media_player", "Not Ready!");
+          // }
           auto call = id(led_strip).turn_on();
           // Set parameters (optional)
           // in ms
