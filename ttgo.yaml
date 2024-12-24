@@ -5,9 +5,9 @@ substitutions:
   tag: ttgo-t1
   wifi_power_save_mode: none
   screenlock_delay: 120sec
-  enable_ota: "true"
-  enable_mdns: "true"
-  enable_wifi_led_status: "true"
+  enable_ota: true
+  enable_mdns: true
+  enable_wifi_led_status: true
 
 esphome:
   name: ${entity_id}
@@ -17,7 +17,7 @@ esp32:
   framework:
     type: arduino
 
-#esp32_ble_tracker:
+# esp32_ble_tracker:
 
 # Enable Home Assistant API
 <<: !include include_api.yaml
@@ -30,7 +30,7 @@ esp32:
 <<: !include include_sensor.yaml
 <<: !include include_switch.yaml
 
-<<: !include include_standart_mesh.yaml
+<<: !include include_standard_mesh.yaml
 
 # Buttons
 binary_sensor:
@@ -63,7 +63,7 @@ spi:
 display:
   - platform: ili9xxx
     model: st7789v
-    #TTGO TDisplay 135x240
+    # TTGO TDisplay 135x240
     cs_pin: GPIO5
     dc_pin: GPIO16
     reset_pin: GPIO23

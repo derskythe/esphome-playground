@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectResources">
+    <resource url="http://www.nlog-project.org/schemas/NLog.xsd" location="$USER_HOME$/AppData/Local/JetBrains/Rider2022.2/extResources/ebda59dc_NLog.xsd" />
+    <xml-schema-version>XMLSchema_1_1</xml-schema-version>
+  </component>
+</project>

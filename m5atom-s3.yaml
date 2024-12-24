@@ -3,8 +3,8 @@ substitutions:
   friendly_name: "M5_Atom_S3"
   entity_id: "m5atom-s3"
   wifi_power_save_mode: "none"
-  enable_ota: "true"
-  enable_wifi_led_status: "false"
+  enable_ota: true
+  enable_wifi_led_status: false
   display_backlight: "display_backlight"
 
 esphome:
@@ -28,20 +28,20 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_api_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_mqtt_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_wifi_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
 
 #######################################
 ## Enable Home Assistant API
@@ -117,13 +117,18 @@ display:
 
       int first  = (int)(128 / 2);
       int second = (int)(128 / 3);
-      it.strftime(first, second * 1 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%Y-%m-%d", id(esptime).now());
-      it.strftime(first, second * 2 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%H:%M:%S", id(esptime).now());
+      it.strftime(first, second * 1 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%Y-%m-%d",
+            id(esptime).now());
+      it.strftime(first, second * 2 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%H:%M:%S",
+            id(esptime).now());
       it.print(5, 5, id(roboto_small), id(my_yellow), TextAlign::TOP_LEFT, "ESPHome");
 
       // Comment out the above lines to see the image without text overlaid
       // it.image(0, 0, id(my_image));
-      it.print(115, 5, id(roboto_small), id(my_green), TextAlign::TOP_RIGHT, id(system_status).state ? "Online" : "Offline");
+      it.print(115, 5, id(roboto_small), id(my_green), TextAlign::TOP_RIGHT,
+         id(system_status).state
+         ? "Online"
+         : "Offline");
 
 # G41=Button
 binary_sensor:

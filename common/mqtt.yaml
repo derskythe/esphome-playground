@@ -46,7 +46,7 @@ mqtt:
     then:
       - globals.set:
           id: is_mqtt_connected
-          value: "true"
+          value: true
       - logger.log:
           format: "Connected to MQTT broker"
           level: INFO
@@ -54,7 +54,7 @@ mqtt:
     then:
       - globals.set:
           id: is_mqtt_connected
-          value: "false"
+          value: false
       - logger.log:
           format: "Disconnected from MQTT broker"
           level: WARN

@@ -17,32 +17,3 @@ font:
       weight: 900
     id: "roboto_big"
     size: 28
-# - file: "gfonts://Material+Symbols+Outlined"
-#   id: icon_temp
-#   size: 28
-#   glyphs: [""] # icon_temp
-
-# - file: "gfonts://Material+Symbols+Outlined"
-#   id: icon_hum
-#   size: 28
-#   glyphs: [""] # icon_hum
-
-# - file: "gfonts://Material+Symbols+Outlined"
-#   id: icon_wifi
-#   size: 28
-#   glyphs: [""] # icon_wifi
-
-# - file: "gfonts://Material+Symbols+Outlined"
-#   id: icon_pressure
-#   size: 28
-#   glyphs: [""] # icon_pressure
-
-# - file: "gfonts://Material+Symbols+Outlined"
-#   id: icon_uptime
-#   size: 28
-#   glyphs: [""] # icon_uptime
-
-# - file: "gfonts://Material+Symbols+Outlined"
-#   id: icon_battery
-#   size: 28
-#   glyphs: [""] # icon_battery

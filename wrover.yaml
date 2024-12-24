@@ -27,14 +27,14 @@ esp32_ble_tracker:
 <<: !include include_sensor.yaml
 <<: !include include_switch.yaml
 
-<<: !include include_standart_mesh.yaml
+<<: !include include_standard_mesh.yaml
 
 # Buttons
 binary_sensor:
   - <<: !include { file: include_button.yaml, vars: { id: BtnA, gpio: GPIO39 } }
   - <<: !include { file: include_binary_sensor.yaml }
 
-#i2c:
+# i2c:
 #  sda: 21
 #  scl: 22
 #  scan: false # nothing to scan
@@ -56,4 +56,4 @@ light:
     restore_mode: ALWAYS_OFF
     id: side_light
     default_transition_length: 0s
-#captive_portal:
+# captive_portal:

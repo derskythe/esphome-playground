@@ -7,21 +7,20 @@ light:
     pin: GPIO15
     num_leds: 10
     default_transition_length: 1s
-    name: "${friendly_name} LED strip"
+    name: '${friendly_name} LED strip'
     restore_mode: ALWAYS_OFF
     icon: mdi:light-flood-up
     effects:
       - addressable_rainbow:
-      - addressable_rainbow:
-          name: "Rainbow Effect With Custom Values"
+          name: 'Rainbow Effect With Custom Values'
           speed: 10
           width: 50
-      - addressable_color_wipe:
       - addressable_scan:
-          name: "Scan Effect With Custom Values"
+          name: 'Scan Effect With Custom Values'
           move_interval: 200ms
       - addressable_fireworks:
+          name: 'Fireworks!'
       - addressable_twinkle:
-          name: "Twinkle Effect With Custom Values"
+          name: 'Twinkle Effect With Custom Values'
           twinkle_probability: 5%
           progress_interval: 4ms

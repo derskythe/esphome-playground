@@ -9,7 +9,7 @@ sensor:
     tvoc:
       name: "${friendly_name} TVOC"
       accuracy_decimals: 1
-    store_baseline: yes
+    store_baseline: true
     address: 0x58
     update_interval: 1s
     # baseline

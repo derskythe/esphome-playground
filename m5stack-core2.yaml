@@ -1,33 +1,33 @@
 ---
 substitutions:
-  friendly_name: "M5Stack"
-  entity_id: "m5stack-core2"
-  wifi_power_save_mode: "none"
-  enable_ota: "true"
-  enable_wifi_led_status: "true"
-  display_backlight: "display_backlight"
+  friendly_name: M5Stack
+  entity_id: m5stack-core2
+  wifi_power_save_mode: 'none'
+  enable_ota: true
+  enable_wifi_led_status: true
+  display_backlight: 'display_backlight'
 
 esphome:
-  name: "${entity_id}"
-  friendly_name: "${friendly_name}"
+  name: '${entity_id}'
+  friendly_name: '${friendly_name}'
   #  includes:
-  #    - "sound/betty_online.h"
-  #    - "sound/betty_shutdown.h"
+  #    - 'sound/betty_online.h'
+  #    - 'sound/betty_shutdown.h'
   on_boot:
     priority: 800
     then:
       - logger.log:
-          format: "Booting ESP32"
+          format: 'Booting ESP32'
           level: INFO
       - light.turn_on:
-          id: "${display_backlight}"
+          id: '${display_backlight}'
           brightness: 1
           transition_length: 1s
       - display.page.show: display_page1
       - component.update: main_display
 
 esp32:
-  board: "${entity_id}"
+  board: '${entity_id}'
   framework:
     type: arduino
 
@@ -37,20 +37,20 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: "false"
-    initial_value: "true"
+    restore_value: false
+    initial_value: true
   - id: is_api_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_mqtt_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_wifi_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
 
 #######################################
 ## Enable Home Assistant API
@@ -85,140 +85,140 @@ packages:
 binary_sensor:
   - platform: gpio
     id: button_a
-    name: "${friendly_name} Button A"
+    name: '${friendly_name} Button A'
     icon: mdi:nintendo-switch
     pin:
       number: GPIO39
-      inverted: "true"
+      inverted: true
     filters:
       - delayed_off: 10ms
     on_press:
       then:
         - logger.log:
-            format: "Button A was pressed"
+            format: 'Button A was pressed'
             level: INFO
         - if:
             condition:
               script.is_running: script_page_turn
             then:
               - logger.log:
-                  format: "Script is already running"
+                  format: 'Script is already running'
                   level: INFO
             else:
               - script.execute: script_page_turn
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "true"
+            state: true
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "true"
+            state: true
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "false"
+            state: false
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "false"
+            state: false
 
   - platform: gpio
     id: button_b
-    name: "${friendly_name} Button B"
+    name: '${friendly_name} Button B'
     icon: mdi:nintendo-switch
     pin:
       number: GPIO38
-      inverted: "true"
+      inverted: true
     filters:
       - delayed_off: 10ms
     on_press:
       then:
         - logger.log:
-            format: "Button B was pressed"
+            format: 'Button B was pressed'
             level: INFO
         - if:
             condition:
               script.is_running: script_page_turn
             then:
               - logger.log:
-                  format: "Script is already running"
+                  format: 'Script is already running'
                   level: INFO
             else:
               - script.execute: script_page_turn
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "true"
+            state: true
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "true"
+            state: true
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "false"
+            state: false
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "false"
+            state: false
 
   - platform: gpio
     id: button_c
-    name: "${friendly_name} Button C"
+    name: '${friendly_name} Button C'
     icon: mdi:nintendo-switch
     pin:
       number: GPIO37
-      inverted: "true"
+      inverted: true
     filters:
       - delayed_off: 10ms
     on_press:
       then:
         - logger.log:
-            format: "Button C was pressed"
+            format: 'Button C was pressed'
             level: INFO
         - if:
             condition:
               script.is_running: script_page_turn
             then:
               - logger.log:
-                  format: "Script is already running"
+                  format: 'Script is already running'
                   level: INFO
             else:
               - script.execute: script_page_turn
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "true"
+            state: true
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "true"
+            state: true
     on_release:
       then:
         - binary_sensor.template.publish:
             id: dim_display_on
-            state: "false"
+            state: false
         - binary_sensor.template.publish:
             id: dim_display_off
-            state: "false"
+            state: false
 
 # - platform: template
-#   name: "${friendly_name} Button Template"
+#   name: '${friendly_name} Button Template'
 #   id: button_template
 #   icon: mdi:dip-switch
 #   on_press:
 #     then:
-#       - logger.log: "Button Template was pressed"
+#       - logger.log: 'Button Template was pressed'
 #       - script.execute: script_page_turn
 #       - binary_sensor.template.publish:
 #           id: dim_display_on
-#           state: "true"
+#           state: true
 #       - binary_sensor.template.publish:
 #           id: dim_display_off
-#           state: "true"
+#           state: true
 #   on_release:
 #     then:
 #       - binary_sensor.template.publish:
 #           id: dim_display_on
-#           state: "false"
+#           state: false
 #       - binary_sensor.template.publish:
 #           id: dim_display_off
-#           state: "false"
+#           state: false
 
 script:
   - id: script_page_turn
@@ -229,7 +229,7 @@ script:
             binary_sensor.is_on: button_a
           then:
             - logger.log:
-                format: "Script Button A was pressed"
+                format: 'Script Button A was pressed'
                 level: INFO
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page1
@@ -240,7 +240,7 @@ script:
             binary_sensor.is_on: button_b
           then:
             - logger.log:
-                format: "Script Button B was pressed"
+                format: 'Script Button B was pressed'
                 level: INFO
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page2
@@ -251,7 +251,7 @@ script:
             binary_sensor.is_on: button_c
           then:
             - logger.log:
-                format: "Script Button C was pressed"
+                format: 'Script Button C was pressed'
                 level: INFO
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page3
@@ -278,7 +278,7 @@ script:
 # // call.set_rgb(1.0, 0.0, 0.0); // color in RGB order, this example is purple
 # // call.set_cold_white(0.2);
 # // call.set_warm_white(0.75);
-# // //call.set_effect("addressable_fireworks");
+# // //call.set_effect('addressable_fireworks');
 # // // perform action:
 # // call.perform();
 
@@ -286,29 +286,29 @@ script:
 external_components:
   - source:
       type: git
-      url: "https://github.com/ssieb/custom_components"
-    components: [ip5306]
+      url: 'https://github.com/ssieb/custom_components'
+    components: [ ip5306 ]
 
 ip5306:
   i2c_id: bus_a
   battery_level:
     id: battery_percent
-    name: "${friendly_name} Battery Percent"
+    name: '${friendly_name} Battery Percent'
     icon: mdi:battery-high
   charger_connected:
     id: battery_connected
-    name: "${friendly_name} Charger Connected"
+    name: '${friendly_name} Charger Connected'
     icon: mdi:battery-charging-medium
   charge_full:
     id: battery_full
-    name: "${friendly_name} Charge Full"
+    name: '${friendly_name} Charge Full'
     icon: mdi:battery-charging-high
 
 # Internal LEDs
 # Display backlight output
 output:
   - platform: ledc
-    id: "${display_backlight}_pwm"
+    id: '${display_backlight}_pwm'
     pin: GPIO32
 
 # - platform: esp32_pwm
@@ -318,9 +318,9 @@ output:
 # Display backlight
 light:
   - platform: monochromatic
-    id: "${display_backlight}"
-    output: "${display_backlight}_pwm"
-    name: "${friendly_name} Backlight"
+    id: '${display_backlight}'
+    output: '${display_backlight}_pwm'
+    name: '${friendly_name} Backlight'
     icon: mdi:monitor
     restore_mode: ALWAYS_OFF
 
@@ -336,14 +336,14 @@ i2c:
   - id: bus_a
     sda: 21
     scl: 22
-    scan: "true"
+    scan: true
     # Default: 50KHz. min. setting at 100KHz needed.
     # Otherwise, lambda is so slow that
     # warnings appear in log frequency: 50Khz
   - id: bus_c
     sda: 17
     scl: 16
-    scan: "true"
+    scan: true
 
 graph:
   # Show bare-minimum auto-ranged graph
@@ -372,7 +372,7 @@ display:
     dc_pin: GPIO27
     reset_pin: GPIO33
     update_interval: 15s
-    invert_colors: "false"
+    invert_colors: false
     pages:
       - id: display_page1
         lambda: |-

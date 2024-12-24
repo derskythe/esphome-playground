@@ -1,22 +1,22 @@
 ---
 substitutions:
   friendly_name: ESP32_CAM_MOD
-  entity_id: "esp32cam-mod"
-  wifi_power_save_mode: "none"
-  enable_ota: "true"
-  enable_wifi_led_status: "false"
+  entity_id: 'esp32cam-mod'
+  wifi_power_save_mode: 'none'
+  enable_ota: true
+  enable_wifi_led_status: false
 
 esphome:
-  name: "${entity_id}"
+  name: '${entity_id}'
   on_boot:
     priority: 800
     then:
       - logger.log:
-          format: "${friendly_name} started"
+          format: '${friendly_name} started'
           level: INFO
 
 esp32:
-  board: "esp32cam"
+  board: 'esp32cam'
   framework:
     type: arduino
 
@@ -26,20 +26,20 @@ esp32:
 globals:
   - id: enable_wifi_led_status
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_api_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_mqtt_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
   - id: is_wifi_connected
     type: bool
-    restore_value: "false"
-    initial_value: "false"
+    restore_value: false
+    initial_value: false
 
 packages:
   pkg_ota: !include common/ota.yaml
@@ -73,19 +73,19 @@ interval:
             # Disable Camera LED during the day
             - light.turn_off: led_strip
             - logger.log:
-                format: "LED must be OFF"
+                format: 'LED must be OFF'
                 level: INFO
           else:
             # Enable Camera LED at night
             - light.turn_on: led_strip
             - logger.log:
-                format: "LED must be ON"
+                format: 'LED must be ON'
                 level: INFO
 
 sensor:
   - platform: adc
     pin: GPIO33
-    name: "${friendly_name} Voltage"
+    name: '${friendly_name} Voltage'
     update_interval: 10s
     icon: mdi:lightning-bolt
     # attenuation: 11db
@@ -137,7 +137,7 @@ light:
   # Camera LED
   - platform: monochromatic
     output: led_pwm
-    name: "${friendly_name} LED"
+    name: '${friendly_name} LED'
     id: led_strip
     restore_mode: ALWAYS_OFF
 
@@ -145,5 +145,5 @@ light:
   # ? Useless
   # - platform: monochromatic
   #   output: onboard_led_pwm
-  #   name: "${friendly_name} Onboard LED"
+  #   name: '${friendly_name} Onboard LED'
   #   id: led_strip

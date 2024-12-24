@@ -18,7 +18,7 @@ speaker:
     max_volume: 1.0
     volume: 0.5
     effects:
-    - name: "Buzzer"
+      - name: 'Buzzer'
         lambda: |-
             auto effect = id(speaker_out).new_effect();
             effect->set_type(EffectType::BUZZER);
@@ -27,7 +27,8 @@ speaker:
             effect->set_volume(0.5);
             effect->start();
             return effect;
-    - name: "Beep"
+
+      - name: "Beep"
         lambda: |-
             auto effect = id(speaker_out).new_effect();
             effect->set_type(EffectType::BEEP);
@@ -36,39 +37,43 @@ speaker:
             effect->set_volume(0.5);
             effect->start();
             return effect;
-    - name: "Alarm"
+
+      - name: "Alarm"
         lambda: |-
-            auto effect = id(speaker_out).new_effect();
-            effect->set_type(EffectType::ALARM);
-            effect->set_length(1000);
-            effect->set_frequency(1000);
-            effect->set_volume(0.5);
-            effect->start();
-            return effect;
-    - name: "Dial Tone"
+          auto effect = id(speaker_out).new_effect();
+          effect->set_type(EffectType::ALARM);
+          effect->set_length(1000);
+          effect->set_frequency(1000);
+          effect->set_volume(0.5);
+          effect->start();
+          return effect;
+
+      - name: "Dial Tone"
         lambda: |-
-            auto effect = id(speaker_out).new_effect();
-            effect->set_type(EffectType::DIAL_TONE);
-            effect->set_length(1000);
-            effect->set_frequency(1000);
-            effect->set_volume(0.5);
-            effect->start();
-            return effect;
-    - name: "Power Up"
+          auto effect = id(speaker_out).new_effect();
+          effect->set_type(EffectType::DIAL_TONE);
+          effect->set_length(1000);
+          effect->set_frequency(1000);
+          effect->set_volume(0.5);
+          effect->start();
+          return effect;
+
+      - name: "Power Up"
         lambda: |-
-            auto effect = id(speaker_out).new_effect();
-            effect->set_type(EffectType::POWER_UP);
-            effect->set_length(1000);
-            effect->set_frequency(1000);
-            effect->set_volume(0.5);
-            effect->start();
-            return effect;
-    - name: "Power Down"
+          auto effect = id(speaker_out).new_effect();
+          effect->set_type(EffectType::POWER_UP);
+          effect->set_length(1000);
+          effect->set_frequency(1000);
+          effect->set_volume(0.5);
+          effect->start();
+          return effect;
+
+      - name: "Power Down"
         lambda: |-
-            auto effect = id(speaker_out).new_effect();
-            effect->set_type(EffectType::POWER_DOWN);
-            effect->set_length(1000);
-            effect->set_frequency(1000);
-            effect->set_volume(0.5);
-            effect->start();
-            return effect;
+          auto effect = id(speaker_out).new_effect();
+          effect->set_type(EffectType::POWER_DOWN);
+          effect->set_length(1000);
+          effect->set_frequency(1000);
+          effect->set_volume(0.5);
+          effect->start();
+          return effect;

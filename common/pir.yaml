@@ -7,7 +7,7 @@ binary_sensor:
     id: motion_sensor
     pin:
       number: "${pin_pir}"
-    # mode: INPUT_PULLUP
+      # mode: INPUT_PULLUP
       inverted: true
     filters:
       - delayed_on: 100ms
@@ -16,12 +16,12 @@ binary_sensor:
           time_on: 10s
           time_off: 20s
       - autorepeat:
-        - delay: 1s
-          time_off: 100ms
-          time_on: 900ms
-        - delay: 5s
-          time_off: 100ms
-          time_on: 400ms
+          - delay: 1s
+            time_off: 100ms
+            time_on: 900ms
+          - delay: 5s
+            time_off: 100ms
+            time_on: 400ms
       - settle: 500ms
     #   - lambda: |-
     #       if (id(other_binary_sensor).state) {

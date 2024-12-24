@@ -1,12 +1,12 @@
 ---
 substitutions:
   esp_name: lilygo
-  font_small: "48"
-  font_big: "100"
+  font_small: '48'
+  font_big: '100'
 
 esphome:
   name: ${esp_name}
-  comment: "E-paper display"
+  comment: 'E-paper display'
   friendly_name: lilygo
 
 esp32:
@@ -29,9 +29,9 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
-  # Enable fallback hotspot (captive_portal node) in case wifi connection fails
+  # Enable fallback hotspot (captive_portal node) in case Wi-Fi connection fails
   ap:
-    ssid: "Lilygo Fallback Hotspot"
+    ssid: 'Lilygo Fallback Hotspot'
     password: !secret fallback
 
 captive_portal:
@@ -69,10 +69,10 @@ font:
       family: Roboto
       weight: 500
     id: din_big
-    # Glyphs are prerastered, choose them early to save flash
-    glyphs: " C$+-0123456789.:"
+    # Glyphs are pre-mastered, choose them early to save flash
+    glyphs: ' C$+-0123456789.:'
     size: $font_big
-  - file: "gfonts://Material+Symbols+Outlined"
+  - file: 'gfonts://Material+Symbols+Outlined'
     id: font_icons_small
     size: $font_small
     glyphs: # also as a list
@@ -80,7 +80,7 @@ font:
       - "\U0000EF44" # Sunset
       - "\U0000F582" # Temperature High
       - "\U0000F581" # Temperature Low
-  - file: "gfonts://Material+Symbols+Outlined"
+  - file: 'gfonts://Material+Symbols+Outlined'
     id: font_icons_big
     size: $font_big
     glyphs:
@@ -89,7 +89,7 @@ font:
 
 binary_sensor:
   - platform: status
-    name: "status"
+    name: 'status'
     # Setting up the buttons here to refresh the display
     # (for experimenting with sleep mode) and to flip between
     # pages on the display.  Only one is defined at the bottom
@@ -102,12 +102,12 @@ binary_sensor:
     on_press:
       then:
         - component.update: t5_disp
-    name: "Button 1"
+    name: 'Button 1'
   - platform: gpio
     pin:
       number: GPIO34
       inverted: true
-    name: "Button 2"
+    name: 'Button 2'
     internal: true
     on_press:
       then:
@@ -117,7 +117,7 @@ binary_sensor:
     pin:
       number: GPIO35
       inverted: true
-    name: "Button 3"
+    name: 'Button 3'
     internal: true
     on_press:
       then:
@@ -143,7 +143,7 @@ text:
   name: alert
   id: alert
   platform: template
-  optimistic: True
+  optimistic: true
   # maybe add a startup set of this state so HA doesn't say Unknown
   update_interval: never
   on_value:
@@ -152,19 +152,19 @@ text:
 
 sensor:
   - platform: homeassistant
-    name: "Current temperature"
+    name: 'Current temperature'
     entity_id: sensor.gatineau_temperature
     id: temp
   - platform: homeassistant
-    name: "Daily high"
+    name: 'Daily high'
     entity_id: sensor.gatineau_high_temperature
     id: daily_high
   - platform: homeassistant
-    name: "Daily low"
+    name: 'Daily low'
     entity_id: sensor.gatineau_low_temperature
     id: daily_low
   - platform: homeassistant
-    name: "GBP CAD"
+    name: 'GBP CAD'
     entity_id: sensor.gbp_cad
     id: gbp_cad
     on_value: # Actions to perform once data for the last sensor has been received
@@ -197,7 +197,8 @@ display:
         lambda: |-
           it.print(  40,  60, id(font_icons_big), TextAlign::CENTER_LEFT, "\ue1ff");
           it.printf(130,  60, id(din_big),        TextAlign::CENTER_LEFT, "%3.1fC", id(temp).state);
-          it.graph((it.get_width() / 2)-200, 140, id(temp_graph)); // no support for ImageAlign in graph()
+          // no support for ImageAlign in graph()
+          it.graph((it.get_width() / 2)-200, 140, id(temp_graph));
           it.print(  70, 600, id(font_icons_small), TextAlign::CENTER_LEFT, "\U0000F582");
           it.printf(260, 600, id(roboto),  TextAlign::CENTER_RIGHT, "%.1fC", id(daily_high).state);
           it.print(  70, 660, id(font_icons_small), TextAlign::CENTER_LEFT, "\U0000F581");

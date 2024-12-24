@@ -1,6 +1,6 @@
 ---
 substitutions:
-  friendly_name: "C3U_Stamp"
+  friendly_name: 'C3U_Stamp'
 
 esphome:
   name: c3u_stamp
@@ -30,16 +30,20 @@ esp32_ble_tracker:
           }
           ESP_LOGD("ble_adv", "  Advertised service data:");
           for (auto data : x.get_service_datas()) {
-              ESP_LOGD("ble_adv", "    - %s: (length %i)", data.uuid.to_string().c_str(), data.data.size());
+              ESP_LOGD("ble_adv", "    - %s: (length %i)",
+                  data.uuid.to_string().c_str(),
+                  data.data.size());
           }
           ESP_LOGD("ble_adv", "  Advertised manufacturer data:");
           for (auto data : x.get_manufacturer_datas()) {
-              ESP_LOGD("ble_adv", "    - %s: (length %i)", data.uuid.to_string().c_str(), data.data.size());
+              ESP_LOGD("ble_adv", "    - %s: (length %i)",
+                  data.uuid.to_string().c_str(),
+                  data.data.size());
           }
 
-<<: !include include_standart_mesh.yaml
+<<: !include include_standard_mesh.yaml
 
-#logger: !remove
+# logger: !remove
 
 # Enable logging
 logger:

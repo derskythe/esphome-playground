@@ -11,6 +11,7 @@ on:
       - '*.yaml'
       - '*.yml'
       - '.github/workflows/build.yaml'
+  # yamllint disable-line rule:empty-values
   workflow_dispatch:
 
 permissions:
@@ -28,11 +29,12 @@ jobs:
           - cancelled
           - failure
     steps:
-      - name: "Run for ${{ matrix.type }}"
+      - name: 'Run for ${{ matrix.type }}'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh run list -R "${{ github.repository }}" -s ${{ matrix.type }}
           sleep 1
-          gh run list -R "${{ github.repository }}" -s ${{ matrix.type }} --json databaseId --jq ".[] | .databaseId" \
+          gh run list -R "${{ github.repository }}" -s ${{ matrix.type }} \
+            --json databaseId --jq ".[] | .databaseId" \
             | xargs -I {} gh run -R "${{ github.repository }}" delete {}

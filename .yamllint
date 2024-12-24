@@ -1,0 +1,77 @@
+---
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+  - '.yamllint'
+
+extends: default
+locale: en_US.UTF-8
+
+rules:
+  anchors:
+    forbid-undeclared-aliases: true
+    forbid-duplicated-anchors: true
+    forbid-unused-anchors: true
+  braces:
+    level: warning
+    max-spaces-inside: 1
+  brackets:
+    level: warning
+    max-spaces-inside: 1
+    min-spaces-inside: 0
+  colons:
+    level: warning
+    max-spaces-before: 0
+    max-spaces-after: 1
+  commas:
+    level: warning
+    max-spaces-before: 0
+    min-spaces-after: 1
+    max-spaces-after: 1
+  comments:
+    require-starting-space: true
+    ignore-shebangs: true
+    min-spaces-from-content: 1
+  comments-indentation: disable
+  document-start: enable
+  empty-lines:
+    max: 2
+    max-start: 0
+    max-end: 1
+    level: warning
+  hyphens:
+    max-spaces-after: 1
+    level: warning
+  indentation:
+    spaces: 2
+    level: warning
+    indent-sequences: true
+    check-multi-line-strings: false
+  line-length:
+    max: 100
+    level: warning
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+  new-lines:
+    type: unix
+  truthy:
+    allowed-values: [ 'true', 'false' ]
+    check-keys: false
+  empty-values:
+    forbid-in-flow-mappings: true
+    forbid-in-block-sequences: true
+    level: warning
+  float-values:
+    require-numeral-before-decimal: true
+    forbid-nan: true
+    forbid-scientific-notation: true
+    level: warning
+  key-duplicates:
+    forbid-duplicated-merge-keys: false
+  quoted-strings:
+    quote-type: single
+    required: only-when-needed
+    extra-required: [^https://, ^http://]
+    extra-allowed: [^.]
+    allow-quoted-quotes: true
+    check-keys: false
