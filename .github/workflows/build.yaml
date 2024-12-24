@@ -38,7 +38,7 @@ jobs:
 
       - name: "Create secrets.yaml"
         run: |
-          VERSION=dev-$(date +'%Y%m%d-%H%M')-${{ github.run_attempt - 1 }}
+          VERSION=dev-$(date +'%Y%m%d-%H%M')-${{ (github.run_attempt - 1) }}
           echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           echo ${{ env.YAML }}  > ./secrets.yaml
 
