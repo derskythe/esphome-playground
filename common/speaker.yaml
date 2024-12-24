@@ -28,7 +28,7 @@ speaker:
             effect->start();
             return effect;
 
-      - name: "Beep"
+      - name: 'Beep'
         lambda: |-
             auto effect = id(speaker_out).new_effect();
             effect->set_type(EffectType::BEEP);
@@ -38,7 +38,7 @@ speaker:
             effect->start();
             return effect;
 
-      - name: "Alarm"
+      - name: 'Alarm'
         lambda: |-
           auto effect = id(speaker_out).new_effect();
           effect->set_type(EffectType::ALARM);
@@ -48,7 +48,7 @@ speaker:
           effect->start();
           return effect;
 
-      - name: "Dial Tone"
+      - name: 'Dial Tone'
         lambda: |-
           auto effect = id(speaker_out).new_effect();
           effect->set_type(EffectType::DIAL_TONE);
@@ -58,7 +58,7 @@ speaker:
           effect->start();
           return effect;
 
-      - name: "Power Up"
+      - name: 'Power Up'
         lambda: |-
           auto effect = id(speaker_out).new_effect();
           effect->set_type(EffectType::POWER_UP);
@@ -68,7 +68,7 @@ speaker:
           effect->start();
           return effect;
 
-      - name: "Power Down"
+      - name: 'Power Down'
         lambda: |-
           auto effect = id(speaker_out).new_effect();
           effect->set_type(EffectType::POWER_DOWN);

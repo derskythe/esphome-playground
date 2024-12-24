@@ -1,8 +1,8 @@
 ---
 mqtt:
-  broker: "192.168.0.204"
+  broker: '192.168.0.204'
   # broker: iotstack.skif.ws
-  username: "log_default"
+  username: 'log_default'
   password: !secret mqtt_password
   # reboot_timeout: 15min
   # keepalive: 60s
@@ -48,7 +48,7 @@ mqtt:
           id: is_mqtt_connected
           value: true
       - logger.log:
-          format: "Connected to MQTT broker"
+          format: 'Connected to MQTT broker'
           level: INFO
   on_disconnect:
     then:
@@ -56,5 +56,5 @@ mqtt:
           id: is_mqtt_connected
           value: false
       - logger.log:
-          format: "Disconnected from MQTT broker"
+          format: 'Disconnected from MQTT broker'
           level: WARN

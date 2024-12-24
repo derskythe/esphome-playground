@@ -4,10 +4,10 @@ sensor:
   - platform: sgp30
     i2c_id: bus_a
     eco2:
-      name: "${friendly_name} eCO2"
+      name: '${friendly_name} eCO2'
       accuracy_decimals: 1
     tvoc:
-      name: "${friendly_name} TVOC"
+      name: '${friendly_name} TVOC'
       accuracy_decimals: 1
     store_baseline: true
     address: 0x58

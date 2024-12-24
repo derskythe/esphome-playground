@@ -2,15 +2,15 @@
 switch:
   - platform: restart
     id: switch_restart_switch
-    name: "Restart ${friendly_name}"
+    name: 'Restart ${friendly_name}'
 
   - platform: safe_mode
     id: switch_restart_safe_mode
-    name: "Restart (Safe Mode) ${friendly_name}"
+    name: 'Restart (Safe Mode) ${friendly_name}'
 
   - platform: shutdown
     id: switch_shutdown
-    name: "Shutdown ${friendly_name}"
+    name: 'Shutdown ${friendly_name}'
 #
 #  - platform: factory_reset
 #    id: switch_factory_reset

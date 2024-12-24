@@ -4,10 +4,10 @@ sensor:
   - platform: sht3xd
     i2c_id: bus_a
     temperature:
-      name: "${friendly_name} Temperature (from not correct sensor)"
+      name: '${friendly_name} Temperature (from not correct sensor)'
       id: not_correct_temperature_sensor
     humidity:
-      name: "${friendly_name} Humidity"
+      name: '${friendly_name} Humidity'
       id: humidity_sensor
     address: 0x44
     update_interval: 60s

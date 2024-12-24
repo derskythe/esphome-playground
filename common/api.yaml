@@ -8,7 +8,7 @@ api:
     then:
       - globals.set:
           id: is_api_connected
-          value: true
+          value: 'true'
       - logger.log:
           format: "Client %s connected to API with IP %s"
           args: [ "client_info.c_str()", "client_address.c_str()" ]
@@ -18,7 +18,7 @@ api:
     then:
       - globals.set:
           id: is_api_connected
-          value: false
+          value: 'false'
       - logger.log:
           format: "API client disconnected"
           level: WARN

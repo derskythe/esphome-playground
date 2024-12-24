@@ -3,10 +3,10 @@
 binary_sensor:
   - platform: gpio
     device_class: motion
-    name: "${friendly_name} Motion Sensor"
+    name: '${friendly_name} Motion Sensor'
     id: motion_sensor
     pin:
-      number: "${pin_pir}"
+      number: '${pin_pir}'
       # mode: INPUT_PULLUP
       inverted: true
     filters:
