@@ -3,14 +3,14 @@ name: Clean-up
 run-name: "Clean-up [${{ github.ref_name }}](${{ github.event_name }}) by ${{ github.actor }}"
 
 on:
-  push:
-    branches:
-      - master
-      - cicd
-    paths:
-      - '*.yaml'
-      - '*.yml'
-      - '.github/workflows/build.yaml'
+#  push:
+  #    branches:
+  #      - master
+  #      - cicd
+  #    paths:
+  #      - '*.yaml'
+  #      - '*.yml'
+  #      - '.github/workflows/build.yaml'
   # yamllint disable-line rule:empty-values
   workflow_dispatch:
 

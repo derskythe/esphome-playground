@@ -100,12 +100,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $Arguments = @{
-            ./,
-            "${{ env.FIRMWARE_NAME }}",
-            "${{ env.VERSION }}",
-            "${{ github.repository }}",
-            "${{ github.ref_name }}",
-            "${{ env.SHA }}"
-          }
+          $Arguments  = @{ './', '${{ env.FIRMWARE_NAME }}', '${{ env.VERSION }}' }
+          $Arguments += @{ '${{ github.repository }}', '${{ github.ref_name }}', '${{ env.SHA }}' }
           ./.github/create-or-update-release.ps1 @Arguments
