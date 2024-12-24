@@ -401,13 +401,13 @@ display:
           "Wi-Fi: %.1f dB", id(wifi_sensor).state);
           element_line += second_element_pos;
 
-          // icon_battery
+          // Picture: icon_battery
           it.image(first_element_pos, element_line, id(icon_battery));
           it.printf(second_element_pos, element_line, id(roboto_big),
           "Battery: %.1f%%", id(battery_percent).state);
           element_line += second_element_pos;
 
-          // icon_uptime
+          // Picture: icon_uptime
           it.image(first_element_pos, element_line, id(icon_uptime));
           it.printf(second_element_pos, element_line, id(roboto_big),
           "Uptime: %.1f%", id(uptime_sensor).state);
@@ -432,6 +432,7 @@ display:
           call.set_rgb(1.0, 0.5, 0.1);
           call.set_cold_white(0.5);
           call.set_warm_white(0.75);
+
           // Perform action
           call.perform();
 
@@ -451,20 +452,28 @@ display:
           for(int i = 0; i < max_height; i++) {
               int j = 0;
 
-              it.horizontal_line(shift_x + (spacing * j), i + shift_y, spacing, id(my_red));
+              it.horizontal_line(shift_x + (spacing * j), i + shift_y, spacing,
+              id(my_red));
               j++;
-              it.horizontal_line(shift_x + (spacing * j), i + shift_y, spacing, id(my_red));
-              j++;
-
-              it.horizontal_line(shift_x + (spacing * j) + 5, i + shift_y, spacing, id(my_green));
-              j++;
-              it.horizontal_line(shift_x + (spacing * j) + 5, i + shift_y, spacing, id(my_green));
+              it.horizontal_line(shift_x + (spacing * j), i + shift_y, spacing,
+              id(my_red));
               j++;
 
-              it.horizontal_line(shift_x + (spacing * j) + 10, i + shift_y, spacing, id(my_blue));
+              it.horizontal_line(shift_x + (spacing * j) + 5, i + shift_y, spacing,
+              id(my_green));
               j++;
-              it.horizontal_line(shift_x + (spacing * j) + 10, i + shift_y, spacing, id(my_blue));
+              it.horizontal_line(shift_x + (spacing * j) + 5, i + shift_y, spacing,
+              id(my_green));
+              j++;
 
-              it.printf(shift_x + (spacing * j) + 12, 2 + shift_y, id(roboto_small), "Index: %.1f", i);
+              it.horizontal_line(shift_x + (spacing * j) + 10, i + shift_y, spacing,
+              id(my_blue));
+              j++;
+              it.horizontal_line(shift_x + (spacing * j) + 10, i + shift_y, spacing,
+              id(my_blue));
+
+              it.printf(shift_x + (spacing * j) + 12, 2 + shift_y, id(roboto_small), 
+              "Index: %.1f", i);
           }
-          it.rectangle(shift_x, shift_y, shift_x + max_width, max_height + shift_y, id(my_yellow));
+          it.rectangle(shift_x, shift_y, shift_x + max_width, max_height + shift_y,          
+          id(my_yellow));
