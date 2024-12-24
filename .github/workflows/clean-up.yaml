@@ -34,7 +34,7 @@ jobs:
     steps:
       - name: "Run for ${{ matrix.type }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repo }}
         run: |
           gh run list -R "${{ env.REPO }}" -s ${{ matrix.type }}
