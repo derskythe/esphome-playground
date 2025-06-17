@@ -95,7 +95,7 @@ jobs:
           ls -al
           tree
 
-      - name: '[ALL] Create or update RELEASE ${{ env.VERSION }} with assets 🌟'
+      - name: '[ALL] Create or update RELEASE with assets 🌟'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
