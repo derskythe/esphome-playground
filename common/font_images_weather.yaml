@@ -1,7 +1,5 @@
 ---
 image:
-type: grayscale
-
   # 󰖐
   - file: mdi:weather-cloudy
     id: icon_weather_cloudy
