@@ -46,7 +46,8 @@ function Format-Bytes
 Set-Location $InputDir
 [string]$ZipName = ('{0}.zip' -f $AppName)
 
-zip -r -qq $ZipName "./$AppName"
+Compress-Archive -Path "./$AppName" -DestinationPath $ZipName -Force
+# zip -r -qq $ZipName "./$AppName"
 
 if (!(Test-Path -Path $ZipName -PathType Leaf))
 {
@@ -64,6 +65,7 @@ if ($Files.Count -eq 0)
 }
 
 Write-Host "Check if release exists"
+
 gh release create $ReleaseVersion -R $Repo --generate-notes --target $Branch --title "$ReleaseVersion branch $Branch"
 if ($LASTEXITCODE -gt 1)
 {
@@ -77,6 +79,7 @@ Write-Host "Start upload"
 [string]$Api = "X-GitHub-Api-Version: 2022-11-28"
 $Json = ((gh api -H $Mime -H $Api /repos/$Repo/releases) | ConvertFrom-Json)
 $TagExists = ($null -ne ($Json.GetEnumerator() | Where-Object { $_.tag_name -eq "$Tag" }))
+
 if ($false -eq $TagExists)
 {
     gh api --method POST -H $Mime -H $Api /repos/$Repo/releases -f tag_name="$Tag" -f target_commitish="$Sha" -f name="$Tag" -F draft=false -F prerelease=false -F generate_release_notes=true
@@ -87,8 +90,8 @@ if ($false -eq $TagExists)
         exit 255
     }
 }
-gh release upload "$Tag" "$ZipName#$ZipName $ZipSize" --clobber -R $Repo
 
+gh release upload "$Tag" "$ZipName#$ZipName $ZipSize" --clobber -R $Repo
 if ($LASTEXITCODE -gt 1)
 {
     Write-Error ('::error title=Failed to upload::Tag: {0}, Repo: {1}, ErrorCode: {2}' -f $ReleaseVersion, $Repo, $LASTEXITCODE)
@@ -96,7 +99,6 @@ if ($LASTEXITCODE -gt 1)
 }
 
 gh release edit "$Tag" --draft=false -R $Repo
-
 if ($LASTEXITCODE -gt 1)
 {
     Write-Error ('::error title=Failed to edit release::Tag: {0}, Repo: {1}, ErrorCode: {2}' -f $ReleaseVersion, $Repo, $LASTEXITCODE)
