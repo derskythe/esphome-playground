@@ -5,63 +5,74 @@ image:
     id: icon_weather_cloudy
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󱭚
   - file: mdi:weather-dust
     id: icon_weather_dust
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖑
   - file: mdi:weather-fog
     id: icon_weather_fog
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖒
   - file: mdi:weather-hail
     id: icon_weather_hail
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖓
   - file: mdi:weather-lightning
     id: icon_weather_lightning
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖖
   - file: mdi:weather-pouring
     id: icon_weather_pouring
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖕
   - file: mdi:weather-partly-cloudy
     id: icon_weather_partly_cloudy
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖘
   - file: mdi:weather-snowy
     id: icon_weather_snowy
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖙
   - file: mdi:weather-sunny
     id: icon_weather_sunny
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰖝
   - file: mdi:weather-windy
     id: icon_weather_windy
     resize: 28x28
     type: grayscale
+    transparency: alpha_channel
 
   # 󰼰
   - file: mdi:weather-hazy
     id: icon_weather_hazy
     type: grayscale
     resize: 28x28
+    transparency: alpha_channel
