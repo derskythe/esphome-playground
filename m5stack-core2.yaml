@@ -80,6 +80,7 @@ packages:
   # pkg_audio: !include common/i2s.yaml
   # LED Strip
   pkg_led_strip: !include common/sk6812.yaml
+  pkg_select: !include common/select.yaml
 
 # Buttons
 binary_sensor:

@@ -8,12 +8,12 @@ sensor:
   - platform: debug
     free:
       name: '${friendly_name} Heap Free'
-    block:
-      name: '${friendly_name} Heap Max Block'
+    cpu_frequency:
+      name: '${friendly_name} CPU Freq.'
     loop_time:
       name: '${friendly_name} Loop Time'
-    psram:
-      name: '${friendly_name} Free PSRAM'
+#    psram:
+#      name: '${friendly_name} Free PSRAM'
 
   # - platform: uptime
   #   id: uptime_sensor

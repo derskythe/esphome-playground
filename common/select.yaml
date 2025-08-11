@@ -1,0 +1,4 @@
+---
+select:
+  - platform: logger
+    name: "Logger select ${friendly_name}"
