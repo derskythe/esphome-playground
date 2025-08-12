@@ -40,6 +40,7 @@ esp32:
 #######################################
 ## Global variables
 #######################################
+
 globals:
   - id: enable_wifi_led_status
     type: bool
