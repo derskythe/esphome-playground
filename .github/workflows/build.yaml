@@ -32,7 +32,7 @@ jobs:
       matrix:
         yaml-file:
           - m5atom-s3.yaml
-          - m5stack-core2.yaml
+          - m5go.yaml
           - m5timer-cam.yaml
           - m5stick-plus.yaml
           - esp32cam.yaml
