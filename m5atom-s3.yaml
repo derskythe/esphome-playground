@@ -31,6 +31,11 @@ esphome:
       - logger.log:
           format: '${friendly_name} started'
           level: INFO
+      - light.turn_on:
+          id: '${display_backlight}'
+          brightness: 0.7
+          transition_length: 1s
+      - component.update: main_display
 
 ################################################################################
 ## ESP32 settings
@@ -103,13 +108,18 @@ i2c:
 ## GPIO pin of the display backlight
 ################################################################################
 
-switch:
-  - platform: gpio
+output:
+  - platform: ledc
     pin: ${pin_lcd_bl}
-    id: backlight
-    name: 'Screen'
-    restore_mode: ALWAYS_ON
+    id: '${display_backlight}_pwm'
+
+light:
+  - platform: monochromatic
+    output: '${display_backlight}_pwm'
+    id: ${display_backlight}
+    name: '${friendly_name} Display'
     icon: fas:display
+    restore_mode: ALWAYS_ON
 
 ################################################################################
 ## SPI Display
@@ -146,11 +156,11 @@ display:
          : id(icon_power_plug_off));
 
       // Picture: icon_temp
-      it.image(6, second_line, id(icon_temp));
+      it.image(10, second_line, id(icon_temp));
       it.printf(30, second_line, id(roboto_middle), "%.1f C", id(temperature_sensor).state);
 
       // Picture: water-percent
-      it.image(18, third_line, id(icon_water_percent));
+      it.image(20, third_line, id(icon_water_percent));
       it.printf(46, third_line, id(roboto_middle), "%.1f %", id(humidity_sensor).state);
 
 
