@@ -2,10 +2,10 @@
     Create or update release with given tag. Also upload files.
     GH_TOKEN is mandatory!
 #>
-########################################
-Set-StrictMode -Version 3.0            #
-$ErrorActionPreference = "Stop"        #
-########################################
+################################################################################
+Set-StrictMode -Version 3.0                                                    #
+$ErrorActionPreference = "Stop"                                                #
+################################################################################
 
 [string]$InputDir = $args[0]
 [string]$AppName = $args[1]
