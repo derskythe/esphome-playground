@@ -56,21 +56,19 @@ jobs:
           echo "${{ env.YAML }}"  > ./secrets.yaml
 
       - name: 'Run action'
-        uses: esphome/build-action@v7.0.0
+        uses: esphome/build-action@v6
         id: esphome-build
         with:
           yaml-file: ${{ matrix.yaml-file }}
           version: dev
           platform: linux/amd64
-          cache: true
           release-summary: ''
           release-url: 'https://github.com/derskythe/esphome-playground'
           complete-manifest: true
 
       - name: 'Write version to file'
         run: |
-          echo ${{ steps.esphome-build.outputs.version }}\
-            > ${{ steps.esphome-build.outputs.name }}/version
+          echo ${{ steps.esphome-build.outputs.version }} > ${{ steps.esphome-build.outputs.name }}/version
 
       - name: 'Upload ESPHome binary'
         uses: actions/upload-artifact@v4
@@ -100,6 +98,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $Arguments  = @{ './', '${{ env.FIRMWARE_NAME }}', '${{ env.VERSION }}' }
-          $Arguments += @{ '${{ github.repository }}', '${{ github.ref_name }}', '${{ env.SHA }}' }
+          $Arguments  = @( './', '${{ env.FIRMWARE_NAME }}', '${{ env.VERSION }}' )
+          $Arguments += @( '${{ github.repository }}', '${{ github.ref_name }}', '${{ env.SHA }}' )
           ./.github/create-or-update-release.ps1 @Arguments
