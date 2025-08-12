@@ -5,8 +5,12 @@ substitutions:
   wifi_power_save_mode: LIGHT
   enable_ota: 'true'
   enable_wifi_led_status: 'false'
-  pin_sda: GPIO25
-  pin_slc: GPIO23
+  pin_sda: GPIO4
+  pin_slc: GPIO13
+  pin_sda_bm8563: GPIO12
+  pin_slc_bm8563: GPIO14
+  pin_camera_sda: GPIO25
+  pin_camera_slc: GPIO23
   pin_clk: GPIO27
   pin_vsync: GPIO22
   pin_href: GPIO26
@@ -31,7 +35,7 @@ esphome:
   platformio_options:
     upload_speed: 115200
     board_build.flash_mode: qio
-    board_build.f_cpu: 160000000L
+    board_build.f_cpu: 240000000L
   on_boot:
     priority: 800
     then:
@@ -127,10 +131,19 @@ interval:
 ################################################################################
 
 i2c:
-  sda: ${pin_sda}
-  scl: ${pin_slc}
-  scan: true
-  id: bus_a
+  - id: bus_a
+    sda: ${pin_sda}
+    scl: ${pin_slc}
+    scan: true
+  - id: bus_b
+    sda: ${pin_camera_sda}
+    scl: ${pin_camera_slc}
+    scan: true
+  - id: bus_c
+    sda: ${pin_sda_bm8563}
+    scl: ${pin_slc_bm8563}
+    scan: true
+
 
 ################################################################################
 # Camera
@@ -141,7 +154,7 @@ esp32_camera:
   external_clock:
     pin: ${pin_clk}
     frequency: 20MHz
-  i2c_id: bus_a
+  i2c_id: bus_b
   data_pins: [ '${pin_data1}', '${pin_data2}', '${pin_data3}', '${pin_data4}', '${pin_data5}', '${pin_data6}', '${pin_data7}', '${pin_data8}' ]
   vsync_pin: ${pin_vsync}
   href_pin: ${pin_href}
