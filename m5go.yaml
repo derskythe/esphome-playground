@@ -1,7 +1,7 @@
 ---
 substitutions:
   friendly_name: M5Stack Core2
-  entity_id: m5stack-core2
+  entity_id: "m5go"
   wifi_power_save_mode: 'none'
   enable_ota: 'true'
   enable_wifi_led_status: 'true'
