@@ -1,0 +1,201 @@
+---
+substitutions:
+  friendly_name: M5Stack Timer Camera
+  entity_id: 'm5stack-timer-cam'
+  wifi_power_save_mode: LIGHT
+  enable_ota: 'true'
+  enable_wifi_led_status: 'false'
+  pin_sda: GPIO25
+  pin_slc: GPIO23
+  pin_clk: GPIO27
+  pin_vsync: GPIO22
+  pin_href: GPIO26
+  pin_pclk: GPIO21
+  pin_rst: GPIO15
+  pin_led: GPIO2
+  pin_data1: GPIO32
+  pin_data2: GPIO35
+  pin_data3: GPIO34
+  pin_data4: GPIO5
+  pin_data5: GPIO39
+  pin_data6: GPIO18
+  pin_data7: GPIO36
+  pin_data8: GPIO19
+
+################################################################################
+## EspHome Settings
+################################################################################
+
+esphome:
+  name: ${entity_id}
+  platformio_options:
+    upload_speed: 115200
+    board_build.flash_mode: qio
+    board_build.f_cpu: 160000000L
+  on_boot:
+    priority: 800
+    then:
+      - logger.log:
+          format: "${friendly_name} started"
+          level: INFO
+
+################################################################################
+## ESP32 settings
+################################################################################
+
+esp32:
+  board: ${entity_id}
+  framework:
+    type: arduino
+    version: recommended
+
+################################################################################
+## Global variables
+################################################################################
+
+globals:
+  - id: enable_wifi_led_status
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
+  - id: is_api_connected
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
+  - id: is_mqtt_connected
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
+  - id: is_wifi_connected
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
+
+################################################################################
+## Add packages
+################################################################################
+
+packages:
+  pkg_ota: !include common/ota.yaml
+  pkg_api: !include common/api.yaml
+  pkg_pkg_common: !include common/standard_mesh.yaml
+  pkg_wifi: !include common/wifi_simple.yaml
+  pkg_mqtt: !include common/mqtt.yaml
+  pkg_sensor: !include common/sensor.yaml
+  pkg_binary_sensor: !include common/binary_sensor.yaml
+  pkg_text_sensor: !include common/text_sensor.yaml
+  pkg_switch: !include common/switch.yaml
+  pkg_select: !include common/select.yaml
+
+################################################################################
+## External sensors
+################################################################################
+
+binary_sensor:
+  - platform: homeassistant
+    id: itsday
+    entity_id: input_boolean.itsday
+    internal: false
+
+interval:
+  - interval: 120s # Show each page for 120 seconds
+    then:
+      - if:
+          condition:
+            binary_sensor.is_on: itsday
+          then:
+            - light.turn_off: led_strip # Disable Camera LED during the day
+            - logger.log:
+                format: 'LED must be OFF'
+                level: INFO
+          else:
+            - light.turn_on: led_strip # Enable Camera LED at night
+            - logger.log:
+                format: 'LED must be ON'
+                level: INFO
+
+    #sensor:
+    #  - platform: adc
+    #    pin: GPIO38
+    #    name: '${friendly_name} Voltage'
+    #    update_interval: 10s
+    #    icon: mdi:lightning-bolt
+    # attenuation: 11db
+
+################################################################################
+# I2C configuration entry
+################################################################################
+
+i2c:
+  sda: ${pin_sda}
+  scl: ${pin_slc}
+  scan: true
+  id: bus_a
+
+################################################################################
+# Camera
+################################################################################
+
+esp32_camera:
+  id: onboard_camera
+  external_clock:
+    pin: ${pin_clk}
+    frequency: 20MHz
+  i2c_id: bus_a
+  data_pins: [ '${pin_data1}', '${pin_data2}', '${pin_data3}', '${pin_data4}', '${pin_data5}', '${pin_data6}', '${pin_data7}', '${pin_data8}' ]
+  vsync_pin: ${pin_vsync}
+  href_pin: ${pin_href}
+  pixel_clock_pin: ${pin_pclk}
+  reset_pin: ${pin_rst}
+  # resolution: 640x480
+  jpeg_quality: 10
+  max_framerate: '15 fps'
+  idle_framerate: '0.5 fps'
+  frame_buffer_count: 2
+  resolution: 1024x768
+  contrast: 1
+  brightness: 1
+  saturation: 0
+  special_effect: 'none'
+  wb_mode: 'auto'
+  # Image settings
+  name: '${friendly_name} Camera'
+
+################################################################################
+## Web Server for camera
+################################################################################
+
+esp32_camera_web_server:
+  - port: 8080
+    mode: stream
+  - port: 8081
+    mode: snapshot
+
+################################################################################
+## GPIO pin of the display backlight
+################################################################################
+
+output:
+  - platform: ledc # backlight output
+    pin: ${pin_led}
+    id: led_pwm
+
+  # ? Useless
+  # - platform: ledc # onboard led
+  #   pin: GPIO16    # fake value
+  #   id: onboard_led_pwm
+
+light:
+  # Camera LED
+  - platform: monochromatic
+    output: led_pwm
+    name: '${friendly_name} LED'
+    id: led_strip
+    restore_mode: ALWAYS_OFF
+
+  # Onboard LED
+  # ? Useless
+  # - platform: monochromatic
+  #   output: onboard_led_pwm
+  #   name: "${friendly_name} Onboard LED"
+  #   id: led_strip
