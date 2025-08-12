@@ -74,7 +74,7 @@ light:
     name: '${friendly_name} LED Light'
     restore_mode: ALWAYS_OFF
     id: led_strip
-    default_transition_length: 0s
+    default_transition_length: 2s
     icon: mdi:alarm-light
 
 ################################################################################
