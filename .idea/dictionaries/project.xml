@@ -4,6 +4,7 @@
       <w>esphome</w>
       <w>ledc</w>
       <w>leds</w>
+      <w>skif</w>
     </words>
   </dictionary>
 </component>

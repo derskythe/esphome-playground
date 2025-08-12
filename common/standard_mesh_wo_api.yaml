@@ -1,0 +1,38 @@
+---
+# Enable logging
+logger:
+  level: DEBUG
+  # Disable too much logging from MQTT
+  # logs:
+  #   mqtt.component: DEBUG
+  #   mqtt.client: ERROR
+
+preferences:
+  flash_write_interval: 1min
+
+debug:
+  update_interval: 60s
+
+web_server:
+  port: 80
+  enable_private_network_access: false
+  version: 3
+  local: true
+  include_internal: true
+
+network:
+  enable_ipv6: false
+
+mdns:
+  disabled: true
+
+time:
+  - platform: sntp
+    id: sntp_time
+    timezone: Europe/Sofia
+    servers:
+     - 0.pool.ntp.org
+     - 1.pool.ntp.org
+     - 2.pool.ntp.org
+
+<<: !include colors.yaml

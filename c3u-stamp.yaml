@@ -7,6 +7,10 @@ substitutions:
   pin_button_a: 'GPIO9'
   pin_led: 'GPIO2'
 
+#######################################
+## EspHome Settings
+#######################################
+
 esphome:
   name: ${entity_id}
   friendly_name: ${friendly_name}
@@ -21,11 +25,15 @@ esphome:
     board_build.mcu: esp32c3
     board_build.f_cpu: 160000000L
 
+#######################################
+## ESP32 settings
+#######################################
+
 esp32:
   board: esp32-c3-devkitm-1
   variant: esp32c3
   framework:
-    type: arduino  # Меняем на arduino вместо esp-idf
+    type: arduino
     version: recommended
   flash_size: 4MB
 
@@ -37,10 +45,6 @@ globals:
     type: bool
     restore_value: 'false'
     initial_value: 'true'
-  - id: is_api_connected
-    type: bool
-    restore_value: 'false'
-    initial_value: 'false'
   - id: is_mqtt_connected
     type: bool
     restore_value: 'false'
@@ -49,6 +53,10 @@ globals:
     type: bool
     restore_value: 'false'
     initial_value: 'false'
+
+#######################################
+## LED
+#######################################
 
 light:
   - platform: esp32_rmt_led_strip
@@ -62,27 +70,29 @@ light:
     default_transition_length: 0s
 
 #######################################
-## Enable Home Assistant API
+## Add sensors and other stuff
 #######################################
 
 packages:
-  pkg_api: !include common/api.yaml
   pkg_ota: !include common/ota.yaml
-  pkg_common: !include common/standard_mesh.yaml
+  pkg_common: !include common/standard_mesh_wo_api.yaml
   pkg_wifi: !include common/wifi_simple.yaml
   pkg_mqtt: !include common/mqtt.yaml
   pkg_sensor: !include common/sensor.yaml
   pkg_binary_sensor: !include common/binary_sensor.yaml
   pkg_text_sensor: !include common/text_sensor.yaml
   pkg_switch: !include common/switch.yaml
-  # Temperature, Pressure
+  # Temperature and humidity sensor
   pkg_temp: !include common/sht40.yaml
+  # Pressure sensor
   pkg_temp_exact: !include common/bmp280.yaml
 
-# I2C configuration entry for ESP32
+#######################################
+# I2C configuration entry for M5Stack C3U Stamp
+#######################################
+
 i2c:
   sda: GPIO1
   scl: GPIO0
   scan: true
   id: bus_a
-  frequency: 400kHz
