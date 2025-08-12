@@ -383,7 +383,7 @@ display:
   - platform: ili9xxx
     id: main_display
     model: M5STACK
-    cs_pin: ${GPIO14}
+    cs_pin: ${pin_cs}
     dc_pin: ${pin_dc}
     reset_pin: ${pin_rst}
     update_interval: 15s
