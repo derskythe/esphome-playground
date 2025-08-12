@@ -1,0 +1,41 @@
+---
+image:
+  # yamllint disable-line
+  # 󰐥
+  - file: mdi:power
+    id: icon_power
+    resize: 24x24
+    type: grayscale
+    transparency: alpha_channel
+
+  # yamllint disable-line
+  # 󰚦
+  - file: mdi:power-plug-off
+    id: icon_power_plug_off
+    resize: 24x24
+    type: grayscale
+    transparency: alpha_channel
+
+  # yamllint disable-line
+  # 󰔏
+  - file: mdi:thermometer
+    id: icon_temp
+    resize: 24x24
+    type: grayscale
+    transparency: alpha_channel
+
+  # yamllint disable-line
+  # 󰖎
+  - file: mdi:water-percent
+    id: icon_water_percent
+    resize: 24x24
+    type: grayscale
+    transparency: alpha_channel
+
+  # yamllint disable-line
+  # 󰡍
+  - file: mdi:arrow-collapse-vertical
+    id: icon_pressure
+    resize: 24x24
+    type: grayscale
+    transparency: alpha_channel

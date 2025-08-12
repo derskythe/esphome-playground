@@ -1,0 +1,47 @@
+---
+sensor:
+  - platform: mpu6886
+    address: 0x68
+    accel_x:
+      name: '${friendly_name} MPU6886 Accel X'
+      icon: mdi:screen-rotation
+    accel_y:
+      name: '${friendly_name} MPU6886 Accel Y'
+      icon: mdi:screen-rotation
+    accel_z:
+      name: '${friendly_name} MPU6886 Accel Z'
+      icon: mdi:screen-rotation
+    gyro_x:
+      name: '${friendly_name} MPU6886 Gyro X'
+      icon: mdi:screen-rotation
+    gyro_y:
+      name: '${friendly_name} MPU6886 Gyro Y'
+      icon: mdi:screen-rotation
+    gyro_z:
+      name: '${friendly_name} MPU6886 Gyro Z'
+      icon: mdi:screen-rotation
+    temperature:
+      name: '${friendly_name} MPU6886 Temperature'
+      icon: mdi:thermometer-lines
+
+binary_sensor:
+  - platform: template
+    id: held_in_hand
+    name: In hands
+    lambda: |-
+      if (abs(id(accel_z).state) < 0.5) {
+        ESP_LOGD("held_in_hand", "Set brightness");
+        return true;
+      }
+      return false;
+    update_interval: 0.3s
+    on_press:
+      then:
+        - light.turn_on:
+            id: display_backlight
+            brightness: 1.0
+    on_release:
+      then:
+        - light.turn_on:
+            id: display_backlight
+            brightness: 0.3
