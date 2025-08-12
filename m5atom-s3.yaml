@@ -33,8 +33,11 @@ esphome:
           level: INFO
       - light.turn_on:
           id: '${display_backlight}'
-          brightness: 0.7
+          brightness: 0.5
           transition_length: 1s
+      - logger.log:
+          format: '${friendly_name} display turn on!'
+          level: INFO
       - component.update: main_display
 
 ################################################################################
@@ -84,6 +87,7 @@ packages:
   pkg_text_sensor: !include common/text_sensor.yaml
   pkg_switch: !include common/switch.yaml
   pkg_select: !include common/select.yaml
+  pkg_display_off: !include common/display_off.yaml
   # Display
   pkg_font: !include common/font.yaml
   pkg_font_images: !include common/font_images_small.yaml
@@ -122,6 +126,23 @@ light:
     restore_mode: ALWAYS_ON
 
 ################################################################################
+## Script
+################################################################################
+
+script:
+  - id: screen_activated
+    mode: single
+    then:
+      - if:
+          condition:
+            binary_sensor.is_on: button_a
+          then:
+            - logger.log:
+                format: 'Turn on by button'
+                level: INFO
+            - light.turn_on: ${display_backlight}
+
+################################################################################
 ## SPI Display
 ################################################################################
 
@@ -156,12 +177,12 @@ display:
          : id(icon_power_plug_off));
 
       // Picture: icon_temp
-      it.image(10, second_line, id(icon_temp));
-      it.printf(30, second_line, id(roboto_middle), "%.1f C", id(temperature_sensor).state);
+      it.image(12, second_line, id(icon_temp));
+      it.printf(34, second_line, id(roboto_middle), "%.1f C", id(temperature_sensor).state);
 
       // Picture: water-percent
-      it.image(20, third_line, id(icon_water_percent));
-      it.printf(46, third_line, id(roboto_middle), "%.1f %", id(humidity_sensor).state);
+      it.image(22, third_line, id(icon_water_percent));
+      it.printf(50, third_line, id(roboto_middle), "%.1f %", id(humidity_sensor).state);
 
 
 
@@ -199,6 +220,7 @@ display:
 
 binary_sensor:
   - platform: gpio
+    id: button_a
     name: 'Button A'
     icon: mdi:keyboard-f1
     pin:
@@ -211,7 +233,32 @@ binary_sensor:
       - delayed_off: 10ms
     on_press:
       then:
-        - logger.log: 'Button A was PRESSED'
+        - logger.log:
+            format: 'Button A was pressed'
+            level: INFO
+        - if:
+            condition:
+              script.is_running: screen_activated
+            then:
+              - logger.log:
+                  format: 'Script is already running'
+                  level: INFO
+            else:
+              - script.execute: screen_activated
+        - binary_sensor.template.publish:
+            id: dim_display_on
+            state: true
+        - binary_sensor.template.publish:
+            id: dim_display_off
+            state: true
+    on_release:
+      then:
+        - binary_sensor.template.publish:
+            id: dim_display_on
+            state: false
+        - binary_sensor.template.publish:
+            id: dim_display_off
+            state: false
 
 ################################################################################
 ## IR Must be here!
