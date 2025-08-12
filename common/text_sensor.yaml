@@ -3,16 +3,21 @@ text_sensor:
   - platform: wifi_info
     ip_address:
       name: '${friendly_name} IP Address'
+      icon: mdi:ip
     ssid:
       name: '${friendly_name} Connected SSID'
+      icon: mdi:access-point-network
     bssid:
       name: '${friendly_name} Connected BSSID'
+      icon: mdi:access-point-network
     mac_address:
-      name: '${friendly_name} Mac Wifi Address'
+      name: '${friendly_name} MAC Address'
+      icon: mdi:ip-network
     scan_results:
       name: '${friendly_name} Latest Scan Results'
     dns_address:
       name: '${friendly_name} DNS Address'
+      icon: mdi:dns
 
   - platform: version
     name: '${friendly_name} Version'
@@ -23,6 +28,7 @@ text_sensor:
       name: '${friendly_name} Device Info'
     reset_reason:
       name: '${friendly_name} Reset Reason'
+      icon: mdi:information-variant-circle-outline
 
   - platform: template
     id: uptime_human

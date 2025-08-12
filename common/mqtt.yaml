@@ -4,7 +4,7 @@ mqtt:
   # broker: iotstack.skif.ws
   username: 'log_default'
   password: !secret mqtt_password
-  # reboot_timeout: 15min
+  # Reboot_timeout: 15min
   # keepalive: 60s
   # client_id: ${entity_id}
   # topic_prefix: ${entity_id}
@@ -18,15 +18,15 @@ mqtt:
   # -? discovery_unique_id_generator
   # Can be one of legacy or mac. Defaults to legacy,
   # which generates unique_id in format ESP<component_type><default_object_id>.
-  # mac generator uses format:
+  # Mac generator uses format:
   # <mac_address>-<component_type>-<fnv1_hash(friendly_name)>
   # discovery_unique_id_generator: "mac"
   # Can be one of none or device_name. Defaults to none which does not generate object_id.
-  # device_name generator uses format:
+  # Device_name generator uses format:
   # <device_name>_<friendly_name>
   # discovery_object_id_generator: "device_name"
-  # Use null if you want to disable sending logs to MQTT
-  # By default this option is enabled
+  # Use null if you want to disable sending logs to MQTT,
+  # By default, this option is enabled
   # The log_topic has an additional configuration option:
   # level (Optional, string): The log level to use for MQTT logging.
   log_topic:

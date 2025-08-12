@@ -1,18 +1,32 @@
 ---
 sensor:
   - platform: wifi_signal
-    name: '${friendly_name} WiFi Signal Sensor'
-    update_interval: 60s
+    name: '${friendly_name} Wi-Fi Signal'
+    update_interval: 120s
+    unit_of_measurement: dB
     id: wifi_sensor
+    entity_category: "diagnostic"
+    icon: fas:wifi
+
+  # Reports the Wi-Fi signal strength in %
+  - platform: copy
+    source_id: wifi_sensor
+    name: "${friendly_name} Wi-Fi Signal Percent"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "%"
+    entity_category: "diagnostic"
+    device_class: ""
+    icon: fas:wifi
 
   - platform: debug
     free:
       name: '${friendly_name} Heap Free'
-      accuracy_decimals: 2
+      accuracy_decimals: 0
     cpu_frequency:
       name: '${friendly_name} CPU Freq.'
       unit_of_measurement: 'MHz'
-      accuracy_decimals: 2
+      accuracy_decimals: 0
       filters:
         - multiply: 0.000001
     loop_time:
