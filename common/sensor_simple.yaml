@@ -8,10 +8,16 @@ sensor:
   - platform: debug
     free:
       name: '${friendly_name} Heap Free'
+      accuracy_decimals: 2
     cpu_frequency:
-      name: '${friendly_name} CPU Freq.'
+        name: '${friendly_name} CPU Freq.'
+        unit_of_measurement: 'MHz'
+        accuracy_decimals: 2
+        filters:
+          - multiply: 0.000001
     loop_time:
       name: '${friendly_name} Loop Time'
+      accuracy_decimals: 0
 
   - platform: uptime
     name: '${friendly_name} Uptime'

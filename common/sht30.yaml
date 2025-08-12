@@ -6,9 +6,11 @@ sensor:
     temperature:
       name: '${friendly_name} Temperature (from not correct sensor)'
       id: not_correct_temperature_sensor
+      accuracy_decimals: 2
     humidity:
       name: '${friendly_name} Humidity'
       id: humidity_sensor
+      accuracy_decimals: 2
     address: 0x44
     update_interval: 60s
     # By-default is OFF
