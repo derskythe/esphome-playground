@@ -27,7 +27,7 @@ binary_sensor:
   - platform: template
     id: 'dim_display_off'
     filters:
-      - delayed_off: 2min # Turn off display
+      - delayed_off: 2min # Turn off the display
     on_release:
       then:
         - logger.log: 'Display OFF!'
