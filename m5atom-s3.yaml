@@ -1,11 +1,27 @@
 ---
 substitutions:
-  friendly_name: 'M5_Atom_S3'
+  friendly_name: Atom S3
   entity_id: 'm5atom-s3'
-  wifi_power_save_mode: 'none'
+  wifi_power_save_mode: LIGHT
   enable_ota: 'true'
   enable_wifi_led_status: 'false'
   display_backlight: 'display_backlight'
+  pin_sda: GPIO38
+  pin_scl: GPIO39
+  pin_mosi: GPIO21
+  pin_sck: GPIO17
+  pin_cs: GPIO15
+  pin_rs: GPIO33
+  pin_rst: GPIO34
+  pin_lcd_bl: GPIO16
+  pin_port_custom1: GPIO2
+  pin_port_custom2: GPIO1
+  pin_button_a: GPIO41
+  pin_ir: GPIO4
+
+################################################################################
+## EspHome Settings
+################################################################################
 
 esphome:
   name: '${entity_id}'
@@ -16,15 +32,20 @@ esphome:
           format: '${friendly_name} started'
           level: INFO
 
+################################################################################
+## ESP32 settings
+################################################################################
+
 esp32:
   board: 'esp32-s3-devkitc-1'
   variant: 'esp32s3'
   framework:
     type: arduino
 
-#######################################
+################################################################################
 ## Global variables
-#######################################
+################################################################################
+
 globals:
   - id: enable_wifi_led_status
     type: bool
@@ -43,66 +64,68 @@ globals:
     restore_value: 'false'
     initial_value: 'false'
 
-#######################################
-## Enable Home Assistant API
-#######################################
+################################################################################
+## Add packages
+################################################################################
 
 packages:
   pkg_api: !include common/api.yaml
   pkg_ota: !include common/ota.yaml
-  pkg_common: !include common/standard_mesh_idf.yaml
+  pkg_common: !include common/standard_mesh.yaml
   pkg_wifi: !include common/wifi_simple.yaml
   pkg_mqtt: !include common/mqtt.yaml
-  pkg_sensor: !include common/sensor_simple.yaml
+  pkg_sensor: !include common/sensor.yaml
   pkg_binary_sensor: !include common/binary_sensor.yaml
-  pkg_text_sensor: !include common/text_sensor_simple.yaml
+  pkg_text_sensor: !include common/text_sensor.yaml
   pkg_switch: !include common/switch.yaml
+  pkg_select: !include common/select.yaml
   # Display
   pkg_font: !include common/font.yaml
-  pkg_font_images: !include common/font_images.yaml
+  pkg_font_images: !include common/font_images_small.yaml
+  # IMU
+  pkg_imu: !include common/mpu6886.yaml
+  # Temperature and humidity sensor
+  pkg_temp: !include common/sht40.yaml
+  # Pressure sensor
+  pkg_temp_exact: !include common/bmp280.yaml
+
+################################################################################
+## I2C
+################################################################################
 
 i2c:
   - id: bus_a
-    sda: GPIO38
-    scl: GPIO39
+    sda: ${pin_sda}
+    scl: ${pin_scl}
+    scan: true
 
-# GPIO pin of the display backlight
+################################################################################
+## GPIO pin of the display backlight
+################################################################################
+
 switch:
   - platform: gpio
-    pin: GPIO16
+    pin: ${pin_lcd_bl}
     id: backlight
-    name: 'Backlight'
+    name: 'Screen'
     restore_mode: ALWAYS_ON
+    icon: fas:display
 
-sensor:
-  - platform: mpu6886
-    address: 0x68
-    accel_x:
-      name: '${friendly_name} MPU6886 Accel X'
-    accel_y:
-      name: '${friendly_name} MPU6886 Accel Y'
-    accel_z:
-      name: '${friendly_name} MPU6886 Accel z'
-    gyro_x:
-      name: '${friendly_name} MPU6886 Gyro X'
-    gyro_y:
-      name: '${friendly_name} MPU6886 Gyro Y'
-    gyro_z:
-      name: '${friendly_name} MPU6886 Gyro z'
-    temperature:
-      name: '${friendly_name} MPU6886 Temperature'
+################################################################################
+## SPI Display
+################################################################################
 
 spi:
-  clk_pin: GPIO17
-  mosi_pin: GPIO21
+  clk_pin: ${pin_sck}
+  mosi_pin: ${pin_mosi}
 
 display:
   - platform: ili9xxx
     id: main_display
     model: ST7789V
-    cs_pin: GPIO15
-    dc_pin: GPIO33
-    reset_pin: GPIO34
+    cs_pin: ${pin_cs}
+    dc_pin: ${pin_rs}
+    reset_pin: ${pin_rst}
     invert_colors: true
     update_interval: 1s
     dimensions:
@@ -111,31 +134,65 @@ display:
       offset_height: 1
       offset_width: 2
     lambda: |-
-      it.rectangle(0,  0, it.get_width(), it.get_height(), id(my_blue));
-      // Header bar
-      it.rectangle(0, 20, it.get_width(), it.get_height(), id(my_blue));
+      const int line_space = 6;
+      const int line_height = 30;
+      const int first_line = 0;
+      const int second_line = first_line + line_space + line_height;
+      const int third_line = second_line + line_space + line_height;
+      int element_line = 0;
 
-      int first  = (int)(128 / 2);
-      int second = (int)(128 / 3);
-      it.strftime(first, second * 1 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%Y-%m-%d",
-            id(esptime).now());
-      it.strftime(first, second * 2 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%H:%M:%S",
-            id(esptime).now());
-      it.print(5, 5, id(roboto_small), id(my_yellow), TextAlign::TOP_LEFT, "ESPHome");
+      it.image(104, first_line, id(system_status).state
+         ? id(icon_power)
+         : id(icon_power_plug_off));
 
-      // Comment out the above lines to see the image without text overlaid
-      // it.image(0, 0, id(my_image));
-      it.print(115, 5, id(roboto_small), id(my_green), TextAlign::TOP_RIGHT,
-         id(system_status).state
-         ? "Online"
-         : "Offline");
+      // Picture: icon_temp
+      it.image(6, second_line, id(icon_temp));
+      it.printf(30, second_line, id(roboto_middle), "%.1f C", id(temperature_sensor).state);
 
-# G41=Button
+      // Picture: water-percent
+      it.image(18, third_line, id(icon_water_percent));
+      it.printf(46, third_line, id(roboto_middle), "%.1f %", id(humidity_sensor).state);
+
+
+
+#      it.rectangle(0,  0, it.get_width(), it.get_height(), id(my_blue));
+#      // Header bar
+#      it.rectangle(0, 30, it.get_width(), it.get_height(), id(my_blue));
+#
+#      int first  = (int)(128 / 2) - 10;
+#      int second = (int)(128 / 3) - 10;
+#      //auto current_time = id(sntp_time).now();
+#      auto current_time = id(esptime).now();
+#      it.strftime(first, second * 1 + 5, id(roboto), id(my_gray), TextAlign::CENTER, "%Y-%m-%d",
+#            current_time);
+#      it.strftime(first, second * 2 + 5, id(roboto_big), id(my_gray), TextAlign::CENTER, "%H:%M:%S",
+#            current_time);
+#      it.print(5, 10, id(roboto), id(my_yellow), TextAlign::TOP_LEFT, "ESPHome");
+#
+#      // Comment out the above lines to see the image without text overload
+#      // it.image(0, 0, id(my_image));
+#      //it.print(115, 5, id(roboto_small), id(my_green), TextAlign::TOP_RIGHT,
+#      //   id(system_status).state
+#      //   ? "Online"
+#      //   : "Offline");
+#      it.image(110, 10, id(system_status).state
+#         ? id(icon_power)
+#         : id(icon_power_plug_off));
+#      //it.print(115, 5, id(roboto_small), id(my_green), TextAlign::TOP_RIGHT,
+#      //   id(system_status).state
+#      //   ? id(icon_power)
+#      //   : id(icon_power_plug_off));
+
+################################################################################
+## Button
+################################################################################
+
 binary_sensor:
   - platform: gpio
     name: 'Button A'
+    icon: mdi:keyboard-f1
     pin:
-      number: GPIO41
+      number: ${pin_button_a}
       inverted: true
       mode:
         input: true
@@ -145,3 +202,7 @@ binary_sensor:
     on_press:
       then:
         - logger.log: 'Button A was PRESSED'
+
+################################################################################
+## IR Must be here!
+################################################################################

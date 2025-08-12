@@ -3,11 +3,17 @@
 sensor:
   - platform: qmp6988
     temperature:
+      id: temperature_sensor_qmp6988
       name: '${friendly_name} Temperature'
+      unit_of_measurement: "°C"
       oversampling: 16x
+      accuracy_decimals: 2
     pressure:
+      id: pressure_sensor_qmp6988
       name: '${friendly_name} Pressure'
       oversampling: 16x
+      unit_of_measurement: "kPa"
+      accuracy_decimals: 2
     address: 0x70
     update_interval: 60s
     iir_filter: 2x

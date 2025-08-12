@@ -1,11 +1,25 @@
 ---
 substitutions:
-  friendly_name: M5Stack
+  friendly_name: M5Stack Core2
   entity_id: m5stack-core2
   wifi_power_save_mode: 'none'
   enable_ota: 'true'
   enable_wifi_led_status: 'true'
   display_backlight: 'display_backlight'
+  pin_lcd_bl: GPIO32
+  pin_clk: GPIO18
+  pin_mosi: GPIO23
+  pin_miso: GPIO19
+  pin_cs: GPIO14
+  pin_dc: GPIO27
+  pin_rst: GPIO33
+  pin_sda_a: GPIO21
+  pin_scl_a: GPIO22
+  pin_sda_b: GPIO17
+  pin_scl_b: GPIO16
+  pin_button_a: GPIO39
+  pin_button_b: GPIO38
+  pin_button_c: GPIO37
 
 esphome:
   name: '${entity_id}'
@@ -31,9 +45,9 @@ esp32:
   framework:
     type: arduino
 
-#######################################
+################################################################################
 ## Global variables
-#######################################
+################################################################################
 globals:
   - id: enable_wifi_led_status
     type: bool
@@ -52,9 +66,9 @@ globals:
     restore_value: 'false'
     initial_value: 'false'
 
-#######################################
+################################################################################
 ## Enable Home Assistant API
-#######################################
+################################################################################
 
 packages:
   pkg_api: !include common/api.yaml
@@ -64,7 +78,7 @@ packages:
   pkg_mqtt: !include common/mqtt.yaml
   pkg_sensor: !include common/sensor_simple.yaml
   pkg_binary_sensor: !include common/binary_sensor.yaml
-  pkg_text_sensor: !include common/text_sensor_simple.yaml
+  pkg_text_sensor: !include common/text_sensor.yaml
   pkg_switch: !include common/switch.yaml
   # Display
   pkg_font: !include common/font.yaml
@@ -87,9 +101,9 @@ binary_sensor:
   - platform: gpio
     id: button_a
     name: '${friendly_name} Button A'
-    icon: mdi:nintendo-switch
+    icon: mdi:keyboard-f1
     pin:
-      number: GPIO39
+      number: ${pin_button_a}
       inverted: true
     filters:
       - delayed_off: 10ms
@@ -125,9 +139,9 @@ binary_sensor:
   - platform: gpio
     id: button_b
     name: '${friendly_name} Button B'
-    icon: mdi:nintendo-switch
+    icon: mdi:keyboard-f2
     pin:
-      number: GPIO38
+      number: ${pin_button_b}
       inverted: true
     filters:
       - delayed_off: 10ms
@@ -163,9 +177,9 @@ binary_sensor:
   - platform: gpio
     id: button_c
     name: '${friendly_name} Button C'
-    icon: mdi:nintendo-switch
+    icon: mdi:keyboard-f3
     pin:
-      number: GPIO37
+      number: ${pin_button_c}
       inverted: true
     filters:
       - delayed_off: 10ms
@@ -310,7 +324,7 @@ ip5306:
 output:
   - platform: ledc
     id: '${display_backlight}_pwm'
-    pin: GPIO32
+    pin: ${pin_lcd_bl}
 
 # - platform: esp32_pwm
 #   pin: GPIO25
@@ -321,33 +335,33 @@ light:
   - platform: monochromatic
     id: '${display_backlight}'
     output: '${display_backlight}_pwm'
-    name: '${friendly_name} Backlight'
+    name: '${friendly_name} Display'
     icon: mdi:monitor
     restore_mode: ALWAYS_OFF
 
 spi:
-  clk_pin: GPIO18
-  mosi_pin: GPIO23
-  miso_pin: GPIO19
+  clk_pin: ${pin_clk}
+  mosi_pin: ${pin_mosi}
+  miso_pin: ${pin_miso}
   interface: hardware
 
 #
 # I2C configuration entry for ESP32
 i2c:
   - id: bus_a
-    sda: 21
-    scl: 22
+    sda: ${pin_sda_a}
+    scl: ${pin_scl_a}
     scan: true
     # Default: 50KHz. min. setting at 100KHz needed.
     # Otherwise, lambda is so slow that
     # warnings appear in log frequency: 50Khz
   - id: bus_c
-    sda: 17
-    scl: 16
+    sda: ${pin_sda_b}
+    scl: ${pin_scl_b}
     scan: true
 
 graph:
-  # Show bare-minimum auto-ranged graph
+  # Show a bare-minimum auto-ranged graph
   - id: single_temperature_graph
     duration: 20min
     x_grid: 5min
@@ -369,45 +383,40 @@ display:
   - platform: ili9xxx
     id: main_display
     model: M5STACK
-    cs_pin: GPIO14
-    dc_pin: GPIO27
-    reset_pin: GPIO33
+    cs_pin: ${GPIO14}
+    dc_pin: ${pin_dc}
+    reset_pin: ${pin_rst}
     update_interval: 15s
     invert_colors: false
     pages:
       - id: display_page1
         lambda: |-
           ESP_LOGD("screen", "Displaying page 1");
-
-          int first_element_pos = 0;
-          int second_element_pos = 40;
+          it.fill( id(my_green).fade_to_black(200) );
+          const int first_element_pos = 0;
+          const int second_element_pos = 40;
           int element_line = 0;
-          it.fill(id(my_green));
-
+          //it.fill(id(my_green));
           // Picture: icon_temp
           it.image(first_element_pos, element_line, id(icon_temp));
           it.printf(second_element_pos, element_line, id(roboto_big),
           "Temp.: %.1f C", id(temperature_sensor).state);
           element_line += second_element_pos;
-
           // Picture: icon_pressure
           it.image(first_element_pos, element_line, id(icon_pressure));
           it.printf(second_element_pos, element_line, id(roboto_big),
           "Pressure: %.1f kPa", id(pressure_sensor).state);
           element_line += second_element_pos;
-
           // Picture: icon_wifi
           it.image(first_element_pos, element_line, id(icon_wifi));
           it.printf(second_element_pos, element_line, id(roboto_big),
           "Wi-Fi: %.1f dB", id(wifi_sensor).state);
           element_line += second_element_pos;
-
           // Picture: icon_battery
           it.image(first_element_pos, element_line, id(icon_battery));
           it.printf(second_element_pos, element_line, id(roboto_big),
           "Battery: %.1f%%", id(battery_percent).state);
           element_line += second_element_pos;
-
           // Picture: icon_uptime
           it.image(first_element_pos, element_line, id(icon_uptime));
           it.printf(second_element_pos, element_line, id(roboto_big),
@@ -416,7 +425,6 @@ display:
       - id: display_page2
         lambda: |-
           ESP_LOGD("screen", "Displaying page 2");
-
           // Red: 100%, Green: 53%, Blue: 5%
           // Turn on or off the LED ambient
           // id(led_strip).toggle();
@@ -456,9 +464,10 @@ display:
         lambda: |-
           ESP_LOGD("screen", "Displaying page 3");
 
-          int spacing = 50;
-          int max_width = 310;
-          int max_height = 256;
+          const int spacing = 50;
+          const int max_width = 310;
+          const int max_height = 256;
+
           int shift_x = (it.get_width() -  max_width) / 2;
           int shift_y = (it.get_height() - max_height) / 2;
 
@@ -466,24 +475,24 @@ display:
               int j = 0;
 
               it.horizontal_line(shift_x + (spacing * j), i + shift_y,
-              spacing, id(my_red));
+              spacing, my_red.fade_to_white(i));
               j++;
               it.horizontal_line(shift_x + (spacing * j), i + shift_y,
-              spacing, id(my_red));
+              spacing, my_red.fade_to_black(i));
               j++;
 
               it.horizontal_line(shift_x + (spacing * j) + 5, i + shift_y,
-              spacing, id(my_green));
+              spacing, my_green.fade_to_white(i));
               j++;
               it.horizontal_line(shift_x + (spacing * j) + 5, i + shift_y,
-              spacing, id(my_green));
+              spacing, my_green.fade_to_black(i));
               j++;
 
               it.horizontal_line(shift_x + (spacing * j) + 10, i + shift_y,
-              spacing, id(my_blue));
+              spacing, my_blue.fade_to_white(i));
               j++;
               it.horizontal_line(shift_x + (spacing * j) + 10, i + shift_y,
-              spacing, id(my_blue));
+              spacing, my_blue.fade_to_black(i));
 
               it.printf(shift_x + (spacing * j) + 12, 2 + shift_y,
               id(roboto_small), "Index: %.1f", i);

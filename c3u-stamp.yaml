@@ -4,12 +4,14 @@ substitutions:
   entity_id: 'c3u-stamp'
   wifi_power_save_mode: LIGHT
   enable_wifi_led_status: 'true'
-  pin_button_a: 'GPIO9'
-  pin_led: 'GPIO2'
+  pin_button_a: GPIO9
+  pin_led: GPIO2
+  pin_sda: GPIO1
+  pin_scl: GPIO0
 
-#######################################
+################################################################################
 ## EspHome Settings
-#######################################
+################################################################################
 
 esphome:
   name: ${entity_id}
@@ -25,9 +27,9 @@ esphome:
     board_build.mcu: esp32c3
     board_build.f_cpu: 160000000L
 
-#######################################
+################################################################################
 ## ESP32 settings
-#######################################
+################################################################################
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -37,15 +39,19 @@ esp32:
     version: recommended
   flash_size: 4MB
 
-#######################################
+################################################################################
 ## Global variables
-#######################################
+################################################################################
 
 globals:
   - id: enable_wifi_led_status
     type: bool
     restore_value: 'false'
     initial_value: 'true'
+  - id: is_api_connected
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
   - id: is_mqtt_connected
     type: bool
     restore_value: 'false'
@@ -55,9 +61,9 @@ globals:
     restore_value: 'false'
     initial_value: 'false'
 
-#######################################
+################################################################################
 ## LED
-#######################################
+################################################################################
 
 light:
   - platform: esp32_rmt_led_strip
@@ -69,31 +75,54 @@ light:
     restore_mode: ALWAYS_OFF
     id: led_strip
     default_transition_length: 0s
+    icon: mdi:alarm-light
 
-#######################################
+################################################################################
 ## Add sensors and other stuff
-#######################################
+################################################################################
 
 packages:
+  pkg_api: !include common/api.yaml
   pkg_ota: !include common/ota.yaml
-  pkg_common: !include common/standard_mesh_wo_api.yaml
+  pkg_common: !include common/standard_mesh.yaml
   pkg_wifi: !include common/wifi_simple.yaml
   pkg_mqtt: !include common/mqtt.yaml
   pkg_sensor: !include common/sensor.yaml
   pkg_binary_sensor: !include common/binary_sensor.yaml
   pkg_text_sensor: !include common/text_sensor.yaml
   pkg_switch: !include common/switch.yaml
+  pkg_select: !include common/select.yaml
   # Temperature and humidity sensor
   pkg_temp: !include common/sht40.yaml
   # Pressure sensor
   pkg_temp_exact: !include common/bmp280.yaml
 
-#######################################
+################################################################################
 # I2C configuration entry for M5Stack C3U Stamp
-#######################################
+################################################################################
 
 i2c:
-  sda: GPIO1
-  scl: GPIO0
+  sda: ${pin_sda}
+  scl: ${pin_slc}
   scan: true
   id: bus_a
+
+################################################################################
+## Button
+################################################################################
+
+binary_sensor:
+  - platform: gpio
+    name: 'Button A'
+    icon: mdi:keyboard-f1
+    pin:
+      number: ${pin_button_a}
+      inverted: true
+      mode:
+        input: true
+        pullup: true
+    filters:
+      - delayed_off: 10ms
+    on_press:
+      then:
+        - logger.log: 'Button A was PRESSED'

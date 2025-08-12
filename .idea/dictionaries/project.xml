@@ -2,8 +2,11 @@
   <dictionary name="project">
     <words>
       <w>esphome</w>
+      <w>iotstack</w>
       <w>ledc</w>
       <w>leds</w>
+      <w>logd</w>
+      <w>miso</w>
       <w>skif</w>
     </words>
   </dictionary>
