@@ -13,5 +13,5 @@ sensor:
       accuracy_decimals: 2
     address: 0x44
     update_interval: 60s
-    # By-default is OFF
+    # By-default, it is OFF
     heater_enabled: true

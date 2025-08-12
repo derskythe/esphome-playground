@@ -1,33 +1,88 @@
 ---
 substitutions:
-  friendly_name: C3U_Stamp
+  friendly_name: C3U Stamp
+  entity_id: 'c3u-stamp'
+  wifi_power_save_mode: LIGHT
+  enable_wifi_led_status: 'true'
+  pin_button_a: 'GPIO9'
+  pin_led: 'GPIO2'
 
 esphome:
-  name: c3u_stamp
+  name: ${entity_id}
+  friendly_name: ${friendly_name}
+  on_boot:
+    priority: 800
+    then:
+      - logger.log:
+          format: 'Booting ${friendly_name}'
+          level: INFO
   platformio_options:
-    board_build.flash_mode: dio
+    board_build.flash_mode: qio
     board_build.mcu: esp32c3
+    board_build.f_cpu: 160000000L
 
 esp32:
   board: esp32-c3-devkitm-1
   variant: esp32c3
   framework:
-    type: esp-idf
+    type: arduino  # Меняем на arduino вместо esp-idf
     version: recommended
-    sdkconfig_options:
-      MDNS_STRICT_MODE: y
+  flash_size: 4MB
 
-esp32_ble_tracker:
+#######################################
+## Global variables
+#######################################
+globals:
+  - id: enable_wifi_led_status
+    type: bool
+    restore_value: 'false'
+    initial_value: 'true'
+  - id: is_api_connected
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
+  - id: is_mqtt_connected
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
+  - id: is_wifi_connected
+    type: bool
+    restore_value: 'false'
+    initial_value: 'false'
 
-<<: !include include_sensor.yaml
+light:
+  - platform: esp32_rmt_led_strip
+    rgb_order: GRB
+    pin: ${pin_led}
+    num_leds: 1
+    chipset: SK6812
+    name: '${friendly_name} LED Light'
+    restore_mode: ALWAYS_OFF
+    id: led_strip
+    default_transition_length: 0s
 
-# Enable Home Assistant API
-api:
-  password: !secret ota_password
+#######################################
+## Enable Home Assistant API
+#######################################
 
-<<: !include include_mqtt.yaml
-<<: !include include_sensor.yaml
-<<: !include include_switch.yaml
-# binary_sensor: !include include_binary_sensor.yaml
+packages:
+  pkg_api: !include common/api.yaml
+  pkg_ota: !include common/ota.yaml
+  pkg_common: !include common/standard_mesh.yaml
+  pkg_wifi: !include common/wifi_simple.yaml
+  pkg_mqtt: !include common/mqtt.yaml
+  pkg_sensor: !include common/sensor.yaml
+  pkg_binary_sensor: !include common/binary_sensor.yaml
+  pkg_text_sensor: !include common/text_sensor.yaml
+  pkg_switch: !include common/switch.yaml
+  # Temperature, Pressure
+  pkg_temp: !include common/sht40.yaml
+  pkg_temp_exact: !include common/bmp280.yaml
 
-<<: !include include_standard_mesh.yaml
+# I2C configuration entry for ESP32
+i2c:
+  sda: GPIO1
+  scl: GPIO0
+  scan: true
+  id: bus_a
+  frequency: 400kHz

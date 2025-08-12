@@ -17,7 +17,7 @@ wifi:
     then:
       - logger.log:
           format: 'WiFi Connected!'
-          level: 'INFO'
+          level: INFO
       - globals.set:
           id: is_wifi_connected
           value: 'true'
@@ -25,7 +25,7 @@ wifi:
     then:
       - logger.log:
           format: 'WiFi disconnected'
-          level: 'WARN'
+          level: WARN
       - globals.set:
           id: is_wifi_connected
           value: 'false'
