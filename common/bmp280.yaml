@@ -10,10 +10,10 @@ sensor:
       id: temperature_sensor
       oversampling: 16x
       unit_of_measurement: "°C"
-      accuracy_decimals: 2
+      accuracy_decimals: 1
     pressure:
       name: "${friendly_name} Pressure"
       id: pressure_sensor
       oversampling: 16x
       unit_of_measurement: "kPa"
-      accuracy_decimals: 2
+      accuracy_decimals: 1

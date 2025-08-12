@@ -9,8 +9,8 @@ sensor:
     temperature:
       name: '${friendly_name} Temperature (from not correct sensor)'
       id: not_correct_temperature_sensor
-      accuracy_decimals: 2
+      accuracy_decimals: 1
     humidity:
       name: '${friendly_name} Humidity'
       id: humidity_sensor
-      accuracy_decimals: 2
+      accuracy_decimals: 1
