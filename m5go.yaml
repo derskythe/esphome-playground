@@ -345,8 +345,10 @@ spi:
   miso_pin: ${pin_miso}
   interface: hardware
 
-#
-# I2C configuration entry for ESP32
+################################################################################
+# I2C configuration entry
+################################################################################
+
 i2c:
   - id: bus_a
     sda: ${pin_sda_a}
