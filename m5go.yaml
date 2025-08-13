@@ -15,8 +15,10 @@ substitutions:
   pin_rst: GPIO33
   pin_sda_a: GPIO21
   pin_scl_a: GPIO22
-  pin_sda_b: GPIO17
-  pin_scl_b: GPIO16
+  pin_sda_b: GPIO26
+  pin_scl_b: GPIO36
+  pin_sda_c: GPIO16
+  pin_scl_c: GPIO17
   pin_button_a: GPIO39
   pin_button_b: GPIO38
   pin_button_c: GPIO37
@@ -49,6 +51,11 @@ esphome:
       - logger.log:
           format: '${friendly_name} display set'
           level: INFO
+  on_shutdown:
+    then:
+      - logger.log:
+          format: '${friendly_name} shutdown'
+          level: INFO
 
 ################################################################################
 ## ESP32 settings
@@ -56,9 +63,11 @@ esphome:
 
 esp32:
   board: m5stack-core2
+  flash_size: 16MB
+  cpu_frequency: 240MHz
   framework:
     type: arduino
-    version: recommended
+    version: latest
 
 ################################################################################
 ## Global variables
@@ -110,6 +119,8 @@ packages:
   # LED Strip
   pkg_led_strip: !include common/sk6812.yaml
   pkg_select: !include common/select.yaml
+  # IMU
+  pkg_imu: !include common/mpu6886.yaml
 
 ################################################################################
 ## Buttons
@@ -382,8 +393,8 @@ i2c:
     # Otherwise, lambda is so slow that
     # warnings appear in log frequency: 50Khz
   - id: bus_c
-    sda: ${pin_sda_b}
-    scl: ${pin_scl_b}
+    sda: ${pin_sda_c}
+    scl: ${pin_scl_c}
     scan: true
 
 ################################################################################
