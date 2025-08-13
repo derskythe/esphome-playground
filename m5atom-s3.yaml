@@ -123,7 +123,7 @@ light:
     id: ${display_backlight}
     name: '${friendly_name} Display'
     icon: fas:display
-    restore_mode: ALWAYS_ON
+    restore_mode: ALWAYS_OFF
 
 ################################################################################
 ## Script
