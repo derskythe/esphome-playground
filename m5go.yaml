@@ -1,6 +1,6 @@
 ---
 substitutions:
-  friendly_name: M5Stack Core2
+  friendly_name: M5Stack M5GO
   entity_id: "m5go"
   wifi_power_save_mode: 'none'
   enable_ota: 'true'
@@ -21,29 +21,44 @@ substitutions:
   pin_button_b: GPIO38
   pin_button_c: GPIO37
 
+################################################################################
+## EspHome Settings
+################################################################################
+
 esphome:
   name: '${entity_id}'
   friendly_name: '${friendly_name}'
   #  includes:
   #    - 'sound/betty_online.h'
   #    - 'sound/betty_shutdown.h'
+  platformio_options:
+    board_build.flash_mode: qio
+    board_build.f_cpu: 240000000L
   on_boot:
     priority: 800
     then:
       - logger.log:
-          format: 'Booting ESP32'
+          format: '${friendly_name} started'
           level: INFO
       - light.turn_on:
           id: '${display_backlight}'
           brightness: 1
-          transition_length: 1s
+          transition_length: 2s
       - display.page.show: display_page1
       - component.update: main_display
+      - logger.log:
+          format: '${friendly_name} display set'
+          level: INFO
+
+################################################################################
+## ESP32 settings
+################################################################################
 
 esp32:
   board: m5stack-core2
   framework:
     type: arduino
+    version: recommended
 
 ################################################################################
 ## Global variables
@@ -96,7 +111,10 @@ packages:
   pkg_led_strip: !include common/sk6812.yaml
   pkg_select: !include common/select.yaml
 
-# Buttons
+################################################################################
+## Buttons
+################################################################################
+
 binary_sensor:
   - platform: gpio
     id: button_a
@@ -212,6 +230,10 @@ binary_sensor:
             id: dim_display_off
             state: false
 
+################################################################################
+## Template
+################################################################################
+
 # - platform: template
 #   name: '${friendly_name} Button Template'
 #   id: button_template
@@ -235,6 +257,10 @@ binary_sensor:
 #           id: dim_display_off
 #           state: false
 
+################################################################################
+## Script
+################################################################################
+
 script:
   - id: script_page_turn
     mode: single
@@ -249,7 +275,6 @@ script:
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page1
             - component.update: main_display
-
       - if:
           condition:
             binary_sensor.is_on: button_b
@@ -260,7 +285,6 @@ script:
             # - light.turn_on: ${display_backlight}
             - display.page.show: display_page2
             - component.update: main_display
-
       - if:
           condition:
             binary_sensor.is_on: button_c
@@ -297,7 +321,10 @@ script:
 # // // perform action:
 # // call.perform();
 
-# Power Management
+################################################################################
+## Power Management
+################################################################################
+
 external_components:
   - source:
       type: git
@@ -319,7 +346,10 @@ ip5306:
     name: '${friendly_name} Charge Full'
     icon: mdi:battery-charging-high
 
-# Internal LEDs
+################################################################################
+## Display LED
+################################################################################
+
 # Display backlight output
 output:
   - platform: ledc
@@ -339,12 +369,6 @@ light:
     icon: mdi:monitor
     restore_mode: ALWAYS_OFF
 
-spi:
-  clk_pin: ${pin_clk}
-  mosi_pin: ${pin_mosi}
-  miso_pin: ${pin_miso}
-  interface: hardware
-
 ################################################################################
 # I2C configuration entry
 ################################################################################
@@ -361,6 +385,20 @@ i2c:
     sda: ${pin_sda_b}
     scl: ${pin_scl_b}
     scan: true
+
+################################################################################
+# SPI
+################################################################################
+
+spi:
+  clk_pin: ${pin_clk}
+  mosi_pin: ${pin_mosi}
+  miso_pin: ${pin_miso}
+  interface: hardware
+
+################################################################################
+# Graph
+################################################################################
 
 graph:
   # Show a bare-minimum auto-ranged graph
@@ -380,6 +418,10 @@ graph:
         line_type: SOLID
         line_thickness: 3
         color: my_blue
+
+################################################################################
+# Display
+################################################################################
 
 display:
   - platform: ili9xxx
