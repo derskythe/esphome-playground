@@ -101,22 +101,22 @@ binary_sensor:
     entity_id: input_boolean.itsday
     internal: false
 
-interval:
-  - interval: 120s # Show each page for 120 seconds
-    then:
-      - if:
-          condition:
-            binary_sensor.is_on: itsday
-          then:
-            - light.turn_off: led_strip # Disable Camera LED during the day
-            - logger.log:
-                format: 'LED must be OFF'
-                level: INFO
-          else:
-            - light.turn_on: led_strip # Enable Camera LED at night
-            - logger.log:
-                format: 'LED must be ON'
-                level: INFO
+#interval:
+#  - interval: 120s # Show each page for 120 seconds
+#    then:
+#      - if:
+#          condition:
+#            binary_sensor.is_on: itsday
+#          then:
+#            - light.turn_off: led_strip # Disable Camera LED during the day
+#            - logger.log:
+#                format: 'LED must be OFF'
+#                level: INFO
+#          else:
+#            - light.turn_on: led_strip # Enable Camera LED at night
+#            - logger.log:
+#                format: 'LED must be ON'
+#                level: INFO
 
     #sensor:
     #  - platform: adc
@@ -188,27 +188,19 @@ esp32_camera_web_server:
 ## GPIO pin of the display backlight
 ################################################################################
 
-output:
-  - platform: ledc # backlight output
-    pin: ${pin_led}
-    id: led_pwm
-
-  # ? Useless
-  # - platform: ledc # onboard led
-  #   pin: GPIO16    # fake value
-  #   id: onboard_led_pwm
-
-light:
-  # Camera LED
-  - platform: monochromatic
-    output: led_pwm
-    name: '${friendly_name} LED'
-    id: led_strip
-    restore_mode: ALWAYS_OFF
-
-  # Onboard LED
-  # ? Useless
-  # - platform: monochromatic
-  #   output: onboard_led_pwm
-  #   name: "${friendly_name} Onboard LED"
-  #   id: led_strip
+#output:
+#  - platform: ledc # backlight output
+#    pin: ${pin_led}
+#    id: led_pwm
+#
+#light:
+#  # Camera LED
+#  - platform: monochromatic
+#    output: led_pwm
+#    name: '${friendly_name} LED'
+#    id: led_strip
+#    restore_mode: ALWAYS_OFF
+status_led:
+  pin:
+    number: ${pin_led}
+    inverted: true
