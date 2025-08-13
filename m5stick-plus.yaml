@@ -1,23 +1,34 @@
 ---
 substitutions:
-  friendly_name: 'M5 Stick+'
+  friendly_name: M5 Stick Plus
   entity_id: 'm5stick-c'
-  wifi_power_save_mode: 'none'
+  wifi_power_save_mode: LIGHT
   enable_ota: 'true'
   enable_wifi_led_status: 'true'
   display_backlight: 'display_backlight'
   # SPM1423
-  pin_audio_lrclk: 'GPIO34'
-  pin_audio_bclk: 'GPIO0'
-  pin_audio_din: 'GPIO34'
-  pin_irda: 'GPIO9'
-  pin_led: 'GPIO10'
-  pin_pir: 'GPIO36'
+  pin_sda: GPIO32
+  pin_scl: GPIO33
+  pin_clk: GPIO13
+  pin_mosi: GPIO15
+  pin_cs: GPIO5
+  pin_dc: GPIO23
+  pin_rst: GPIO18
+  pin_audio_lrclk: GPIO34
+  pin_audio_bclk: GPIO0
+  pin_audio_din: GPIO34
+  pin_irda: GPIO9
+  pin_led: GPIO10
+  pin_pir: GPIO36
   # Home Button
-  pin_button_a: 'GPIO37'
+  pin_button_a: GPIO37
   # Power Button
-  pin_button_b: 'GPIO39'
-  pin_speaker: 'GPIO02'
+  pin_button_b: GPIO39
+  pin_speaker: GPIO02
+
+################################################################################
+## EspHome Settings
+################################################################################
 
 esphome:
   name: "${entity_id}"
@@ -31,10 +42,15 @@ esphome:
       - display.page.show: display_page1
       - component.update: main_display
 
+################################################################################
+## ESP32 settings
+################################################################################
+
 esp32:
-  board: '${entity_id}'
+  board: ${entity_id}
   framework:
     type: arduino
+    version: recommended
 
 ################################################################################
 ## Global variables
@@ -59,19 +75,20 @@ globals:
     initial_value: 'false'
 
 ################################################################################
-## Enable Home Assistant API
+## Add packages
 ################################################################################
 
 packages:
   pkg_api: !include common/api.yaml
   pkg_ota: !include common/ota.yaml
   pkg_common: !include common/standard_mesh.yaml
-  pkg_wifi: !include common/wifi.yaml
+  pkg_wifi: !include common/wifi_simple.yaml
   pkg_mqtt: !include common/mqtt.yaml
   pkg_sensor: !include common/sensor.yaml
   pkg_binary_sensor: !include common/binary_sensor.yaml
   pkg_text_sensor: !include common/text_sensor.yaml
   pkg_switch: !include common/switch.yaml
+  pkg_select: !include common/select.yaml
   # Display
   pkg_font: !include common/font.yaml
   pkg_font_images: !include common/font_images.yaml
@@ -84,18 +101,21 @@ packages:
   # Humidity (Can give temperature as well)
   pkg_humidity: !include common/sht30.yaml
   # Infra Red Transmitter
-  pkg_irda: !include common/irda.yaml
+  #  pkg_irda: !include common/irda.yaml
   # PIR Sensor
-  pkg_pir: !include common/pir.yaml
+  #  pkg_pir: !include common/pir.yaml
   # LED Strip
   # pkg_led_strip: !include common/sk6812.yaml
 
-# Buttons
+################################################################################
+## Button
+################################################################################
+
 binary_sensor:
   - platform: gpio
     id: button_a
     name: "${friendly_name} Button A"
-    icon: mdi:nintendo-switch
+    icon: mdi:keyboard-f1
     pin:
       number: GPIO37
       inverted: true
@@ -124,7 +144,7 @@ binary_sensor:
   - platform: gpio
     id: button_b
     name: "${friendly_name} Button B"
-    icon: mdi:nintendo-switch
+    icon: mdi:keyboard-f2
     pin:
       number: GPIO39
       inverted: true
@@ -176,97 +196,97 @@ binary_sensor:
           ESP_LOGD("template", "Display OFF!");
           id(display_backlight).set_brightness(0.0);
 
-# interval:
-#   - interval: 60s!include common/irda.yaml # Infra Red Transmitter
-#         if( !id(is_wifi_connected) || !id(is_mqtt_connected) || !id(is_api_connected) ) {
-#           ESP_LOGW("interval_timer", "Not all services are connected");
-#           id(led_strip).turn_off();
-#           id(led_strip).turn_on();
-#           delay(100);
-#           id(led_strip).turn_off();
-#           delay(100);
-#           id(led_strip).turn_on();
-#           delay(100);
-#           id(led_strip).turn_off();
-#         }
-# script:
-#   - id: script_page_turn
-#     mode: single
-#     then:
-#       - if:
-#           condition:
-#             binary_sensor.is_on: button_a
-#           then:
-#             - logger.log:
-#                 format: "Script Button A was pressed"
-#                 level: INFO
-#             - display.page.show: display_page1
-#             - component.update: main_display
+    # interval:
+    #   - interval: 60s!include common/irda.yaml # Infra Red Transmitter
+    #         if( !id(is_wifi_connected) || !id(is_mqtt_connected) || !id(is_api_connected) ) {
+    #           ESP_LOGW("interval_timer", "Not all services are connected");
+    #           id(led_strip).turn_off();
+    #           id(led_strip).turn_on();
+    #           delay(100);
+    #           id(led_strip).turn_off();
+    #           delay(100);
+    #           id(led_strip).turn_on();
+    #           delay(100);
+    #           id(led_strip).turn_off();
+    #         }
+    # script:
+    #   - id: script_page_turn
+    #     mode: single
+    #     then:
+    #       - if:
+    #           condition:
+    #             binary_sensor.is_on: button_a
+    #           then:
+    #             - logger.log:
+    #                 format: "Script Button A was pressed"
+    #                 level: INFO
+    #             - display.page.show: display_page1
+    #             - component.update: main_display
+    #       - if:
+    #           condition:
+    #             binary_sensor.is_on: button_b
+    #           then:
+    #             - logger.log:
+    #                 format: "Script Button B was pressed"
+    #                 level: INFO
+    #             - display.page.show: display_page2
+    #             - component.update: main_display
+    #       - if:
+    #           condition:
+    #             binary_sensor.is_on: button_c
+    #           then:
+    #             - logger.log:
+    #                 format: "Script Button C was pressed"
+    #                 level: INFO
+    #             - display.page.show: display_page3
+    #             - component.update: main_display
+    # - id: script_turn_on_led_ambient
+    #   mode: single
+    #   then:
+    #     - lambda: |-
+    #         static bool first_run = true;
+    #         if (!first_run) {
+    #           first_run = true;
+    #           id(led_strip).turn_off();
+    #           return;
+    #         }
+    #         first_run = false;
+    #         id(led_strip).turn_on();
+    # // Set correct values
+    # // auto call = id(led_light).turn_on();
+    # // // set parameters (optional)
+    # // call.set_transition_length(1000); // in ms
+    # // call.set_brightness(0.5); // 1.0 is full brightness
+    # // call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
+    # // call.set_rgb(1.0, 0.0, 0.0); // color in RGB order, this example is purple
+    # // call.set_cold_white(0.2);
+    # // call.set_warm_white(0.75);
+    # // //call.set_effect("addressable_fireworks");
+    # // // perform action:
+    # // call.perform();
 
-#       - if:
-#           condition:
-#             binary_sensor.is_on: button_b
-#           then:
-#             - logger.log:
-#                 format: "Script Button B was pressed"
-#                 level: INFO
-#             - display.page.show: display_page2
-#             - component.update: main_display
+    ################################################################################
+    # Power Management
+    ################################################################################
 
-#       - if:
-#           condition:
-#             binary_sensor.is_on: button_c
-#           then:
-#             - logger.log:
-#                 format: "Script Button C was pressed"
-#                 level: INFO
-#             - display.page.show: display_page3
-#             - component.update: main_display
-
-# - id: script_turn_on_led_ambient
-#   mode: single
-#   then:
-#     - lambda: |-
-#         static bool first_run = true;
-#         if (!first_run) {
-#           first_run = true;
-#           id(led_strip).turn_off();
-#           return;
-#         }
-#         first_run = false;
-#         id(led_strip).turn_on();
-# // Set correct values
-# // auto call = id(led_light).turn_on();
-# // // set parameters (optional)
-# // call.set_transition_length(1000); // in ms
-# // call.set_brightness(0.5); // 1.0 is full brightness
-# // call.set_color_mode(ColorMode::RGB_COLD_WARM_WHITE);
-# // call.set_rgb(1.0, 0.0, 0.0); // color in RGB order, this example is purple
-# // call.set_cold_white(0.2);
-# // call.set_warm_white(0.75);
-# // //call.set_effect("addressable_fireworks");
-# // // perform action:
-# // call.perform();
-
-# Power Management
-external_components:
-  - source:
-      type: git
-      url: 'https://github.com//martydingo/esphome-axp192'
-    components: [ axp192 ]
-
-sensor:
-  - platform: axp192
-    id: display_backlight # display_backlight
-    i2c_id: bus_a
-    model: M5STICKC
-    address: 0x34
-    update_interval: 60s
-    brightness: 75%
-    battery_level:
-      name: "${friendly_name} Battery Percent"
-      id: battery_percent
-      icon: mdi:battery-high
+    #external_components:
+    #  - source:
+    #      type: git
+    #      url: 'https://github.com//martydingo/esphome-axp192'
+    #    components: [ axp192 ]
+    #
+    #sensor:
+    #  - platform: axp192
+    #    id: display_backlight # display_backlight
+    #    i2c_id: bus_a
+    #    model: M5STICKC
+    #    address: 0x34
+    #    update_interval: 60s
+    #    brightness: 75%
+    #    battery_level:
+    #      name: "${friendly_name} Battery Percent"
+    #      id: battery_percent
+    #      icon: mdi:battery-high
     # charger_connected: # ! not exist in the library
     #   name: "${friendly_name} Charger Connected"
     #   id: battery_connected
@@ -276,44 +296,55 @@ sensor:
     #   id: battery_full
     #   icon: mdi:battery-charging-high
 
-# Internal LEDS
+################################################################################
+# Internal LEDs
+################################################################################
+
 output:
   - platform: ledc # display backlight output
     pin: ${pin_led}
-    id: builtin_led_pwm
+    id: '${display_backlight}_pwm'
     inverted: true
+
+
+light:
+  - platform: monochromatic # display backlight
+    name: "${friendly_name} Monitor"
+    icon: mdi:led-off
+    output: '${display_backlight}_pwm'
+    id: ${display_backlight}
+    restore_mode: ALWAYS_OFF
 
   # - platform: esp32_pwm
   #   pin: GPIO25
   #   icon: material-symbols:volume-down-rounded
   #   id: rtttl_out
 
-light:
-  - platform: monochromatic # display backlight
-    output: builtin_led_pwm
-    name: "${friendly_name} LED"
-    icon: mdi:led-off
-    id: led_strip
-    restore_mode: ALWAYS_OFF
+################################################################################
+# I2C configuration entry
+################################################################################
 
-spi:
-  clk_pin: GPIO13
-  mosi_pin: GPIO15
-  interface: hardware
-
-# I2C configuration entry for ESP32
 i2c:
   - id: bus_a
-    sda: GPIO32
-    scl: GPIO33
+    sda: ${pin_sda}
+    scl: ${pin_scl}
     scan: true
+
+################################################################################
+# Display
+################################################################################
+
+spi:
+  clk_pin: ${pin_clk}
+  mosi_pin: ${pin_mosi}
+  interface: hardware
 
 display:
   - platform: ili9xxx
     model: st7789v
-    cs_pin: GPIO5
-    dc_pin: GPIO23
-    reset_pin: GPIO18
+    cs_pin: ${pin_cs}
+    dc_pin: ${pin_dc}
+    reset_pin: ${pin_rst}
     dimensions:
       height: 240
       width: 135
