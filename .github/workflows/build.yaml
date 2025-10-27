@@ -84,7 +84,7 @@ jobs:
           echo "SHA=$(git rev-parse --verify HEAD)" >> "$GITHUB_ENV"
 
       - name: 'Download files'
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: ${{ env.FIRMWARE_NAME }}-${{ env.VERSION }}
 
