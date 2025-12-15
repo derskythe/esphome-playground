@@ -71,7 +71,7 @@ jobs:
           echo ${{ steps.esphome-build.outputs.version }} > ${{ steps.esphome-build.outputs.name }}/version
 
       - name: 'Upload ESPHome binary'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.esphome-build.outputs.name }}-${{ env.VERSION }}
           path: ${{ steps.esphome-build.outputs.name }}
